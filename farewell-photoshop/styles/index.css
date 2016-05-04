@@ -1,0 +1,977 @@
+:root {
+  --current-primary-color: rgb(0, 0, 0);
+  --current-secondary-color: rgb(0, 0, 0);
+  --current-background-color: rgb(255, 255, 255);
+  --current-secondary-background-color: rgba(255, 255, 255, 0.7);
+  --current-font-color: rgb(0, 0, 0);
+  --current-border-style: 1px solid rgba(0, 0, 0, 0.2);
+  --current-css-background-color: rgba(0, 0, 0, 0.8);
+  --current-css-font-color: rgb(255, 255, 255);
+  --current-spec-font-color: rgb(0, 0, 0);
+  --current-filter: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+figure,
+input[type=radio],
+h1, h2,
+pre, code, ul, p {
+  padding: 0;
+  margin: 0;
+}
+
+address {
+  font-style: normal;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+  font-weight: 200;
+  white-space: pre-wrap;
+  max-width: 70vw;
+}
+
+code var {
+  color: var(--current-primary-color);
+}
+
+.spec code {
+  font-weight: 600;
+  font-size: 1em;
+  color: var(--current-spec-font-color);
+}
+
+code .function {
+  color: var(--current-primary-color);
+  font-weight: 800;
+}
+
+/* data-color */
+
+.color {
+  border-radius: 20px;
+  padding: 0.1em 0.2em;
+}
+
+span[data-color='rgb(89, 173, 235)'] {
+  background: rgb(89, 173, 235);
+}
+span[data-color='rgb(59, 89, 152)'] {
+  background: rgb(59, 89, 152);
+}
+
+span[data-color='rgb(53, 206, 147)'] {
+  background: rgb(53, 206, 147);
+}
+
+span[data-color='rgb(26, 71, 129)'] {
+  background: rgb(26, 71, 129);
+}
+
+span[data-color='rgb(51, 28, 20)'] {
+  background: rgb(51, 28, 20);
+}
+
+span[data-color='rgba(255, 255, 255, 0.8)'] {
+  background: rgba(255, 255, 255, 0.8);
+  color: black;
+}
+
+span[data-color='rgba(0, 0, 0, 0.2)'] {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+span[data-color='rgba(0, 0, 0, 0.1)'] {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+span[data-color='rgba(255, 255, 255, 0.1)'] {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+
+span[data-color='yellow'] {
+  background: yellow;
+  color: black;
+}
+
+span[data-color='red'] {
+  background: red;
+}
+
+span[data-color='skyblue'] {
+  background: skyblue;
+  color: black;
+}
+
+span[data-color='transparent'] {
+  border: 1px solid white;
+}
+
+body {
+  scroll-snap-type: mandatory;  
+  overflow-x: hidden;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 200;
+  counter-reset: slides;
+}
+
+h1 {
+  font-size: 4em;
+  font-weight: 100;
+  margin: 0;
+  text-align: center;
+}
+
+h2 {
+  margin: 0;
+  font-weight: 300;
+}
+
+
+
+img {
+  max-width: 100%;
+}
+
+
+.slide-number::before {
+  counter-increment: slides;
+  content: counter(slides);
+  background: var(--current-primary-color);
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  border-radius: 100%;
+  padding: 0.25em 0.5em;
+  letter-spacing: 0;
+}
+
+.intro {
+  text-align: center;
+}
+
+/* Intro slides */
+.slide main {
+  justify-content: space-around;
+  
+}
+
+
+/* Slide Styles */
+.slide {
+  align-items: center;
+  background: var(--current-background-color);
+  color: var(--current-font-color);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+  margin: 0 auto;
+  overflow-x: hidden;
+  scroll-snap-coordinate: top;
+  width: 100%;
+}
+
+.slide > header {
+  align-self: flex-start;
+  background: var(--current-secondary-background-color);
+  border-bottom: var(--current-border-style);
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em 1em;
+  width: 100%;
+}
+
+.slide > header h1 {
+  font-size: 3em;
+  font-weight: 200;
+  color: var(--current-primary-color);
+}
+
+.slide > .example {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.slide > main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 1em;
+  align-items: center;
+  justify-content: space-around;
+}
+
+
+.slide > footer {
+  align-self: flex-start;
+  background: var(--current-secondary-background-color);
+  border-top: var(--current-border-style);
+  color: var(--current-secondary-color);
+  display: flex;
+  font-weight: 600;
+  justify-content: space-between;
+  letter-spacing: 0.2em;
+  padding: 0.5em 1em;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+
+
+
+
+/* Starting Slide */
+
+.slide:first-child header {
+  text-align: center;
+}
+
+.slide:first-child h1 {
+  font-size: 4em;
+  font-weight: 100;
+}
+
+
+
+
+/* Hero example */
+
+.hero-example {
+  --current-primary-color: rgb(53, 206, 147);
+  --current-secondary-color: rgb(89, 173, 235);
+  --current-background-color: #f5f8fa;
+  --current-font-color: rgb(255, 255, 255);
+  justify-content: space-between;
+}
+
+.hero {
+  background: linear-gradient(
+    to right,
+    var(--current-secondary-color),
+    var(--current-primary-color)
+  ), var(--current-secondary-color);
+  color: var(--current-font-color);
+  text-align: center;
+  width: 100%;
+}
+
+.hero-example header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+}
+
+.hero-example button {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid currentColor;
+  border-radius: 0.25em;
+  color: currentColor;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  font-family: inherit;
+}
+
+.hero-example .sign-up {
+  background: none;
+}
+
+.hero-example .byline {
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.hero-example .categories {
+  width: 100%;
+  background: rgb(255, 255, 255);
+  color: rgb(89, 173, 235);
+}
+
+.hero-example ul {
+  display: flex;
+  list-style-type: none;
+  justify-content: space-around;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-example li {
+  padding: 1em;
+  flex-grow: 1;
+  border: 1px solid lightgrey;
+  border-right: none;
+  border-top: none;
+}
+
+.hero-example li:last-child {
+  border-right: 1px solid lightgrey;
+}
+
+.css {
+  background: var(--current-css-background-color);
+  color: var(--current-css-font-color);
+  word-break: break-all;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  font-size: 1em;
+}
+
+
+
+
+
+
+/* User Inteface Example */
+
+.user-interface-example {
+  --current-primary-color: rgb(59, 89, 152);
+  --current-background-color: #edf0f5;
+  --current-secondary-background-color: rgb(255, 255, 255);
+}
+
+.user-interface-example section {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.user-interface-example section header {
+  display: flex;
+  justify-content: space-between;
+  transition: 1s;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent), var(--current-primary-color);
+  box-sizing: border-box;
+  color: #ffffff;
+  padding: 1em 1em;
+  font-weight: 800;
+  width: 100%;
+}
+
+
+.user-interface-example button {
+  transition: 1s;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent), var(--current-primary-color);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 2px;
+  padding: 0.5em 1em;
+}
+
+.user-interface-example header nav ul,
+.user-interface-example article nav ul {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  
+}
+
+.user-interface-example article li {
+  font-weight: 800;
+  padding: 1em;
+  text-decoration: underline;
+  color: var(--current-primary-color);
+  flex-grow: 1;
+}
+
+.user-interface-example .example input {
+  width: 100%;
+  height: 5vh;
+}
+
+.user-interface-example button {
+  margin-top: 1em; 
+}
+
+
+.user-interface-example aside ul {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-interface-example address {
+  font-weight: 400;
+  color: var(--current-primary-color);
+  font-style: normal;
+}
+
+.user-interface-example section main {
+  padding: 0.5em 1em;
+}
+
+.user-interface-example article,
+.user-interface-example aside:last-child {
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  margin-bottom: 0.5em;
+  padding: 0.5em 1em;
+  box-sizing: border-box;
+  background: rgb(255, 255, 255);
+  
+}
+
+.user-interface-example main {
+  display: flex;
+  flex-grow: 2;
+}
+
+.user-interface-example main aside {
+  flex-grow: 1;
+  flex-basis: 20%;
+}
+
+.user-interface-example main section {
+  flex-grow: 1;
+  margin-right: 0.5em;
+}
+
+.user-interface-example header li {
+  padding: 0 1em;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* Radial Gradients */
+.radial-gradient {
+  --current-primary-color: skyblue;
+  --current-secondary-color: skyblue;
+  background: radial-gradient(rgba(255, 255, 255, 0.8) 2px, transparent 4px) 0 / 25px 25px, radial-gradient(circle at 0 25%, skyblue 50%, rgb(240, 251, 79));
+  width: 100%;
+}
+
+
+/* Repeating gradients */
+.repeating-radial-gradient {
+  --current-primary-color: rgb(26, 71, 129);
+  --current-font-color: white;
+}
+
+.repeating-radial-gradient > header > h1 {
+  font-size: 2em;
+}
+
+.wood-panel figcaption, .ocean figcaption {
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 2em;
+  mix-blend-mode: exclusion;
+  text-shadow: 0 0 5px var(--current-primary-color);
+}
+
+.repeating-radial-gradient-2 section figure {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 1em;
+} 
+
+.wood-panel, .ocean {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wood-panel {
+  transition: 1s;
+  background: repeating-linear-gradient(to right, transparent 1px, rgba(0, 0, 0, 0.2) 5px, transparent 93px), repeating-linear-gradient(to right, transparent 0px, rgba(0, 0, 0, 0.2) 5px, rgba(0, 0, 0, 0.1) 31px, transparent 47px);
+}
+
+
+.ocean {
+  background: repeating-radial-gradient(circle, transparent 3px, rgba(255, 255, 255, 0.1) 43px, rgba(26, 71, 129, 0.5) 137px), repeating-radial-gradient(circle, rgb(26, 71, 129), rgba(255, 255, 255, 0.1) 7px, transparent 109px), rgb(26, 71, 129);
+  
+}
+
+.repeating-radial-gradient-2 .ocean:hover {
+  background: repeating-radial-gradient(circle, transparent 3px, rgba(255, 255, 255, 0.1) 43px, rgba(26, 71, 129, 0.5) 137px), repeating-radial-gradient(circle, rgb(26, 71, 129), rgba(255, 255, 255, 0.1) 7px, transparent 109px), rgb(26, 71, 129);
+  background-blend-mode: saturation;
+}
+
+.repeating-radial-gradient-2 .wood-panel:hover {
+  background: url("../assets/wooden.png") left bottom / 37px auto, repeating-linear-gradient(to right, transparent 1px, rgba(0, 0, 0, 0.2) 5px, transparent 93px), repeating-linear-gradient(to right, transparent 0px, rgba(0, 0, 0, 0.2) 5px, rgba(0, 0, 0, 0.1) 31px, transparent 47px), rgb(131, 108, 90);
+  background-blend-mode: soft-light, overlay;
+}
+
+
+.repeating-radial-gradient section,
+.repeating-radial-gradient figure {
+  width: 100%;
+}
+
+
+.repeating-radial-gradient section {
+  flex-grow: 1;
+  display: flex;
+}
+
+/* Blend Modes */
+.about-blend-modes header {
+  background: url('../assets/polka-dots.png') 0 0 / 0 50%;
+}
+
+.about-blend-modes section {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.blended-images figure {
+  transition: transform 1s;
+}
+
+.blended-images figure img {
+  height: 25vh;
+  width: 25vh;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+
+.blended-images:not(:hover) figure:first-child {
+  transform: translateX(50%);
+}
+
+.blended-images:not(:hover) figure:last-child {
+  transform: translateX(-50%);
+}
+
+
+.blended-images figure:last-child {
+  mix-blend-mode: var(--current-blend-mode);
+}
+
+.blend-modes {
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 1em;
+  width: 70%;
+}
+
+.blend-modes input {
+  display: none;
+  width: 0px;
+  height: 0px;
+  border: none;
+}
+
+.blend-modes label {
+  flex: 1 20%;
+  text-align: center;
+  padding: 1em 0.5em;
+}
+
+.blend-modes code {
+  padding: 0.5em 1.5em;
+  border-radius: 2em;
+}
+
+.blend-modes input:checked + code {
+  background: pink;
+}
+
+.blended-images {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50%;
+}
+
+/* Products */
+.product-display {
+  --current-primary-color: red;
+}
+
+.product-display figure {
+  max-height: 500px;
+}
+
+.product-display img {
+  max-height: 100%;
+}
+
+.product-display img:hover {
+  background: radial-gradient(circle, red 30%, transparent 50%);
+}
+
+
+
+.linear-gradient .example {
+  display: flex;
+  justify-content: space-between;
+}
+
+.linear-gradient .example > * {
+  flex-basis: 45%;
+}
+
+/* Background Blend Mode */
+.background-blend-mode {
+  --current-primary-color: rgb(149, 40, 32);
+  background: url('../assets/blacktown-station.jpg') left / cover no-repeat,
+  url('../assets/big-tree.jpg') left / cover no-repeat, black;
+  background-blend-mode: lighten;
+}
+
+.background-blend-mode img {
+  width: 300px;
+  height: 250px;
+  object-fit: cover;
+}
+
+
+/* Background Blend Mode */
+.background-blend-mode-2 {
+  --current-primary-color: rgb(149, 40, 32);
+  background: url('../assets/blacktown-station.jpg') left / cover no-repeat,
+  url('../assets/big-tree.jpg') left / cover no-repeat, black;
+  background-blend-mode: lighten, hard-light;
+}
+
+.background-blend-mode-2 img {
+  width: 300px;
+  height: 250px;
+  object-fit: cover;
+}
+
+
+/* Mix blend mode */
+.mix-blend-mode {
+  --current-primary-color: pink;
+  background: url('../assets/glass.jpg');
+  
+}
+
+.mix-blend-mode main {
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mix-blend-mode footer {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.mix-blend-mode footer span:first-child {
+  mix-blend-mode: difference;
+}
+
+.mix-blend-mode footer:hover {
+  isolation: isolate;
+}
+
+.mix-blend-mode section {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  text-align: center;
+  justify-content: space-between;
+  width: 90%;
+  flex-grow: 1;
+}
+
+
+.mix-blend-mode section article {
+  padding: 1em;
+  background: pink;
+  mix-blend-mode: difference;
+  font-weight: 800;
+  flex-basis: 40%;
+  transition: 1s;
+}
+
+.mix-blend-mode section article:hover {
+  mix-blend-mode: normal;
+}
+
+.mix-blend-mode img {
+  width: 30%;
+}
+
+.mix-blend-mode footer:hover {
+  isolation: isolate;
+}
+
+.mix-blend-mode .css {
+  width: 50vw;
+}
+
+.mix-blend-mode header {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.mix-blend-mode h1 {
+  font-size: 3em;
+  
+}
+
+/* About isolation */
+
+.isolation {
+  --current-primary-color: rgb(77, 166, 181);
+  background: url('../assets/bricks.jpg') 0 / cover;
+
+}
+
+.isolation header {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.isolation main {
+  padding: 1em;
+  background: rgba(255, 255, 255, 0.3);
+  color: rgb(27, 116, 151);
+  font-weight: 800;
+  text-align: center;
+  flex-grow: 0;
+}
+
+.isolation main h1 {
+  mix-blend-mode: overlay;
+}
+
+.isolation main:hover {
+  isolation: isolate;
+}
+
+.isolation .slide-number {
+  mix-blend-mode: hard-light;
+}
+
+/* shadows */
+.shadows {
+  --current-primary-color: rgb(201, 1, 34);
+}
+
+.shadows .wing-shadow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-55%);
+  object-fit: scale-down;
+}
+
+.shadows main {
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+
+.shadows .blended {
+  position: relative;
+  object-fit: scale-down; 
+}
+
+.shadows figure {
+  position: relative;
+}
+
+.shadows figure img {
+  object-fit: scale-down;
+}
+
+.correct:before {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  content: url('../assets/wing-shadow.png');
+  object-fit: contain;
+  left: -2%;
+  top: 2%;
+}
+
+.shadows .example:hover .correct:before {
+  mix-blend-mode: multiply;
+}
+
+.shadows .example {
+  width: 100%;
+  flex-basis: 20%;
+  display: flex;
+  justify-content: space-around;
+  color: #FFFFFF;
+  background: url('../assets/water-bg.jpg') center / cover;
+  padding-top: 2em;
+}
+
+.shadows .example:hover .wing-shadow {
+  mix-blend-mode: multiply;
+}
+
+/* Filters */
+.about-filters {
+  --current-primary-color: rgb(220, 177, 77);
+}
+
+.about-filters img {
+  transition: 1s;
+  filter: var(--current-filter);
+}
+
+
+.about-filters .filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.about-filters .filters label {
+  flex-grow: 1;
+  flex-basis: 30%;
+  text-align: center;
+}
+
+.about-filters img {
+  width: 500px;
+}
+
+/* Drop-shadow */
+
+.drop-shadow {
+  --current-primary-color: rgb(200, 0, 0);
+}
+
+.drop-shadow img {
+  transition: 1s;
+}
+
+.drop-shadow img:hover {
+  
+  filter: drop-shadow(5px 5px 3px black);
+}
+
+
+
+/* hue-rotate */
+.hue-rotate {
+  --current-primary-color: rgb(158, 21,	66);
+}
+
+.hue-rotate .pink {
+  transition: 1s;
+}
+
+.hue-rotate .pink:hover {
+  filter: hue-rotate(20deg);
+}
+
+.hue-rotate .red {
+  filter: hue-rotate(20deg);
+}
+
+.hue-rotate footer {
+  filter: var(--current-hue-rotate);
+}
+
+.hue-rotate button {
+  background: var(--current-primary-color);
+}
+
+/* Backgrounds */
+figure figcaption {
+  text-align: center;
+}
+
+.product-highlight-example section {
+  text-align: center;
+  background: radial-gradient(circle, red, transparent 50%);
+}
+
+
+
+.texture-example figure {
+  display: flex;
+  flex-direction: column;
+}
+
+.texture-example img {
+  border: 15px solid transparent;
+  border-image: url('../assets/polaroid-texture.jpg') 30 30 round;
+  width: 50%;
+}
+
+.border-image img {
+  border: 2em solid transparent;
+  border-image: repeating-radial-gradient(circle, pink, purple) 10;
+}
+
+
+
+.border-image .fade {
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(to right, rgb(0, 0, 0), transparent) 1;
+  
+}
+
+.border-image .dotted {
+  border-bottom: 1em solid transparent;
+  border-image: radial-gradient(circle, rgb(0, 0, 0), pink) 1 repeat;
+  
+}
+
+
+.radial-gradient .sunset {
+  background: radial-gradient(ellipse farthest-corner at 0 90%, rgb(254, 250, 224), rgb(205, 113, 26));
+}
+
+.radial-gradient .dots {
+  background: radial-gradient(yellow 2px, transparent 4px) 0 / 25px 25px;
+}
+
+.tiles {
+  background: repeating-linear-gradient(to right, transparent, rgba(0, 0, 0, 0.2) 10vh, rgba(0, 0, 0, 0.3) 10vh, transparent 11vh), repeating-linear-gradient(to top, transparent, rgba(0, 0, 0, 0.3) 10vh, transparent 11vh), rgb(219, 219, 219);
+}
+
+.drapes {
+  background: repeating-linear-gradient(to top, transparent, rgba(255, 255, 255, 0.2) 13vh, rgba(0, 0, 0, 0.2) 13.5vh, transparent 17vh), repeating-linear-gradient(to top, transparent, rgba(255, 255, 255, 0.2) 3vh, rgba(0, 0, 0, 0.2) 5vh, transparent 7vh), rgb(219, 219, 219);
+}
+
+.record {
+  background: repeating-radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent 5px), radial-gradient(circle, rgb(0, 0, 0) 50%, transparent 50%) 0 0;
+}
+
+
+.water {
+  background: repeating-radial-gradient(circle, rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.3)), rgb(68, 107, 166);
+}
+
+.consistent-cta figure, .video-blending figure {
+  position: relative;
+}
+
+.cta {
+  color: #FFFFFF;
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-transform: uppercase;
+  font-family: sans-serif;
+  font-weight: 800;
+}
+
+.video-blending figure {
+  height: 50%;
+  background: url('../assets/pink-budding.png');
+}
+
+
+.video-blending figure:hover .cta {
+  mix-blend-mode: difference;
+}
+
+.video-blending video {
+  background: url('../assets/pink-budding.png');
+  height: 100%;
+  mix-blend-mode: var(--current-blend-mode);
+}

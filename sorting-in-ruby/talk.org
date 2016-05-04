@@ -1,0 +1,490 @@
+#+TITLE: Sorting in Ruby
+#+AUTHOR: Jessica Claire Edwards
+#+EMAIL: jessica@eml.cc
+#+TWITTER: @jsscclr
+#+GITHUB: @jessicace
+
+* Enumerable#sort Array#sort
+** Enumerable#sort
+   #+BEGIN_SRC C
+                       static VALUE
+     enum_sort(VALUE obj)
+     {
+       return rb_ary_sort(enum_to_a(0, 0, obj)); // call Array#sort, convert enumberable to an array
+     }
+   #+END_SRC
+   #+BEGIN_SRC ruby
+     %w(rhea kea flea).sort
+   #+END_SRC
+   #+BEGIN_SRC ruby
+   (1..10).sort { |a, b| b <=> a }
+   #+END_SRC
+   #+BEGIN_SRC ruby
+     fruits = { "Apple": 1, "Pear": 6, "Mango": 5, "Orange": 3, "Strawberry": 2, "Banana": 1, "Tomato": 2 }
+
+     fruits.sort do |fruit1, fruit2|
+       if fruit1[1] < fruit2[1]
+         -12
+       elsif fruit1[1] == fruit2[1]
+         0
+       else
+         12
+       end
+     end
+   #+END_SRC
+** Array#sort
+   #+BEGIN_SRC C
+                    VALUE
+     rb_ary_sort(VALUE ary)
+     {
+         ary = rb_ary_dup(ary);
+         rb_ary_sort_bang(ary);
+         return ary;
+     }
+   #+END_SRC
+   #+BEGIN_SRC ruby
+   %w(Apple Pear Mango Orange Strawberry strawberry Banana Tomato).sort
+   #+END_SRC
+   #+BEGIN_SRC ruby
+   %w(Apple Pear Mango Orange Strawberry strawberry Banana Tomato).sort { |fruit1, fruit2| fruit1.casecmp(fruit2) }
+   #+END_SRC
+
+* Array#sort! - Implementation of Quicksort
+  #+BEGIN_SRC C
+                    VALUE
+    rb_ary_sort_bang(VALUE ary)
+    {
+        rb_ary_modify(ary);
+        assert(!ARY_SHARED_P(ary));
+        if (RARRAY_LEN(ary) > 1) {
+            VALUE tmp = ary_make_substitution(ary); /* only ary refers tmp */
+            struct ary_sort_data data;
+            long len = RARRAY_LEN(ary);
+
+            RBASIC_CLEAR_CLASS(tmp);
+            data.ary = tmp;
+            data.opt_methods = 0;
+            data.opt_inited = 0;
+            RARRAY_PTR_USE(tmp, ptr, {
+                ruby_qsort(ptr, len, sizeof(VALUE),
+                           rb_block_given_p()?sort_1:sort_2, &data);
+            }); /* WB: no new reference */
+            rb_ary_modify(ary);
+            if (ARY_EMBED_P(tmp)) {
+                if (ARY_SHARED_P(ary)) { /* ary might be destructively operated in the given block */
+                    rb_ary_unshare(ary);
+                    FL_SET_EMBED(ary);
+                }
+                ary_memcpy(ary, 0, ARY_EMBED_LEN(tmp), ARY_EMBED_PTR(tmp));
+                ARY_SET_LEN(ary, ARY_EMBED_LEN(tmp));
+            }
+            else {
+                if (!ARY_EMBED_P(ary) && ARY_HEAP_PTR(ary) == ARY_HEAP_PTR(tmp)) {
+                    FL_UNSET_SHARED(ary);
+                    ARY_SET_CAPA(ary, RARRAY_LEN(tmp));
+                }
+                else {
+                    assert(!ARY_SHARED_P(tmp));
+                    if (ARY_EMBED_P(ary)) {
+                        FL_UNSET_EMBED(ary);
+                    }
+                    else if (ARY_SHARED_P(ary)) {
+                        /* ary might be destructively operated in the given block */
+                        rb_ary_unshare(ary);
+                    }
+                    else {
+                        ruby_sized_xfree((void *)ARY_HEAP_PTR(ary), ARY_HEAP_SIZE(ary));
+                    }
+                    ARY_SET_PTR(ary, RARRAY_CONST_PTR(tmp));
+                    ARY_SET_HEAP_LEN(ary, len);
+                    ARY_SET_CAPA(ary, RARRAY_LEN(tmp));
+                }
+                /* tmp was lost ownership for the ptr */
+                FL_UNSET(tmp, FL_FREEZE);
+                FL_SET_EMBED(tmp);
+                ARY_SET_EMBED_LEN(tmp, 0);
+                FL_SET(tmp, FL_FREEZE);
+            }
+            /* tmp will be GC'ed. */
+            RBASIC_SET_CLASS_RAW(tmp, rb_cArray); /* rb_cArray must be marked */
+        }
+        return ary;
+    }
+  #+END_SRC
+  #+BEGIN_SRC C
+/* qs6.c */
+/*****************************************************/
+/*                                                   */
+/*          qs6   (Quick sort function)              */
+/*                                                   */
+/* by  Tomoyuki Kawamura              1995.4.21      */
+/* kawamura@tokuyama.ac.jp                           */
+/*****************************************************/
+
+typedef struct { char *LL, *RR; } stack_node; /* Stack structure for L,l,R,r */
+#define PUSH(ll,rr) do { top->LL = (ll); top->RR = (rr); ++top; } while (0)  /* Push L,l,R,r */
+#define POP(ll,rr)  do { --top; (ll) = top->LL; (rr) = top->RR; } while (0)      /* Pop L,l,R,r */
+
+#define med3(a,b,c) ((*cmp)((a),(b),d)<0 ?                                   \
+                       ((*cmp)((b),(c),d)<0 ? (b) : ((*cmp)((a),(c),d)<0 ? (c) : (a))) : \
+                       ((*cmp)((b),(c),d)>0 ? (b) : ((*cmp)((a),(c),d)<0 ? (a) : (c))))
+
+typedef int (cmpfunc_t)(const void*, const void*, void*);
+void
+ruby_qsort(void* base, const size_t nel, const size_t size, cmpfunc_t *cmp, void *d)
+{
+  register char *l, *r, *m;          	/* l,r:left,right group   m:median point */
+  register int t, eq_l, eq_r;       	/* eq_l: all items in left group are equal to S */
+  char *L = base;                    	/* left end of current region */
+  char *R = (char*)base + size*(nel-1); /* right end of current region */
+  size_t chklim = 63;                   /* threshold of ordering element check */
+  enum {size_bits = sizeof(size) * CHAR_BIT};
+  stack_node stack[size_bits];          /* enough for size_t size */
+  stack_node *top = stack;
+  int mmkind;
+  size_t high, low, n;
+
+  if (nel <= 1) return;        /* need not to sort */
+  mmprepare(base, size);
+  goto start;
+
+  nxt:
+  if (stack == top) return;    /* return if stack is empty */
+  POP(L,R);
+
+  for (;;) {
+    start:
+    if (L + size == R) {       /* 2 elements */
+      if ((*cmp)(L,R,d) > 0) mmswap(L,R); goto nxt;
+    }
+
+    l = L; r = R;
+    n = (r - l + size) / size;  /* number of elements */
+    m = l + size * (n >> 1);    /* calculate median value */
+
+    if (n >= 60) {
+      register char *m1;
+      register char *m3;
+      if (n >= 200) {
+	n = size*(n>>3); /* number of bytes in splitting 8 */
+	{
+	  register char *p1 = l  + n;
+	  register char *p2 = p1 + n;
+	  register char *p3 = p2 + n;
+	  m1 = med3(p1, p2, p3);
+	  p1 = m  + n;
+	  p2 = p1 + n;
+	  p3 = p2 + n;
+	  m3 = med3(p1, p2, p3);
+	}
+      }
+      else {
+	n = size*(n>>2); /* number of bytes in splitting 4 */
+	m1 = l + n;
+	m3 = m + n;
+      }
+      m = med3(m1, m, m3);
+    }
+
+    if ((t = (*cmp)(l,m,d)) < 0) {                           /*3-5-?*/
+      if ((t = (*cmp)(m,r,d)) < 0) {                         /*3-5-7*/
+	if (chklim && nel >= chklim) {   /* check if already ascending order */
+	  char *p;
+	  chklim = 0;
+	  for (p=l; p<r; p+=size) if ((*cmp)(p,p+size,d) > 0) goto fail;
+	  goto nxt;
+	}
+	fail: goto loopA;                                    /*3-5-7*/
+      }
+      if (t > 0) {
+	if ((*cmp)(l,r,d) <= 0) {mmswap(m,r); goto loopA;}     /*3-5-4*/
+	mmrot3(r,m,l); goto loopA;                           /*3-5-2*/
+      }
+      goto loopB;                                            /*3-5-5*/
+    }
+
+    if (t > 0) {                                             /*7-5-?*/
+      if ((t = (*cmp)(m,r,d)) > 0) {                         /*7-5-3*/
+	if (chklim && nel >= chklim) {   /* check if already ascending order */
+	  char *p;
+	  chklim = 0;
+	  for (p=l; p<r; p+=size) if ((*cmp)(p,p+size,d) < 0) goto fail2;
+	  while (l<r) {mmswap(l,r); l+=size; r-=size;}  /* reverse region */
+	  goto nxt;
+	}
+	fail2: mmswap(l,r); goto loopA;                      /*7-5-3*/
+      }
+      if (t < 0) {
+	if ((*cmp)(l,r,d) <= 0) {mmswap(l,m); goto loopB;}   /*7-5-8*/
+	mmrot3(l,m,r); goto loopA;                           /*7-5-6*/
+      }
+      mmswap(l,r); goto loopA;                               /*7-5-5*/
+    }
+
+    if ((t = (*cmp)(m,r,d)) < 0)  {goto loopA;}              /*5-5-7*/
+    if (t > 0) {mmswap(l,r); goto loopB;}                    /*5-5-3*/
+
+    /* determining splitting type in case 5-5-5 */           /*5-5-5*/
+    for (;;) {
+      if ((l += size) == r)      goto nxt;                   /*5-5-5*/
+      if (l == m) continue;
+      if ((t = (*cmp)(l,m,d)) > 0) {mmswap(l,r); l = L; goto loopA;}/*575-5*/
+      if (t < 0)                 {mmswap(L,l); l = L; goto loopB;}  /*535-5*/
+    }
+
+    loopA: eq_l = 1; eq_r = 1;  /* splitting type A */ /* left <= median < right */
+    for (;;) {
+      for (;;) {
+	if ((l += size) == r)
+	  {l -= size; if (l != m) mmswap(m,l); l -= size; goto fin;}
+	if (l == m) continue;
+	if ((t = (*cmp)(l,m,d)) > 0) {eq_r = 0; break;}
+	if (t < 0) eq_l = 0;
+      }
+      for (;;) {
+	if (l == (r -= size))
+	  {l -= size; if (l != m) mmswap(m,l); l -= size; goto fin;}
+	if (r == m) {m = l; break;}
+	if ((t = (*cmp)(r,m,d)) < 0) {eq_l = 0; break;}
+	if (t == 0) break;
+      }
+      mmswap(l,r);    /* swap left and right */
+    }
+
+    loopB: eq_l = 1; eq_r = 1;  /* splitting type B */ /* left < median <= right */
+    for (;;) {
+      for (;;) {
+	if (l == (r -= size))
+	  {r += size; if (r != m) mmswap(r,m); r += size; goto fin;}
+	if (r == m) continue;
+	if ((t = (*cmp)(r,m,d)) < 0) {eq_l = 0; break;}
+	if (t > 0) eq_r = 0;
+      }
+      for (;;) {
+	if ((l += size) == r)
+	  {r += size; if (r != m) mmswap(r,m); r += size; goto fin;}
+	if (l == m) {m = r; break;}
+	if ((t = (*cmp)(l,m,d)) > 0) {eq_r = 0; break;}
+	if (t == 0) break;
+      }
+      mmswap(l,r);    /* swap left and right */
+    }
+
+    fin:
+    if (eq_l == 0)                         /* need to sort left side */
+      if (eq_r == 0)                       /* need to sort right side */
+	if (l-L < R-r) {PUSH(r,R); R = l;} /* sort left side first */
+	else           {PUSH(L,l); L = r;} /* sort right side first */
+      else R = l;                          /* need to sort left side only */
+    else if (eq_r == 0) L = r;             /* need to sort right side only */
+    else goto nxt;                         /* need not to sort both sides */
+  }
+}
+#endif /* HAVE_GNU_QSORT_R */
+  
+  #+END_SRC
+  #+BEGIN_SRC ruby
+  a = [ "d", "a", "e", "c", "b" ]
+  a.sort! 
+  #+END_SRC
+  #+BEGIN_SRC ruby
+  a = [ "d", "a", "e", "c", "b" ]
+  a.sort! { |x,y| y <=> x }
+  #+END_SRC
+
+** Ruby Implementation of Quicksort
+   - Credit: [[https://github.com/kanwei/algorithms/blob/master/lib/algorithms/sort.rb][Ruby algorithms]]
+  #+BEGIN_SRC ruby
+      # Quicksort: A divide-and-conquer sort that recursively partitions a container until it is sorted.
+      # Requirements: Container should implement #pop and include the Enumerable module.
+      # Time Complexity: О(n log n) average, O(n^2) worst-case
+      # Space Complexity: О(n) auxiliary
+      # Stable: No
+      # 
+      #   Algorithms::Sort.quicksort [5, 4, 3, 1, 2] => [1, 2, 3, 4, 5]
+      # def self.quicksort(container)
+      #   return [] if container.empty?
+      #   
+      #   x, *xs = container
+      # 
+      #   quicksort(xs.select { |i| i <  x }) + [x] + quicksort(xs.select { |i| i >= x })
+      # end
+  
+      $string = '';
+
+      # def quicksort(container, left = 0, right = container.size - 1)
+      #   if left < right 
+      #     middle = partition(container, left, right)
+      #     quicksort(container, left, middle - 1)
+      #     quicksort(container, middle + 1, right)
+      #   end
+      # end
+  
+      def quicksort(container)
+        bottom, top = [], []
+        top[0] = 0
+        bottom[0] = container.size
+        $string << "container size: #{container.size}\n"
+        i = 0
+        while i >= 0 do
+          $string << "Array: #{container}\n"
+          l = top[i]
+          r = bottom[i] - 1;
+          if l < r
+            $string << "Pivot: #{container[l]}\n"
+            pivot = container[l]
+            while l < r do
+              r -= 1 while (container[r] >= pivot  && l < r)
+              if (l < r)
+                container[l] = container[r]
+                l += 1
+              end
+              l += 1 while (container[l] <= pivot  && l < r)
+              if (l < r)
+                container[r] = container[l]
+                r -= 1
+              end
+            end
+            container[l] = pivot
+            top[i+1] = l + 1
+            bottom[i+1] = bottom[i]
+            bottom[i] = l
+            i += 1
+          else
+            i -= 1
+          end
+        end
+        container    
+      end
+
+      a = [ "d", "a", "e", "c", "b", "f", "h", "z", "Z", "1" ]
+      a.quicksort(a)
+      $string
+  #+END_SRC
+
+* Enumerable#sort_by
+  #+BEGIN_SRC C
+                   static VALUE
+    enum_sort_by(VALUE obj)
+    {
+        VALUE ary, buf;
+        struct MEMO *memo;
+        long i;
+        struct sort_by_data *data;
+
+        RETURN_SIZED_ENUMERATOR(obj, 0, 0, enum_size);
+
+        if (RB_TYPE_P(obj, T_ARRAY) && RARRAY_LEN(obj) <= LONG_MAX/2) {
+            ary = rb_ary_new2(RARRAY_LEN(obj)*2);
+        }
+        else {
+            ary = rb_ary_new();
+        }
+        RBASIC_CLEAR_CLASS(ary);
+        buf = rb_ary_tmp_new(SORT_BY_BUFSIZE*2);
+        rb_ary_store(buf, SORT_BY_BUFSIZE*2-1, Qnil);
+        memo = MEMO_NEW(0, 0, 0);
+        OBJ_INFECT(memo, obj);
+        data = (struct sort_by_data *)&memo->v1;
+        RB_OBJ_WRITE(memo, &data->ary, ary);
+        RB_OBJ_WRITE(memo, &data->buf, buf);
+        data->n = 0;
+        rb_block_call(obj, id_each, 0, 0, sort_by_i, (VALUE)memo);
+        ary = data->ary;
+        buf = data->buf;
+        if (data->n) {
+            rb_ary_resize(buf, data->n*2);
+            rb_ary_concat(ary, buf);
+        }
+        if (RARRAY_LEN(ary) > 2) {
+            RARRAY_PTR_USE(ary, ptr,
+                          ruby_qsort(ptr, RARRAY_LEN(ary)/2, 2*sizeof(VALUE),
+                                     sort_by_cmp, (void *)ary));
+        }
+        if (RBASIC(ary)->klass) {
+            rb_raise(rb_eRuntimeError, "sort_by reentered");
+        }
+        for (i=1; i<RARRAY_LEN(ary); i+=2) {
+            RARRAY_ASET(ary, i/2, RARRAY_AREF(ary, i));
+        }
+        rb_ary_resize(ary, RARRAY_LEN(ary)/2);
+        RBASIC_SET_CLASS_RAW(ary, rb_cArray);
+        OBJ_INFECT(ary, memo);
+
+        return ary;
+    }
+  #+END_SRC
+  
+  #+BEGIN_SRC ruby 
+    Dir["*"].collect { |f|
+      $string << "Filename: #{f}\n"
+      [test(?M, f), f]
+    }.sort.collect { |f| f[1] }
+    
+    $string
+  #+END_SRC
+
+  #+BEGIN_SRC ruby :results output raw
+    require 'benchmark'
+
+    a = (1..100000).map { rand(100000) }
+
+    Benchmark.bm(10) do |b|
+      b.report("Sort")    { a.sort }
+      b.report("Sort by") { a.sort_by { |a| a } }
+    end
+  #+END_SRC
+
+  #+BEGIN_SRC ruby :results output raw
+    require 'benchmark'
+
+    a = (1..100000).map { "word#{rand(100000)}" }
+
+    Benchmark.bm(10) do |b|
+      b.report("Sort")    { a.sort { |word1, word2| word1.length <=> word2.length } }
+      b.report("Sort by") { a.sort_by { |a| a.length } }
+    end
+  #+END_SRC
+
+  #+BEGIN_SRC ruby :results output raw
+    require 'benchmark'
+
+    a = (1..100000).map { "word#{rand(100000)}" }
+
+    Benchmark.bm(10) do |b|
+      b.report("Sort")    { a.sort }
+      b.report("Sort by") { a.sort_by { |a| a } }
+    end
+  #+END_SRC
+
+  #+BEGIN_SRC ruby :results output raw
+    require 'benchmark'
+
+    a = (1..100000).map { "word#{rand(100000)}" }
+
+    Benchmark.bm(10) do |b|
+      b.report("Sort")    { a.sort { |word1, word2| word1 <=> word2 } }
+      b.report("Sort by") { a.sort_by { |a| a } }
+    end
+  #+END_SRC
+
+  #+BEGIN_SRC ruby :results output raw
+    require 'benchmark'
+    files = Dir["*"]
+
+    Benchmark.bm(10) do |b|
+      b.report("Sort")    { files.sort { |a, b| test(?M, a) <=> test(?M, b) } }
+      b.report("Sort by") { files.sort_by { |f| test(?M, f) } }
+    end
+  #+END_SRC
+
+  #+BEGIN_SRC ruby :results output raw
+    require 'benchmark'
+
+    a = (1..100000).map { rand(100000) }
+
+    Benchmark.bm(10) do |b|
+      b.report("Sort")    { a.sort }
+      b.report("Sort by") { a.sort_by { |a| a } }
+    end
+  #+END_SRC

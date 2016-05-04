@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Farewell Photoshop</title>
+    <link rel="stylesheet" href="./styles/index.css" />
+  </head>
+  <body>
+    <section class="slide">
+      <main>
+        <header>
+          <h1>Farewell Photoshop</h1>
+          <h2>Advanced CSS Image Techniques</h2>
+        </header>
+      </main>
+      <footer><address>
+        Jessica Claire Edwards
+      </address><span class="slide-number"></span></footer>
+    </section>
+
+    <section class="slide">
+      <main>
+        <header>
+          <h1>Why?</h1>
+        </header>
+      </main>
+      <footer><span></span><span class="slide-number"></span></footer>
+    </section>
+    
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>Gradients</h1>
+          <h2>A function that returns an image.</h2>
+        </header>
+        <ul>
+          <li><code>linear-gradient()</code></li>
+          <li><code>radial-gradient()</code></li>
+          <li><code>repeating-linear-gradient()</code></li>
+          <li><code>repeating-radial-gradient()</code></li>
+        </ul>
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    
+    <!-- Linear Gradient Function Example -->
+    <section class="slide hero-example">
+      <header>
+        <h1>&#60;linear-gradient()&#62;</h1>
+      </header>
+      <section class="hero example">
+        <header>
+          <h2>❤</h2>
+          <nav>
+            <button class="sign-up">Sign in</button>
+            <button class="log-in">Log in</button>
+          </nav>
+        </header>
+        <section>
+          <p class="byline">See what people are complaining about right now.</p>
+          <p>Find community, arguments and inspiration about the things you love.</p>
+        </section>
+        <nav class="categories">
+          <ul>
+            <li>JavaScript Fatigue</li>
+            <li>Rants</li>
+            <li>JavaScript Fatigue Fatigue</li>
+            <li>Cat Memes</li>
+          </ul>
+        </nav>
+      </section>
+      <main>
+
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+    <!-- Linear Gradient Function Example -->
+    <section class="slide hero-example">
+      <header>
+        <h1>&#60;linear-gradient()&#62;</h1>
+      </header>
+      <section class="hero example">
+        <header>
+          <h2>❤</h2>
+          <nav>
+            <button class="sign-up">Sign in</button>
+            <button class="log-in">Log in</button>
+          </nav>
+        </header>
+        <section>
+          <p class="byline">See what people are complaining about right now.</p>
+          <p>Find community, arguments and inspiration about the things you love.</p>
+        </section>
+        <nav class="categories">
+          <ul>
+            <li>JavaScript Fatigue</li>
+            <li>Rants</li>
+            <li>JavaScript Fatigue Fatigue</li>
+            <li>Cat Memes</li>
+          </ul>
+        </nav>
+      </section>
+      <main>
+<code class="css"><var>.hero</var> {
+  background-color: <span class="color" data-color="rgb(89, 173, 235)">rgb(89, 173, 235)</span>;
+  background: <span class="function">linear-gradient(</span>
+                <span>to right</span>,
+                <span class="color" data-color="rgb(89, 173, 235)">rgb(89, 173, 235)</span>, <span class="color" data-color="rgb(53, 206, 147)">rgb(53, 206, 147)</span>
+              <span class="function">)</span>;
+}</code>
+        
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>linear-gradient()</h1>
+        </header>
+        <pre class="spec"><code>
+linear-gradient(direction, color-stop-list)
+        </code></pre>
+        <section><p>Direction can be an angle, or :</p>
+          <ul>
+            <li>to top (0deg)</li>
+            <li>to right (90deg)</li>
+            <li>to bottom (180deg)</li>
+            <li>to left (270deg)</li>
+          </ul>
+        </section>
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+
+    <!-- User Interface Example -->
+    <section class="slide user-interface-example">
+      <header>
+        <h1>&#60;linear-gradient()&#62;</h1>
+      </header>
+      <section class="example">
+        <header>
+          <span>jessbook</span>
+          <nav>
+            <ul>
+              <li>❤</li>
+              <li>★</li>
+              <li>☁</li>
+            </ul>
+          </nav>
+        </header>
+        <main>
+          <aside>
+            <ul>
+              <li>Home</li>
+              <li>Events</li>
+              <li>Pages</li>
+              <li>Friends</li>
+              <li>Cats</li>
+            </ul>
+          </aside>
+          <section>
+            <article>
+              <nav>
+                <ul>
+                  <li><a>Update Status</a></li>
+                  <li><a>Add Cat Photos</a></li>
+                  <li><a>Add Photo Album (of cats)</a></li>
+                </ul>
+              </nav>
+              <form>
+                <input type="textarea" value="What's on your mind?" />
+                <button>Post</button>
+              </form>
+            </article>
+            <article>
+              <address>Jane Smith</address>
+              <q>#FOMO</q>
+            </article>
+            <article>
+              <address>John Doe</address>
+              <q>#LOL</q>
+            </article>
+            <article>
+              <address>Bob</address>
+              <q>#BBQ</q>
+            </article>
+          </section>
+          <aside>
+            <ul>
+              <li>Other things</li>
+              <li>More things</li>
+              <li>Ad about something</li>
+              
+            </ul>
+          </aside>
+        </main>
+      </section>
+      <main>
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    
+    <!-- User Interface Example -->
+    <section class="slide user-interface-example user-interface-example-2">
+      <header>
+        <h1>&#60;linear-gradient()&#62;</h1>
+      </header>
+      <section class="example">
+        <header>
+          <span>jessbook</span>
+          <nav>
+            <ul>
+              <li>❤</li>
+              <li>★</li>
+              <li>☁</li>
+            </ul>
+          </nav>
+        </header>
+        <main>
+          <aside>
+            <ul>
+              <li>Home</li>
+              <li>Events</li>
+              <li>Pages</li>
+              <li>Friends</li>
+              <li>Cats</li>
+            </ul>
+          </aside>
+          <section>
+            <article>
+              <nav>
+                <ul>
+                  <li><a>Update Status</a></li>
+                  <li><a>Add Cat Photos</a></li>
+                  <li><a>Add Photo Album (of cats)</a></li>
+                </ul>
+              </nav>
+              <form>
+                <input type="textarea" value="What's on your mind?" />
+                <button>Post</button>
+              </form>
+            </article>
+            <article>
+              <address>Jane Smith</address>
+              <q>#FOMO</q>
+            </article>
+            <article>
+              <address>John Doe</address>
+              <q>#LOL</q>
+            </article>
+            <article>
+              <address>Bob</address>
+              <q>#BBQ</q>
+            </article>
+          </section>
+          <aside>
+            <ul>
+              <li>Other things</li>
+              <li>More things</li>
+              <li>Ad about something</li>
+              
+            </ul>
+          </aside>
+        </main>
+      </section>
+      <main>
+<code class="css"><var>header, button</var> {
+  background-color: <span class="color" data-color="rgb(59, 89, 152)">rgb(59, 89, 152)</span>;
+  background: <span class="function">linear-gradient(</span>
+            <span>to bottom</span>,
+            <span class="color" data-color="rgba(255, 255, 255, 0.1)">rgba(255, 255, 255, 0.1)</span>, <span class="color" data-color="transparent">transparent</span>
+            <span class="function">)</span>, <span class="color" data-color="rgb(59, 89, 152)">rgb(59, 89, 152)</span>;
+}</code>
+        <label>
+          <input name="color-input" type="color" />Change Colour Theme
+        </label>
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>radial-gradient()</h1>
+        </header>
+        <pre class="spec"><code>
+radial-gradient(shape, size, color-stop-list)
+        </code></pre>
+        <section><p>Shape can be either a <strong>circle</strong> or an <strong>ellipse</strong>.</p>
+        </section>
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+    
+    <!-- Product Display -->
+    <section class="slide product-display">
+      <header>
+        <h1>&#60;radial-gradient()&#62;</h1>
+      </header>
+      <section>
+        <figure class="product">
+          <img src="./assets/cat.png" alt="Cat" />
+          <img src="./assets/cat.png" alt="Cat" />
+          <img src="./assets/cat.png" alt="Cat" />
+        </figure>
+      </section>
+      <main>
+<code class="css"><var>.cat:hover</var> {
+  background: <span class="function">radial-gradient(</span>circle, <span class="color" data-color="red">red</span> 30%, <span class="color" data-color="transparent">transparent</span> 50%<span class="function">)</span>;
+}</code></pre>
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    
+    
+    
+    <!-- Radial Gradients -->
+    <section class="slide radial-gradient">
+      <header>
+        <h1>&#60;radial-gradient()&#62;</h1>
+      </header>
+      <main>
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    
+
+    <!-- Radial Gradients -->
+    <section class="slide radial-gradient">
+      <header>
+        <h1>&#60;radial-gradient()&#62;</h1>
+      </header>
+      <main>
+<code class="css"><var>.slide</var> {
+  background: <span class="function">radial-gradient(</span>
+                <span class="color" data-color="rgba(255, 255, 255, 0.8)">rgba(255, 255, 255, 0.8)</span> 2px,
+                <span class="color" data-color="transparent">transparent</span> 4px
+              <span class="function">)</span> 0 / 25px 25px,
+              <span class="function">radial-gradient(</span>
+                circle at 0 25%,
+              <span class="color" data-color="skyblue">skyblue</span> 50%, <span class="color" data-color="yellow">yellow</span>
+              <span class="function">)</span>;
+}</code></pre>
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    <!-- Repeating Gradients -->
+    <section class="slide repeating-radial-gradient">
+      <header>
+        <h1>&#60;repeating-radial-gradient()&#62;</h1>
+        <h1>&#60;repeating-linear-gradient()&#62;</h1>
+      </header>
+      <section>
+        <figure class="ocean">
+          <figcaption>Ripples</figcaption>
+        </figure>
+        <figure class="wood-panel">
+          <figcaption>Wood Panel</figcaption>
+        </figure>
+        
+      </section>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    <!-- Repeating Gradients -->
+    <section class="slide repeating-radial-gradient repeating-radial-gradient-2">
+      <header>
+        <h1>&#60;repeating-radial-gradient()&#62;</h1>
+        <h1>&#60;repeating-linear-gradient()&#62;</h1>
+      </header>
+      <section>
+        <figure class="ocean">
+          <figcaption>Ripples</figcaption>
+<code class="css"><var>.ripples</var> {
+  background: <span class="function">repeating-radial-gradient(</span>
+                circle,
+                <span class="color" data-color="transparent">transparent</span> 3px,
+                <span class="color" data-color="rgba(255, 255, 255, 0.1)">rgba(255, 255, 255, 0.1)</span> 43px,
+                <span class="color" data-color="rgba(26, 71, 129, 0.5)">rgba(26, 71, 129, 0.5)</span> 137px
+              <span class="function">)</span>,
+              <span class="function">repeating-radial-gradient(</span>
+                circle,
+                <span class="color" data-color="rgb(26, 71, 129)">rgb(26, 71, 129)</span>
+                <span class="color" data-color="rgba(255, 255, 255, 0.1)">rgba(255, 255, 255, 0.1)</span> 7px,
+                <span class="color" data-color="transparent">transparent</span> 109px
+              <span class="function">)</span>,
+              <span class="color" data-color="rgb(26, 71, 129)">rgb(26, 71, 129)</span>;
+}</code>
+        </figure>
+        <figure class="wood-panel">
+          <figcaption>Wood Panel</figcaption>
+<code class="css"><var>.panels</var> {
+  background: <span class="function">repeating-linear-gradient(</span>
+                to right,
+                <span class="color" data-color="transparent">transparent</span> 1px,
+                <span class="color" data-type="rgba(0, 0, 0, 0.2)">rgba(0, 0, 0, 0.2)</span> 5px,
+                <span class="color" data-color="transparent">transparent</span> 93px),
+              <span class="function">)</span>,
+              <span class="function">repeating-linear-gradient(</span>
+                to right,
+                <span class="color" data-color="transparent">transparent</span> 0px,
+                <span class="color" data-color="rgba(0, 0, 0, 0.2)">rgba(0, 0, 0, 0.2)</span> 5px,
+                <span class="color" data-color="rgba(0, 0, 0, 0.1)">rgba(0, 0, 0, 0.1)</span> 31px,
+                <span class="color" data-color="transparent">transparent</span> 47px
+              <span class="function">)</span>;
+}</code>
+        </figure>
+        
+      </section>
+      
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>Support</h1>
+          <h2>Global: 89.12%</h2>
+          <h3>Unprefixed: 77.95%</h3>
+          <p>Not supported in <strong>Opera Mini</strong> or <strong>Internet Explorer</strong> versions less than 11.</p>
+          <p>Set a fallback via the <code>background-color</code> attribute.</p>
+        </header>
+      </main>
+      <footer><span>Gradients</span><span class="slide-number"></span></footer>
+    </section>
+
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>Blend Modes</h1>
+          <h2>1 pixel + 1 pixel = new pixel!</h2>
+        </header>
+        <ul>
+          <li><code>background-blend-mode</code></li>
+          <li><code>mix-blend-mode</code></li>
+          <li><code>isolation</code></li>
+        </ul>
+      </main>
+      
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer>
+    </section>
+    
+    <!-- Blend Modes -->
+    <section class="slide about-blend-modes">
+      <header><h1>&#60;blend-mode&#62;</h1></header>
+      <section>
+        <div class="blended-images">
+          <figure>
+            <img src="./assets/fifi.png" alt="Fifi the cat" />
+          </figure>
+          <figure>
+            <img src="./assets/polka-dots.png" alt="Rainbow polka dots" />
+          </figure>
+        </div>
+        <form class="blend-modes">
+          <label class="separable"><input name="blend-modes" type="radio" value="normal" /><code>normal</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="multiply" /><code>multiply</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="screen" /><code>screen</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="overlay" /><code>overlay</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="darken" /><code>darken</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="lighten" /><code>lighten</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="color-dodge" /><code>color-dodge</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="color-burn" /><code>color-burn</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="hard-light" /><code>hard-light</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="soft-light" /><code>soft-light</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="difference" /><code>difference</code></label>
+          <label class="separable"><input name="blend-modes" type="radio" value="exclusion" /><code>exclusion</code></label>
+          <label class="non-separable"><input name="blend-modes" type="radio" value="hue" /><code>hue</code></label>
+          <label class="non-separable"><input name="blend-modes" type="radio" value="saturation" /><code>saturation</code></label>
+          <label class="non-separable"><input name="blend-modes" type="radio" value="color" /><code>color</code></label>
+          <label class="non-separable"><input name="blend-modes" type="radio" value="luminosity" /><code>luminosity</code></label>
+        </fieldgroup>
+      </section>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer>
+    </section>
+
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>background-blend-mode</h1>
+          <h2><code>background-blend-mode: &#60;blend-mode&#62;</code></h2>
+          <p>Blend layers of our background.</p>
+        </header>
+      </main>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer>
+    </section>
+
+    <!-- Background Blend Modes -->
+    <section class="slide background-blend-mode">
+      <header><h1>background-blend-mode: &#60;blend-mode&#62;</h1></header>
+      <main>
+        <section><img src="assets/blacktown-station.jpg" alt="station" /> <img src="assets/big-tree.jpg" alt="station" /></section>
+<code class="css">background: url('blacktown-station.jpg') no-repeat,
+            url('big-tree.jpg') left / cover no-repeat,
+            black;
+background-blend-mode: lighten;</code>
+        </pre>
+      </main>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer></main>
+    </section>
+
+    <!-- Background Blend Modes -->
+    <section class="slide background-blend-mode-2">
+      <header><h1>background-blend-mode: &#60;blend-mode&#62;</h1></header>
+      <main>
+        <section><img src="assets/blacktown-station.jpg" alt="station" /> <img src="assets/big-tree.jpg" alt="station" /></section>
+        <code class="css">background: url('blacktown-station.jpg') no-repeat,
+            url('big-tree.jpg') left / cover no-repeat,
+            black;
+background-blend-mode: lighten, hard-light;</code>
+        </pre>
+      </main>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer></main>
+    </section>
+
+    
+    <!-- Isolation -->
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>mix-blend-mode</h1>
+          <h2><code>mix-blend-mode: &#60;blend-mode&#62;;</code></h2>
+          <p>Blend an element with other elements.</p>
+        </header>
+      </main>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer>
+    </section>
+    
+
+    <!-- Mix-blend-mode -->
+    <section class="slide mix-blend-mode">
+      <header><h1>mix-blend-mode: &#60;blend-mode&#62;</h1></header>
+      <section class="example">
+        <article>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa.</article>
+
+        <article>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa.</article>
+      </section>
+      <main>
+<code class="css"><var>article</var> {
+  background: pink;
+  mix-blend-mode: difference;
+}</code>
+
+        
+      </main>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer>
+    </section>
+
+
+    <!-- Isolation -->
+    <section class="slide isolation">
+      <header><h1>isolation: isolate | none</h1></header>
+      <main>
+        <h1><strong>Look at me!</strong></h1>
+      </main>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer></main>
+    </section>
+
+    <section class="slide video-blending">
+      <header><h1>Video Blending</h1></header>
+      <figure>
+        <span class="cta">Explore</span>
+        <video class="calvin-klein" src="assets/calvin-klein.mp4" controls />
+      </figure>
+      <fieldgroup class="blend-modes">
+        <label class="separable"><input name="blend-modes" type="radio" value="normal" /><code>normal</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="multiply" /><code>multiply</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="screen" /><code>screen</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="overlay" /><code>overlay</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="darken" /><code>darken</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="lighten" /><code>lighten</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="color-dodge" /><code>color-dodge</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="color-burn" /><code>color-burn</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="hard-light" /><code>hard-light</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="soft-light" /><code>soft-light</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="difference" /><code>difference</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="exclusion" /><code>exclusion</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="hue" /><code>hue</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="saturation" /><code>saturation</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="color" /><code>color</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="luminosity" /><code>luminosity</code></label>
+      </fieldgroup>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer>
+    </section>
+    
+    
+    <!-- Drop shadows -->
+    <section class="slide shadows">
+      <header><h1>mix-blend-mode: &#60;blend-mode&#62;</h1></header>
+      <main>
+        <br/>
+        <h2>Photoshop prototype? No problem!</h2>
+<code class="css"><var>.logo:before</var> {
+  position: absolute;
+  content: url('../assets/wing-shadow.png');
+  mix-blend-mode: multiply;
+}</code>
+        <div class="example">
+          <figure class="correct">
+            <img class="blended" src="./assets/virgin-logo-top.png" alt="Virgin Logo" />
+          </figure>
+        </div>
+      </main>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer></main>
+    </section>
+
+
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>Support</h1>
+          <h2>Global: 54.73% + 9.78% = 64.5%</h2>
+          <p>Not supported in <strong>Opera Mini</strong>, <strong>Internet Explorer</strong>, or <strong>Edge</strong>.</p>
+          <p><code>mix-blend-mode</code> on SVG elements is currently only supported in Firefox.</p>
+          <p>Under consideration in <strong>Edge</strong>, but has a low priority.</p>
+          <p>In <strong>Safari</strong>, hue, saturation, color, and luminosity are not supported :(</p>
+          <p>Polyfills using the canvas are available for <code>background-blend-mode</code>.</p>
+          <p><code>isolation</code> is only supported in <strong>Firefox</strong> and <strong>Chrome</strong>.</p>
+        </header>
+        <section>
+          <h1>Considerations</h1>
+          <h2>Consistency</h2>
+          <p>Don't expect the same colours on every device OR browser!</p>
+          <h2>Accessibility</h2>
+          <p>Ensure contrast on text.</p>
+          <p>Make sure your design still works!</p>
+          <h2>Stacking Context</h2>
+          <p><code>mix-blend-mode</code> creates a new stacking context.</p>
+          <p>Only solution is to figure out how stacking contexts work.</p>
+        </section>
+      </main>
+      <footer><span>Blend Modes</span><span class="slide-number"></span></footer>
+    </section>
+    
+    <!-- Filters -->
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>Filters</h1>
+          <h2><code>filter</code> property, not the <code>filter()</code> function.</h2>
+        </header>
+        
+      </main>
+      <footer><span>Filters</span><span class="slide-number"></span></footer>
+    </section>
+
+    <!-- Filters -->
+    <section class="slide about-filters">
+      <header><h1>filter: &#60;filter-function()&#62;</h1></header>
+      <section>
+        <figure>
+          <img src="./assets/pepper.jpg" alt="Pepper the cat" />
+        </figure>
+      </section>
+      <section class="filters">
+        <label>
+          <input name="filters" type="checkbox" value="blur(5px)" />
+          <code>blur(5px)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="brightness(2)" />
+          <code>brightness(2)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="contrast(2)" />
+          <code>contrast(2)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="drop-shadow(5px 5px 3px blue)" />
+          <code>drop-shadow(5px 5px 3px blue)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="grayscale(1)" />
+          <code>grayscale(1)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="hue-rotate(100deg)" />
+          <code>hue-rotate(100deg)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="invert(1)" />
+          <code>invert(1)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="opacity(0.2)" />
+          <code>opacity(0.2)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="saturate(2)" />
+          <code>saturate(2)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="sepia(1)" />
+          <code>sepia(1)</code>
+        </label>
+        <label>
+          <input name="filters" type="checkbox" value="url" />
+          <code>url()</code>
+        </label>
+        
+      </section>
+      <footer><span>Filters</span><span class="slide-number"></span></footer>
+    </section>
+
+    
+    <!-- Drop shadow -->
+    <section class="slide drop-shadow">
+      <header><h1>&#60;drop-shadow()&#62;</h1></header>
+      <img class="filtered" src="./assets/apple.png" alt="Apple" />
+      <main>
+<code class="css"><var>img</var> {
+  filter: drop-shadow(5px 5px 3px black);
+}</code>
+        <h2><code>drop-shadow(x-offset y-offset blur-radius color);</code></h2>
+      </main>
+      <footer><span>Filters</span><span class="slide-number"></span></footer>
+    </section>
+
+    <!-- Hue-rotate -->
+    <section class="slide hue-rotate">
+      <header><h1>&#60;hue-rotate()&#62;</h1></header>
+      <main>
+        <section>
+          <img class="pink" src="./assets/lipstick.png" alt="Lipstick" />
+          <img class="red" src="./assets/lipstick.png" alt="Lipstick" />
+        </section>
+      </main>
+<code class="css"><var>.lipstick</var> {
+  filter: hue-rotate(20deg);
+}</code>
+      <footer><span>Filters</span><span class="slide-number"></span></footer>
+    </section>
+
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>Support</h1>
+          <h2>Global: 78.34% + 1.73% = 80.07%</h2>
+          <h2>Unprefixed: 9.27% + 1.73% = 11%</h2>
+          <p>Not supported in <strong>Opera Mini</strong>, or <strong>Internet Explorer</strong>.</p>
+          <p>Only available in <strong>Edge</strong> behind the 'Enable CSS filter' flag, and does not support the url() function.</p>
+          <p>Unprefixed in <strong>Safari</strong> as of 9.1, woo!</p>
+          <p><code>-webkit-filter</code> used pretty much everywhere.</p>
+          <p>SVG filter global support is at 90%+!</p>
+          <p>Polyfills using the canvas are available for <code>background-blend-mode</code>.</p>
+
+        </header>
+        <section>
+          <h1>Considerations</h1>
+          <h2>Consistency</h2>
+          <h2>Accessibility</h2>
+          
+        </section>
+        <section>
+          <h1>The Future</h1>
+          <h2><code>filter()</code></h2>
+          <p>Available in <strong>Safari</strong></p>
+          <h2><code>backdrop-filter()</code></h2>
+          <p>Available in <strong>Safari</strong></p>
+          <p>Behind <em>Experimental Web Platform Features</em> flag in <strong>Chrome</strong></p>
+        </section>
+      </main>
+      <footer><span>Filters</span><span class="slide-number"></span></footer>
+    </section>
+
+
+    <!-- Summary -->
+    <section class="slide intro">
+      <main>
+        <header>
+          <h1>Summary</h1>
+          <h2>Minimise network requests</h2>
+          <h2>Lower page weight</h2>
+          <h2>Streamline the development workflow</h2>
+          <h2>Have fun :)</h2>
+        </header>
+        
+      </main>
+      <footer><span></span><span class="slide-number"></span></footer>
+    </section>
+    
+    <section class="slide">
+      <main>
+        <header>
+          <h1>Thank you!</h1>
+        </header>
+      </main>
+      <footer><address>
+        Jessica Claire Edwards
+      </address><span class="slide-number"></span></footer>
+    </section>
+    <script>
+     var styles = getComputedStyle(document.documentElement);
+
+     document.addEventListener('change', function changeHandler(event) {
+       
+       if (event.target.type == 'color') {
+         document.querySelector('.user-interface-example-2').style.setProperty('--current-primary-color', event.target.value);
+         
+       } else if (event.target.type == 'checkbox') {
+         var filters = document.querySelectorAll('.about-filters input:checked');
+         var array = [];
+         for (var i = 0; i < filters.length; ++i) {
+           array.push(filters[i].value); 
+         }
+         document.documentElement.style.setProperty('--current-filter', array.join(" "));
+       } else {
+         document.documentElement.style.setProperty('--current-blend-mode', event.target.value);
+       }
+     }, false);
+    </script>
+  </body>
+</html>

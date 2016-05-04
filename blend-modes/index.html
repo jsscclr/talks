@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Blend Modes in CSS</title>
+  </head>
+  <style>
+   :root {
+     --current-blend-mode: normal;
+   }
+   
+   body, figure, input[type=radio], h1, pre {
+     padding: 0;
+     margin: 0;
+     
+   }
+
+   pre {
+     font-size: 2em;
+     overflow-y: scroll;
+   }
+   
+   body {
+     scroll-snap-type: mandatory;
+     scroll-snap-points-y: repeat(100%);
+     overflow-x: hidden;
+     font-family: monospace;
+   }
+
+   h1 {
+     font-size: 4em;
+     text-transform: uppercase;
+     font-weight: 400;
+   }
+
+   code {
+     text-transform: lowercase;
+   }
+   
+   .slide {
+     margin: 0 auto;
+     width: 100vw;
+     height: 100vh;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-around;
+     align-items: center;
+   }
+
+
+   .slide:first-child {
+     background: url('embers.jpg') center / cover, url('grey.jpg') center / cover, black;
+     background-blend-mode: lighten;
+     animation: start-screen 20s ease-in-out alternate infinite;
+   }
+
+   .slide:first-child address {
+     color: #000000;
+     font-weight: 400;
+     font-size: 2em;
+   }
+
+   .slide:first-child h1 {
+     color: #000000;
+     font-weight: 400;
+   }
+
+   @keyframes start-screen {
+     0% {
+       background-color: grey;
+     }
+     100% {
+       background-color: black;
+     }
+   }
+
+   .pixel-equation, .blended-images {
+     display: flex;
+     align-items: center;
+     justify-content: space-around;
+     min-width: 50%;
+   }
+   
+   .pixel {
+     height: 50px;
+     width: 50px;
+     background: #000000;
+   }
+
+
+   
+   .blended-images figure {
+     transition: transform 1s;
+   }
+
+   .blended-images figure img {
+     height: 25vh;
+     width: 25vh;
+     object-fit: contain;
+     border-radius: 50%;
+   }
+
+   
+   .blended-images:not(:hover) figure:first-child {
+     transform: translateX(50%);
+   }
+
+   .blended-images:not(:hover) figure:last-child {
+     transform: translateX(-50%);
+   }
+   
+
+   .blended-images figure:last-child {
+     mix-blend-mode: var(--current-blend-mode);
+   }
+
+   .blend-modes {
+     display: flex;
+     flex-wrap: wrap;
+     background: skyblue;
+     border-radius: 1em;
+   }
+   
+   .blend-modes input {
+     display:none;
+     width: 0px;
+     height: 0px;
+     border: none;
+   }
+
+   .blend-modes label {
+     flex: 1 20%;
+     text-align: center;
+     padding: 1em 0.5em;
+   }
+
+   .blend-modes code {
+     padding: 1em 0.5em;
+     border-radius: 0.5em;
+   }
+
+   .blend-modes input:checked + code {
+     background: pink;
+   }
+
+   .images {
+     display: flex;
+     justify-content: space-around;
+     width: 60%;
+   }
+
+   .background-blend-mode img, .mix-blend-mode .images img {
+     height: 15vh;
+     width: 20vh;
+     object-fit: cover;
+   }
+
+   .isolation .images img {
+     height: 15vh;
+     width: 20vh;
+     object-fit: cover;
+   }
+
+   .background-blend-mode .example {
+     background: url('blacktown-station.jpg') no-repeat, url('big-tree.jpg') left / cover no-repeat;
+     width: 50%;
+     border-radius: 0.5em;
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+     flex-basis: 40%;
+   }
+
+   .background-blend-mode .example:hover {
+     background-blend-mode: lighten;
+   }
+
+   .css {
+     background-color: #000000;
+     padding: 0.5em 1em;
+     border-radius: 0.5em;
+     color: #FFFFFF;
+   }
+
+   .mix-blend-mode .example {
+     position: relative;
+     flex-basis: 40%;
+     width: 40%;
+   }
+
+   .mix-blend-mode .example img {
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+   }
+
+   .isolation .example img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+   }
+   
+   .mix-blend-mode .example:hover img {
+     mix-blend-mode: multiply;
+   }
+
+   .isolation {
+     background: pink;
+     display: none;
+   }
+
+   .isolation img {
+     isolation: isolate;
+   }
+   
+   .isolation .example {
+     padding: 2em;
+     margin-top: -50%;
+     background: url('trees.png') center / cover;
+   }
+
+   .isolation .example span {
+     margin-left: -50%;
+     background-color: white;
+     
+   }
+   
+   .isolation .example:hover {
+     mix-blend-mode: difference;
+     
+   }
+   
+   .replicating-photoshop .wing-shadow {
+     position: absolute;
+     top: 50%;
+     transform: translateY(-55%);
+     object-fit: scale-down;
+   }
+   
+   .replicating-photoshop .blended {
+     position: relative;
+     padding-left: 3px;
+     object-fit: scale-down; 
+   }
+
+   
+   .replicating-photoshop figure {
+     background: url('water-bg.jpg');
+     position: relative;
+     flex-basis: 40%;
+     padding: 1vmax;
+     border-radius: 0.5em;
+   }
+
+   .replicating-photoshop figure img {
+     object-fit: scale-down;
+   }
+
+   .replicating-photoshop .example {
+     flex-basis: 10%;
+     width: 60%;
+     display: flex;
+     justify-content: space-around;
+     color: #FFFFFF;
+   }
+
+   .replicating-photoshop .example:hover .wing-shadow {
+     mix-blend-mode: multiply;
+   }
+
+   .casting-better-shadows {
+     display: none;
+   }
+
+   .casting-better-shadows .example figure {
+     background: linear-gradient(90deg, rgb(254, 209, 43), rgb(210, 20, 54));
+   }
+
+   .casting-better-shadows .example figure img {
+     background: url('eye-shadow-1@2x.png'), linear-gradient(-90deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+     background-blend-mode: multiply, normal;
+     
+   }
+
+   .better-backgrounds .fear-of-the-walking-dead {
+     height: 100%;
+     background-image: -moz-repeating-radial-gradient(center center, rgba(93,70,53,0.3), rgba(93,70,53,0.3) 1px, transparent 1px, transparent 100%), linear-gradient(0deg, #4c3119 60%, #25120e);
+     background-size: 10px 10px, auto;
+     width: 30%;
+   }
+   .better-backgrounds .example {
+     flex-basis: 50%;
+     display: flex;
+     justify-content: space-around;
+     width: 100%;
+   }
+   .better-backgrounds .subway {
+     background: radial-gradient(circle at top left, #549337, #244d22 80%);
+     height: 100%;
+     width: 30%;
+   }
+
+   .better-backgrounds .fear-of-the-walking-dead:hover {
+     background-blend-mode: color-dodge, hard-light;
+     background: url(data:image/png;base64,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), -moz-repeating-radial-gradient(center center, rgba(93,70,53,0.8), rgba(93,70,53,0.8) 1px, transparent 1px, transparent 100%), linear-gradient(0deg, #4c3119 60%, #25120e);
+     background-size: auto, 10px 10px, auto;
+   }
+
+   .better-backgrounds pre {
+     max-width: 100%;
+     text-wrap: break-word;
+     flex-basis: 20%;
+   }
+
+   .better-backgrounds .data-url {
+     height: 10vh;
+     width: 10vh;
+   }
+
+   .better-backgrounds .data-url:hover {
+     mix-blend-mode: darken;
+   }
+   
+   .better-backgrounds .subway:hover {
+     background-blend-mode: color-dodge;
+     background: url(data:image/png;base64,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),
+     radial-gradient(circle at top left, #549337, #244d22 80%);
+   }
+
+   .consistent-cta figure, .video-blending figure {
+     position: relative;
+   }
+
+   .cta {
+     color: #FFFFFF;
+     position: absolute;
+     bottom: 20%;
+     left: 50%;
+     transform: translateX(-50%);
+     text-transform: uppercase;
+     font-family: sans-serif;
+     font-weight: 800;
+   }
+
+   .consistent-cta video:hover {
+     mix-blend-mode: difference;
+   }
+
+   .video-blending figure {
+     height: 50%;
+     background: url('pink-budding.png');
+   }
+
+   .video-blending video {
+     height: 100%;
+     mix-blend-mode: var(--current-blend-mode);
+   }
+
+   .video-blending video:hover {
+     mix-blend-mode: normal;
+   }
+
+   .what, .properties {
+     display: none;
+   }
+
+   .about-blend-modes, .replicating-photoshop, .better-backgrounds, .video-blending {
+     max-width: 750px;
+   }
+
+   .background-blend-mode {
+     background-color: rgba(120, 44, 34, 0.3);
+   }
+
+   .background-blend-mode h1, .mix-blend-mode h1 {
+     font-size: 2.5em;
+   }
+
+   .mix-blend-mode {
+     background-color: pink;
+   }
+
+   .problems ul {
+     padding: 0;
+     list-style-type: none;
+     margin: 0;
+     text-align: center;
+     font-size: 3em;
+   }
+
+   .stacking-context {
+     display: none;
+   }
+
+   .stacking-context figure {
+     flex-basis: 50%;
+     width: 50%;
+     position: relative;
+     perspective: 70px;
+     
+   }
+
+   .stacking-context figure div {
+     height: 100px;
+     border: 2px solid black;
+     background: rgba(255, 0, 0, 0.5);
+     transform: rotateX(10deg);
+     position: absolute;
+     width: 100%;
+   }
+
+   .stacking-context figure div:first-child {
+     transform: rotateX(10deg) translateY(30px) translateZ(2px);
+     background-color: rgba(0, 255, 0, 0.5);
+     
+   }
+
+   .stacking-context figure div:nth-child(2) {
+     isolation: true;
+   }
+   
+   .stacking-context figure div:last-child {
+     transform: rotateX(10deg) translateY(-30px) translateZ(-2px);
+     background-color: rgba(0, 0, 255, 0.5);
+     mix-blend-mode: multiply;
+   }
+  </style>
+  <body>
+    <section class="slide">
+      <h1>Blend Modes in CSS</h1>
+      <address>
+        Jessica Claire Edwards
+      </address>
+    </section>
+    <section class="slide what">
+      <h1>What are blend modes?</h1>
+      <div class="pixel-equation">
+        <div class="pixel"></div>
+        +
+        <div class="pixel"></div>
+        =
+        <div class="pixel"></div>
+      </div>
+    </section>
+    <section class="slide about-blend-modes">
+      <h1><code>&#60;blend-mode&#62;</code></h1>
+      <div class="blended-images">
+        <figure>
+          <img src="fifi.png" alt="Fifi the cat" />
+        </figure>
+        <figure>
+          <img src="polka-dots.jpg" alt="Rainbow polka dots" />
+        </figure>
+      </div>
+      <fieldgroup class="blend-modes">
+        <label class="separable"><input name="blend-modes" type="radio" value="normal" /><code>normal</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="multiply" /><code>multiply</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="screen" /><code>screen</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="overlay" /><code>overlay</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="darken" /><code>darken</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="lighten" /><code>lighten</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="color-dodge" /><code>color-dodge</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="color-burn" /><code>color-burn</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="hard-light" /><code>hard-light</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="soft-light" /><code>soft-light</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="difference" /><code>difference</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="exclusion" /><code>exclusion</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="hue" /><code>hue</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="saturation" /><code>saturation</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="color" /><code>color</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="luminosity" /><code>luminosity</code></label>
+      </fieldgroup>
+    </section>
+    <section class="slide properties">
+      <h1>CSS Properties</h1>
+      <ul>
+        <li><code>background-blend-mode</code></li>
+        <li><code>mix-blend-mode</code></li>
+        <li><code>isolation</code></li>
+      </ul>
+    </section>
+    <section class="slide background-blend-mode">
+      <h1><code>background-blend-mode: &#60;blend-mode&#62;</code></h1>
+      <div class="images">
+        <figure>
+          <img src="blacktown-station.jpg" alt="Blacktown Station" />
+        </figure>
+        <figure>
+          <img src="big-tree.jpg" alt="Big tree" />
+        </figure>
+      </div>
+      <pre class="css">
+        <code>
+background: url('blacktown-station.jpg') no-repeat,
+            url('big-tree.jpg') left / cover no-repeat;
+background-blend-mode: lighten;
+        </code>
+      </pre>
+      
+      <div class="example">
+        
+      </div>
+      
+    </section>
+    <section class="slide mix-blend-mode">
+      <h1><code>mix-blend-mode: &#60;blend-mode&#62;</code></h1>
+      <div class="images">
+        <figure>
+          <img src="thorns.jpg" alt="Thorns"  />
+        </figure>
+        <figure>
+          <img src="budding.png" alt="Trees" />
+        </figure>
+        <figure>
+          <img src="city.jpg" alt="City landscape" />
+        </figure>
+      </div>
+      <pre class="css">
+        <code>
+img {
+  mix-blend-mode: multiply;
+}
+        </code>
+      </pre>
+      
+      <figure class="example">
+        <img src="thorns.jpg" alt="Thorns" />
+        <img src="budding.png" alt="Trees" />
+        <img src="city.jpg" alt="City landscape" />
+      </figure>
+      
+      
+    </section>
+    <section class="slide isolation">
+      <h1><code>isolation:  &#60;isolation-mode&#62;</code></h1>
+      <div class="images">
+        
+      </div>
+      <img src="branch.jpg" />
+      <div class="example">
+        <span>Hello!</span>
+      </div>
+    </section>
+    <section class="slide replicating-photoshop">
+      <h1>Keeping Up Appearances</h1>
+      <pre class="css"><code>
+.wing-shadow {
+  mix-blend-mode: multiply;
+}
+      </code></pre>
+      <div class="example">
+        <figure>
+          <img src="virgin-logo@2x.png" alt="Virgin Logo" />
+        </figure>
+        <figure>
+          <img class="wing-shadow" src="wing-shadow@2x.png" alt="Wing Shadow" />
+          <img class="blended" src="virgin-logo-top@2x.png" alt="Virgin Logo" />
+        </figure>
+      </div>
+    </section>
+    <section class="slide casting-better-shadows">
+      <h1>Replicating Photoshop</h1>
+      <div class="example">
+        <figure>
+          <img src="eye-shadow-1@2x.png" alt="Eye shadow" />
+          <img src="eye-shadow-2@2x.png" alt="Eye shadow" />
+        </figure>
+        <figure>
+          <img src="eye-shadow-1@2x.png" alt="Eye shadow" />
+          <img src="eye-shadow-2@2x.png" alt="Eye shadow" />
+        </figure>
+      </div>
+    </section>
+    <section class="slide better-backgrounds">
+      <h1>Better Backgrounds</h1>
+      <pre class="css"><code>
+background-blend-mode: soft-light;
+background: url(data:image/png;base64,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),
+            radial-gradient(circle at top left, #549337, #244d22 80%);
+      </code></pre>
+      <div class="example">
+        <img class="data-url" src="data:image/png;base64,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" />
+        <figure class="subway">
+          
+        </figure>
+        <figure class="fear-of-the-walking-dead">
+        </figure>
+      </div>
+    </section>
+    <section class="slide consistent-cta">
+      <h1>Consistent Call To Actions</h1>
+      <figure>
+        <span class="cta">Explore</span>
+        <video class="calvin-klein" src="calvin-klein.mp4" controls />
+      </figure>
+    </section>
+    <section class="slide video-blending">
+      <h1>Video Blending</h1>
+      <figure>
+        <span class="cta">Explore</span>
+        <video class="calvin-klein" src="calvin-klein.mp4" controls />
+      </figure>
+      <fieldgroup class="blend-modes">
+        <label class="separable"><input name="blend-modes" type="radio" value="normal" /><code>normal</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="multiply" /><code>multiply</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="screen" /><code>screen</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="overlay" /><code>overlay</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="darken" /><code>darken</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="lighten" /><code>lighten</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="color-dodge" /><code>color-dodge</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="color-burn" /><code>color-burn</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="hard-light" /><code>hard-light</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="soft-light" /><code>soft-light</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="difference" /><code>difference</code></label>
+        <label class="separable"><input name="blend-modes" type="radio" value="exclusion" /><code>exclusion</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="hue" /><code>hue</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="saturation" /><code>saturation</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="color" /><code>color</code></label>
+        <label class="non-separable"><input name="blend-modes" type="radio" value="luminosity" /><code>luminosity</code></label>
+      </fieldgroup>
+    </section>
+    <section class="slide problems">
+      <h1>Problems</h1>
+      <ul>
+        <li>Stacking context</li>
+        <li>Browser support</li>
+        <li>Accessibility</li>
+      </ul>
+    </section>
+    <section class="slide stacking-context">
+      <h1>Stacking Context</h1>
+      <figure>
+        <div></div>
+        <div></div>
+        <div></div>
+      </figure>
+    </section>
+    <script>
+     var styles = getComputedStyle(document.documentElement);
+
+     document.addEventListener('change', function changeHandler(event) {
+       document.documentElement.style.setProperty('--current-blend-mode', event.target.value);
+     }, false);
+    </script>
+  </body>
+</html>
