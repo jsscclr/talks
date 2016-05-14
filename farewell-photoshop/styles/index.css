@@ -346,7 +346,7 @@ img {
   display: flex;
   justify-content: space-between;
   transition: 1s;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent), var(--current-primary-color);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)), var(--current-primary-color);
   box-sizing: border-box;
   color: #ffffff;
   padding: 1em 1em;
@@ -357,7 +357,7 @@ img {
 
 .user-interface-example button {
   transition: 1s;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent), var(--current-primary-color);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)), var(--current-primary-color);
   color: rgb(255, 255, 255);
   border: none;
   border-radius: 2px;
@@ -443,7 +443,7 @@ img {
 .radial-gradient {
   --current-primary-color: skyblue;
   --current-secondary-color: skyblue;
-  background: radial-gradient(rgba(255, 255, 255, 0.8) 2px, transparent 4px) 0 / 25px 25px, radial-gradient(circle at 0 25%, skyblue 50%, rgb(240, 251, 79));
+  background: radial-gradient(rgba(255, 255, 255, 0.8) 2px, rgba(255, 255, 255, 0) 4px) 0 / 25px 25px, radial-gradient(circle at 0 25%, skyblue 50%, rgb(240, 251, 79));
   width: 100%;
 }
 
@@ -486,12 +486,12 @@ img {
 
 
 .ocean {
-  background: repeating-radial-gradient(circle, transparent 3px, rgba(255, 255, 255, 0.1) 43px, rgba(26, 71, 129, 0.5) 137px), repeating-radial-gradient(circle, rgb(26, 71, 129), rgba(255, 255, 255, 0.1) 7px, transparent 109px), rgb(26, 71, 129);
+  background: repeating-radial-gradient(circle, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0.1) 43px, rgba(26, 71, 129, 0.5) 137px), repeating-radial-gradient(circle, rgb(26, 71, 129), rgba(255, 255, 255, 0.1) 7px, rgba(255, 255, 255, 0) 109px), rgb(26, 71, 129);
   
 }
 
 .repeating-radial-gradient-2 .ocean:hover {
-  background: repeating-radial-gradient(circle, transparent 3px, rgba(255, 255, 255, 0.1) 43px, rgba(26, 71, 129, 0.5) 137px), repeating-radial-gradient(circle, rgb(26, 71, 129), rgba(255, 255, 255, 0.1) 7px, transparent 109px), rgb(26, 71, 129);
+  background: repeating-radial-gradient(circle, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0.1) 43px, rgba(26, 71, 129, 0.5) 137px), repeating-radial-gradient(circle, rgb(26, 71, 129), rgba(255, 255, 255, 0.1) 7px, rgba(255, 255, 255, 0) 109px), rgb(26, 71, 129);
   background-blend-mode: saturation;
 }
 
@@ -600,7 +600,7 @@ img {
 }
 
 .product-display img:hover {
-  background: radial-gradient(circle, red 30%, transparent 50%);
+  background: radial-gradient(circle, red 30%, rgba(255, 0, 0, 0) 50%);
 }
 
 
@@ -815,6 +815,7 @@ img {
 
 .about-filters img {
   transition: 1s;
+  -webkit-filter: var(--current-filter);
   filter: var(--current-filter);
 }
 
@@ -846,7 +847,7 @@ img {
 }
 
 .drop-shadow img:hover {
-  
+  -webkit-filter: drop-shadow(5px 5px 3px black);
   filter: drop-shadow(5px 5px 3px black);
 }
 
@@ -862,14 +863,17 @@ img {
 }
 
 .hue-rotate .pink:hover {
+  -webkit-filter: hue-rotate(20deg);
   filter: hue-rotate(20deg);
 }
 
 .hue-rotate .red {
+  -webkit-filter: hue-rotate(20deg);
   filter: hue-rotate(20deg);
 }
 
 .hue-rotate footer {
+  -webkit-filter: var(--current-hue-rotate);
   filter: var(--current-hue-rotate);
 }
 
@@ -884,7 +888,7 @@ figure figcaption {
 
 .product-highlight-example section {
   text-align: center;
-  background: radial-gradient(circle, red, transparent 50%);
+  background: radial-gradient(circle, red, rgba(255, 0, 0, 0) 50%);
 }
 
 
