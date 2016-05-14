@@ -1,0 +1,1008 @@
+* Common
+  - introduce the window.navigator object
+  - Device APIs Working Group:
+    - specifications that provide access to user device information
+* Battery Status API
+** Talk Here: Battery Status API
+*** Use Cases
+    - display notification if amount of power is not up to the app's
+      requirement, advise the user to manage their resources
+      accordingly
+    - e.g. estimated download time versus battery status?
+    - can use to adjust app resource usage to reduce battery drain
+    - save changes before the battery runs out in order to prevent data loss
+    - enable auto saving
+    - utility applications - collect statistics on battery usage
+    - inform user if the device is charged enough to play a game, watch
+      a movie
+    - optimise battery consumption - e.g. email client checks server
+      for new email less frequently if device is low on battery
+    - word processor - save changes automatically before the battery
+      runs out in order to prevent data loss
+    - process on the client or process on the server
+    - email applications reduce frequency for polling
+    - reduce javascript processing client-side
+    - offline storage of web application data
+    - avoid network calls for images
+*** navigator
+***** getBattery()
+      - provides information about the system's battery
+      - returns a battery promise
+      - battery promise resolved in a BatteryManager interface
+      - 43 onwards
+****** syntax
+       #+BEGIN_SRC js
+       navigator.getBattery().then(funcRef);
+       #+END_SRC
+       - where funcRef is a function to be called when the battery
+         promise returned by navigator.getBattery gets resolved
+       -
+***** battery
+      - used in older browsers
+      - directly return the batteryManager object
+*** BatteryManager
+    - Interface
+    - Provides ways to get information about battery charge level
+    - returned from battery promise via navigator.getBattery
+**** events
+     - do not return event objects - access properties from
+       BatteryManager interface
+     - attach event listeners to the battery manager
+***** chargingchange
+      - battery charging state is updated
+      - fired when charging attribute has changed
+***** chargingtimechange
+      - sent when battery charging time is updated
+      - fired when chargingTime attribute changes
+***** dischargingtimechange
+      - when battery discharging time is updated
+      - fired when the dischargingTime attribute has changed
+***** levelchange
+      - sent when battery level is updated
+      - fired when level attribute has changed
+**** attributes
+***** charging
+      - Read only
+      - Boolean
+      - Indicates whether or not the battery is charging
+      - true if battery is charging, system's battery is not
+        determinable, attached to the system, full, unable to report
+      - false if battery is discharging
+      - 
+***** chargingTime
+      - read only
+      - number
+      - Represents remaining time until battery is fully charged in seconds
+      - Returns 0 if the battery is already fully charged
+      - returns positive infinity if the battery is discharging or if
+        implementation is unable to report the remaining charging time
+***** dischargingTime
+      - read only
+      - Represents the remaining time until battery is fully discharged
+        and system will suspend
+      - Seconds
+      - remaining time in seconds until system battery is completely discharged
+      - returns positive infinity if the battery is charging, if
+        unable to report the remaining discharging time, or if there
+        is no battery attached to the system
+***** level
+      - represents system battery charge level
+      - scaled to a value between 0.0 and 1.0
+      - double (float)
+      - returns 0 if battery is empty and system is about to suspend
+      - returns 1.0 if battery is full, if implementation cannot
+        report the battery's level, or if there is no battery attached
+        to the system
+      - multiply by 100 to get percentage
+*** Support
+**** https://github.com/pstadler/battery.js
+     - Wrapper for the HTML5 Battery Status API
+     - For obvious reasons, there is no polyfill.
+**** Browsers
+     - Edge: Under Consideration
+     - Safari :(
+**** Global
+     - Australia: 47.86%
+     - Global: 64.66%
+*** Misc
+    - similar uses to page visibility
+*** Security
+    - Can be used to identify your online presence - creating a
+      digital fingerprint of your device.
+    - W3C - information disclosed has minimal impact on privacy,
+      exposed without permission grants
+    - Information is very specific- receive both seconds and
+      percentages 
+    - These two figures, provides one of 14 million combinations-
+      becomes a unique ID for each user. Battery updates almost every
+      half a minute - identify a user within 30 seconds. You could be
+      identified if using a website via a proxy, then revisiting the
+      same website without a proxy. Link user's new and old
+      identities - use respawning.
+    - Can be disabled.
+    - Provide users the choice.
+    - Will it stay quite so granular?
+    - ‘The leaking battery: A privacy analysis of the HTML5 Battery Status API’
+** The State of Browser APIs - 1
+*** [[http://hwclass.in/2016/03/09/the-next-generation-of-browser-apis/]]
+    - 2016-03-09
+*** Battery Status API
+    - get charging information from the computer
+    - get battery status of machine in the form of a double between 0 and 1
+    - uses the navigator object via getBattery()
+    - Firefox versions below 42 uses navigator.battery
+      #+BEGIN_SRC js
+        if (navigator.getBattery()) {  
+            var battery = navigator.getBattery()
+            console.log(battery.level * 100); //a double value our battery
+        }
+      #+END_SRC
+    - Track charging level via levelchange
+      #+BEGIN_SRC js
+        navigator.getBattery().then(function(battery) {  
+            battery.addEventListener('levelchange', function() {
+                console.log('Battery Status : ' + this.level * 100 + ' %');
+            });
+        });
+      #+END_SRC
+    - Support:
+      - Chrome 45
+      - Firefox 43
+      - Opera 34
+      - IE No support
+      - Safari No support
+** How to Use the HTML5 Battery Status API
+*** [[http://www.sitepoint.com/html5-battery-status-api/]]
+    - 2013-12-19
+*** Causes of Battery Drain
+    - The screen:
+      - switch to a light on dark theme
+      - Disable non-critical CSS3 and JavaScript animations
+      - Avoid DOM changes
+    - Network activity:
+      - Slow down / stop Ajax polling
+      - Use AppCache or Service workers to make an offline application
+      - Store data on the client using Web Storage
+      - Avoid requests for non-critical assets e.g. images
+    - Audible / tactile output
+      - Sound / vibration drains battery.
+      - Shorten effects, disable it
+    - Processing
+      - Action games
+      - Avoid complex ongoing client-side calculations
+*** Cross browser battery object
+    - Early implementation (outdated)
+    #+BEGIN_SRC js
+      var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery || navigator.msBattery;
+
+      if (battery) {
+          // battery API supported
+      }
+    #+END_SRC
+*** Properties
+    - Charging or above certain level
+      #+BEGIN_SRC js
+        var enableEffects = (battery.charging || battery.level > 0.25);
+
+        // vibrate for one second
+        if (enableEffects) navigator.vibrate(1000);
+      #+END_SRC
+      - Progressive enhancement!
+    - chargingTime: time in seconds until charging reaches 100%
+    - dischargingTime: time in seconds until the battery is completely
+      discharged
+*** Battery Status Events
+    - chargingchange: device has changed from charging to discharging
+      or discharging to charging
+    - levelchange: battery level has changed
+    - chargingtimechange: change in time until battery is fully charged
+    - dischargingtimechange: change in time until battery is fully discharged
+    - We can make better decisions!
+*** Example
+    #+BEGIN_SRC js
+
+      (function() {
+
+          "use strict";
+
+          // detect battery support
+          var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery || navigator.msBattery || null;
+
+          if (battery) {
+
+              // meter element
+              var meter = document.getElementsByTagName("meter")[0],
+                  status = document.getElementById("status");
+
+              // battery status change
+              window.onload = battery.onlevelchange = battery.onchargingchange = function() {
+
+                  meter.value = battery.level;
+                  meter.textContent = Math.floor((battery.level*100)+"%");
+                  var s;
+                  if (battery.charging) {
+                      s = "CHARGING: fully charged in " + battery.chargingTime;
+                  }
+                  else {
+                      s = "DISCHARGING: time remaining " + battery.dischargingTime;
+                  }
+                  status.textContent = s + " seconds";
+
+              };
+
+              // enable battery meter
+              document.getElementById("nosupport").style.display = "none";
+              document.getElementsByTagName("article")[0].style.display = "block";
+
+          }
+
+      }());
+
+    #+END_SRC
+** Battery Status API
+*** [[https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API]]
+*** About
+    - provides information about the system's battery charge level
+    - provides events
+    - can use to adjust app resource usage to reduce battery drain
+    - save changes before the battery runs out in order to prevent data loss
+    - extends window.navigator
+    - navigator.getBattery()
+      - returns a battery promise
+      - promise resolves in a BatteryManager object
+*** events
+    - chargingchange
+    - levelchange
+    - chargingtimechange
+    - dischargingtimechange
+*** Example
+    #+BEGIN_SRC js
+      navigator.getBattery().then(function(battery) {
+          function updateAllBatteryInfo(){
+              updateChargeInfo();
+              updateLevelInfo();
+              updateChargingInfo();
+              updateDischargingInfo();
+          }
+          updateAllBatteryInfo();
+
+          battery.addEventListener('chargingchange', function(){
+              updateChargeInfo();
+          });
+          function updateChargeInfo(){
+              console.log("Battery charging? "
+                          + (battery.charging ? "Yes" : "No"));
+          }
+
+          battery.addEventListener('levelchange', function(){
+              updateLevelInfo();
+          });
+          function updateLevelInfo(){
+              console.log("Battery level: "
+                          + battery.level * 100 + "%");
+          }
+
+          battery.addEventListener('chargingtimechange', function(){
+              updateChargingInfo();
+          });
+          function updateChargingInfo(){
+              console.log("Battery charging time: "
+                          + battery.chargingTime + " seconds");
+          }
+
+          battery.addEventListener('dischargingtimechange', function(){
+              updateDischargingInfo();
+          });
+          function updateDischargingInfo(){
+              console.log("Battery discharging time: "
+                          + battery.dischargingTime + " seconds");
+          }
+
+      });
+    #+END_SRC
+*** Support
+    - Chrome 39
+    - Chrome for Android - 42
+      - BatteryManager.chargingTime, BatteryManager.dischargingTime
+        always equal to infinity
+    - Firefox
+      - Navigator.getBattery supported in Firefox 43 onwards
+      - Navigator.battery is deprecated but supported by Firefox
+        - returns the batteryManager object directly
+      - Linux requires UPower
+    - Safari
+      - No support
+** Using the Battery Status API to Optimize Your Development
+*** [[http://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/]]
+*** Introduction
+    - Access information about the user's battery
+    - In development since early 2011
+*** Use
+    - Specification is not finalised so should be used to progressively
+      enhance your application. If you see navigator.battery, this is
+      deprecated.
+    - Customise Geolocation elements:
+      - Have a lower accuracy
+      - Don't request usage of inbuilt GPS
+      - Provide option between lower battery usage or higher accuracy
+    - Set video streams or playback to lower quality by default
+      - Data transfers quicker, less intensive on the device
+      - Option to download high quality stream
+    - CSS Animations
+      - Reduce complex CSS animations
+      - Provide a more basic interface
+    - Determine interval for background tasks
+      - E.g. Ajax, Web Workers
+      - Use state to determine how frequently tasks should be called
+      - Minimise network usage
+    - Idea should be to provide reasonable defaults, then enhance
+      applications when we know. Or provide warnings, etc
+*** Browser Support
+    - Mobile
+      - Firefox mobile has supported for over 3 years! 18+ January 2013
+      - Opera 25+ October 2014
+      - Chrome 40+ April 2015
+    - Desktops
+      - Firefox 18+ 2012
+      - Chrome 39 October 2014
+      - Opera 25 October 2014
+*** Practical Example: Reducing Background API Calls
+    - Set default intervals for data and processor-intensive tasks
+    - Websites request information dynamically - using Ajax to push /
+      pull data
+    - Often started by default in the background. Choose default
+      experience for the user
+    - set conservative default settings
+** HTML5 Battery API
+*** [[http://jaspreetchahal.org/html5-battery-api/]]
+*** Use
+    - slow down re-polling of server
+    - alert user when accessing / loading images
+*** Old syntax
+    - navigator.battery || navigator.webkitBattery || navigator.mozBattery
+    -
+*** Events
+    #+BEGIN_SRC js
+      // adds a "charging time change" event listener
+      batteryObj.addEventListener("chargingtimechange", function() {
+        console.warn("Event: Battery charge time change, Value: ", batteryObj.chargingTime);
+      }, false);
+      // adds a "discharging time change" event listener
+      batteryObj.addEventListener("dischargingtimechange", function() {
+        console.warn("Event: Battery discharging time change, value: ", batteryObj.dischargingTime);
+      }, false);
+      // adds a levelchange event listener
+      batteryObj.addEventListener("levelchange", function() {
+        console.warn("Event: Battery level change, Value: ", batteryObj.level);
+      }, false);
+      // adds a chargingchange event listener
+      batteryObj.addEventListener("chargingchange", function() {
+        console.warn("Event: Battery charge change, Value: ", batteryObj.charging);
+      }, false);
+
+    #+END_SRC
+** HTML5 Battery Status API
+*** [[https://steveedson.co.uk/html5/battery-api/]]
+*** Uses
+    - stop or reduce Ajax requests
+    - OLED screen - switch to a dark themed stylesheet and reduce the
+      power consumption on the device
+    - prompt the user to save an article to read later, with a service
+      such as instapaper or pocket
+    - save data that the user is working on before it is lost
+
+*** Use
+    - spec has not been finalised
+    - fetch data asynchronously
+    - use Promise: first parameter for success, second parameter for failure
+    - charging:
+      - if infinity, is because not enough data or device never charges
+        / discharges
+      - on mobiles, often not available - so set to infinity always
+
+    #+BEGIN_SRC js
+      navigator.getBattery().then(batterySuccess, batteryFailure);
+
+    #+END_SRC
+    #+BEGIN_SRC js
+      var battery;
+
+      /**
+       ,* Successful callback providing a Battery Manager object.
+       ,* @param batteryManager
+       ,*/
+      function batterySuccess(batteryManager) {
+          battery = batteryManager;
+
+          updatedBatteryStats();
+      }
+
+      /**
+       ,* Failure callback.
+       ,*/
+      function batteryFailure() {
+          // Fail gracefully.
+      }
+
+
+    #+END_SRC
+
+*** Event handling
+    #+BEGIN_SRC js
+      // Register event handlers
+      battery.addEventListener('chargingchange', updatedBatteryStats);
+      battery.addEventListener('chargingtimechange', updatedBatteryStats);
+      battery.addEventListener('dischargingtimechange', updatedBatteryStats);
+      battery.addEventListener('levelchange', updatedBatteryStats);
+
+    #+END_SRC
+
+*** Full use
+    #+BEGIN_SRC js
+      // Initialise Variables
+      var battery;
+
+      // Define functions
+
+      /**
+       ,* Successful callback providing a Battery Manager object.
+       ,* @param batteryManager
+       ,*/
+      function batterySuccess(batteryManager) {
+          // Assign batteryManager to globally 
+          //   available `battery` variable.
+          battery = batteryManager;
+
+          // Register event handlers  
+          battery.addEventListener('chargingchange', updatedBatteryStats);
+          battery.addEventListener('chargingtimechange', updatedBatteryStats);
+          battery.addEventListener('dischargingtimechange', updatedBatteryStats);
+          battery.addEventListener('levelchange', updatedBatteryStats);
+
+          // Process updated data
+          updatedBatteryStats();
+      }
+
+      /**
+       ,* Failure callback.
+       ,*/
+      function batteryFailure() {
+          // Fail gracefully. 
+      }
+
+      /**
+       ,* Update HTML with current battery stats
+       ,*/
+      function updatedBatteryStats() {
+          // Example data in window.battery:
+          //   BatteryManager
+          //     charging: false
+          //     chargingTime: Infinity
+          //     dischargingTime: 12600
+          //     level: 0.56
+          //     onchargingchange: null
+          //     onchargingtimechange: null
+          //     ondischargingtimechange: null
+          //     onlevelchange: null
+      }
+
+      if("getBattery" in navigator) {
+          // API is supported
+
+          // Request battery manager object.
+          navigator.getBattery().then(batterySuccess, batteryFailure);
+
+      } else {
+          // API is not supported, fail gracefully.
+      }
+
+    #+END_SRC
+** JavaScript Battery API
+*** [[https://davidwalsh.name/javascript-battery-api]]
+*** Functionality
+    - callback provided to then is given a BatteryManager object
+      #+BEGIN_SRC js
+      navigator.getBattery().then(function(result) {});
+      #+END_SRC
+    - BatteryManager object
+      #+BEGIN_SRC js
+        BatteryManagery {
+            charging: false,
+            chargingTime: Infinity,
+            dischargingTime: 8940,
+            level: 0.59,
+            onchargingchange: null,
+            onchargingtimechange: null,
+            ondischargingtimechange: null,
+            onlevelchange: null
+        }    
+      #+END_SRC
+*** Issues
+    - Old API had issues with Mac device batteries.
+    - Promise based now. Old used synchronous.
+** HTML5 Battery Status API
+*** [[http://code.tutsplus.com/tutorials/html5-battery-status-api--mobile-22795]]
+*** About
+    - W3C Candidate Recommendation - but has not changed much
+      since 2012. Current API most likely won't change.
+    -
+*** Examples
+    - temporarily pause long-running processes
+    - proactive action - if application manages content, then it may be
+      useful to save the user's data more frequently
+    - switch to a light on dark theme - screen draws less power from
+      the battery
+    -
+** 10 HTML5 APIs Worth Looking Into
+*** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
+*** Battery Status
+* Vibration
+** Main
+*** Uses
+    - accessibility - notifications can use vibration rather than
+      sounds or visuals
+    - I'm imagining its use in an in-browser music app. Something like
+      Bandcamp. If a song fails to load, or there's some other
+      important notification, it should vibrate, because the user
+      likely isn't looking at the screen. It doesn't have many obvious
+      openings for value, but it can potentially be useful to have
+      around. 
+** [[https://www.joezimjs.com/javascript/top-5-9-favorite-html5-apis/]]
+*** Vibration
+    - Works on phones, tablets.
+**** Use cases
+     - Used with notifications to get user attention
+     - games
+**** Support
+     - limited on desktop
+     - use as an enhancement
+**** Use
+     - super easy! navigator.vibrate()
+     - Can send in a number of milliseconds for the device to vibrate
+     - Can send an array of numbers representing multiply vibrations -
+       length of time the device vibrates, pause lengths between the vibrations
+*** Network Information
+    - Depending on connection type
+** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
+*** Vibration API
+    - programatically produce a vibration
+    - vibrate during the game is reaction to a particular event
+    - window.navigator.vibrate() method
+      - accepts one parameter, either an integer or array of integers
+      - the array is alternating vibration times and pauses
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+*** Vibration
+    #+BEGIN_SRC js
+      // Vibrate for 1 second (1000 milliseconds).
+      navigator.vibrate(1000);
+
+      // Vibrate in sequence.
+      navigator.vibrate([500, 250, 500]);
+    #+END_SRC
+    - build games, create accessible applications
+* getUserMedia
+** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
+*** getUserMedia API
+    - access to multimedia stream from local devices
+    - real time communication, tutorials, lesson recording
+    - accepts parameters as an object of constraints, a success
+      callback, and a failure callback
+    - can control the requested stream - high resolution or low
+    - desktop browser support is Chrome 21+, Firefox 17+, Opera
+      18+. Mobile support Chrome 32+, Firefox 26+, Opera 12+.
+* Network Information API
+** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
+*** Network Information APIs
+    - discover whether user is on a metered connection
+    - provide estimate of bandwidth
+    - change behaviour of pages to accommodate user
+    - window.navigator.connection property
+      - exposes two read only properties: bandwidth, metered
+      - bandwidth: represents current bandwidth
+      - metered: boolean - true if subject to limitation and bandwidth
+        usage
+    - support: Firefox 12+, Chrome
+* Device Orientation API
+** Main
+*** Support
+    - Support
+      - IE11
+      - Supported in Edge fully!
+      - Partial support - lack of compassneedscalibration event support.
+      - Not supported in Safari.
+      - Supported in iOS Safari.
+      - Global: 85.44%
+      - Australia: 88.73%
+    - DeviceOrientationEvent.beta
+      - -90 and 90 values on mobile Safari
+      - 180 and -180 on Firefox
+    - DeviceOrientationAlpha
+      - Safari does not implement the spec correctly. Alpha is
+        arbitrary, instead of relative to true north.
+      - Safari offers webkitCompassing, which has the opposite sign to
+        alpha, and is relative to magnetic north instead of true
+        north.
+    - IE Mobile has no support
+** EdX
+*** Introduction
+    - use dev tools to fake the orientation values, using mobile
+      device emulation mode.
+*** The coordinate system and Euler angles
+    - Transformation from the Earth coordinate frame to the device
+      coordinate frame uses the following rotations.
+    - Rotations use the right-hand convention. Positive rotation
+      around an axis is clockwise when viewed along the positive
+      direction of the axis.
+**** alpha
+     - Alpha in 0 - 360
+     - Rotation around the Z axis
+     - Device in the initial position
+     - Device rotated through angle alpha about z axis
+**** beta
+     - Beta in -180 - 180
+     - Rotation around the x axis
+**** gamma
+     - Gamma in -90 - 90
+     - Rotation around the y axis
+*** Get different angles using the JavaScript HTML5 orientation API
+**** Typical Use
+     - Use:
+       - Test if your browser supports the orientation
+       - Define a listener for the deviceorientation event
+       - Get the angles from the event
+     -
+**** Interesting Uses
+     - Mix orientation API and websockets
+     - Control the movement of the logo shown!
+     - Cool use case :D
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   #+BEGIN_SRC js
+     // Check to make sure the browser supprots DeviceOrientationEvents
+     if (window.DeviceOrientationEvent) {
+         // Create an event listener
+         window.addEventListener('deviceorientation', function(event) {
+             // Get the left-to-right tilt (in degrees).
+             var tiltLR = event.gamma;
+
+             // Get the front-to-back tilt (in degrees).
+             var titleFB = event.beta;
+
+             // Get the direction of the device (in degrees).
+             var direction = event.alpha;
+         });
+     }
+   #+END_SRC
+* Device Motion API
+** EdX
+*** Introduction
+    - Deals with accelerations
+    - Uses
+      - Controlling a game
+        - Monitor device orientation and interpret tilting in a
+          certain direction as a means to control and on-screen sprite
+      - Gesture recognition
+        - Monitor device acceleration and apply signal processing to
+          recognise specific gestures - e.g. a shaking gesture to
+          clear a web form
+      - Mapping
+        - Use orientation to correctly align the map with reality
+    -
+*** Basic Usage
+    - Returns more than just rotation information.
+    - Returns acceleration information about device current motion.
+    - Acceleration along the X axis, Y axis, and Z axis.
+    - Measured in meters per second squared.
+    - Accleration returned as an acceleration event.
+    - Two properties:
+      - accelerationIncludingGravity
+      - acceleration
+        - excludes the effects of gravity.
+    - There are two properties, as some devices are able to exclude
+      the effect of gravity if equipped with a gyroscope.
+    - There is acceleration due implicitly to gravity.
+    - If the device does not have a gyroscope, the acceleration
+      property will be null.
+    - All iOS devices have a gyroscope.
+*** About Acceleration
+    - Device motion is a superset of the device orientation event.
+    - It returns data about the rotation information.
+    - Includes acceleration information about the device.
+    - The acceleration data is returned in three axes: x, y, z.
+    - Measured in m/s^2.
+    - Some devices do not have the hardware to exclude the effect of
+      gravity.
+*** Common Steps
+    - Principles
+      - Test if API is supported
+      - Add listener for devicemotion events
+      - Get acceleration values from the DOM event
+*** Common processing with acceleration values
+    - Test value of the acceleration.z property:
+      - If > 0, device is facing up
+      - Otherwise, facing down
+        #+BEGIN_SRC js
+          // For example, if acceleration.z is > 0 then the phone is facing up
+          var facingUp = -1;
+          if (acceleration.z > 0) {
+              facingUp = +1;
+          }
+        #+END_SRC
+    - Compute the angle corresponding to the Left / Right and Front
+      / Back tilts.
+      #+BEGIN_SRC js
+       
+        function deviceMotionHandler(eventData) {
+            // Grab the acceleration including gravity from the results
+            var acceleration = eventData.accelerationIncludingGravity;
+            // Convert the value from acceleration to degrees
+            // acceleration.x|y is the acceleration according
+            //  to gravity, we'll assume we're on  Earth and divide
+            // by 9.81 (earth gravity) to get a percentage value, 
+            // and then multiply that by 90 to convert to degrees.
+            var tiltLR = Math.round(((acceleration.x) / 9.81) * -90);
+            var tiltFB = Math.round(((acceleration.y + 9.81) / 9.81) * 90 * facingUp);
+            // ... do something
+        }
+
+      #+END_SRC
+    - Compute the vertical (direction of the sky)
+      #+BEGIN_SRC js
+        var angle = Math.atan2(accel.y,accel.x);
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+ 
+        ctx.moveTo(50,50);
+        // Draw sky direction in the canvas
+        ctx.lineTo(50-50*Math.cos(angle),50+50*Math.sin(angle));
+        ctx.stroke();
+      #+END_SRC
+    - Use acceleration values to move on screen
+      #+BEGIN_SRC js
+        ball.x += acceleration.x;
+        ball.y += acceleration.y;
+      #+END_SRC
+    -
+*** Example
+    - X and Y acceleration values can be used for indicating the
+      sky's direction (vertical)
+    - Z acceleration is an indicator for the face up / face down
+      orientation of the device
+* Geolocation API
+** Main
+*** Support
+    - Australia: 95.37%
+    - Global: 89.43%
+    - Whilst support is widespread, you should not depend on it, due
+      to privacy concerns.
+    - Chrome 50 has just recently come out.
+    - Desktop
+      - IE 9+
+      - Firefox 3.5+
+      - Chrome 4.0+
+      - Safari 5.0+
+      - Opera 10.6+
+    - Mobile
+      - Chrome 33
+      - Firefox 26
+      - IE 10
+      - Safari 3.2
+      - Opera 11
+** EdX
+**** Introduction
+     - implemented in most modern browsers
+     - Uses different means to get current location:
+       - GPS
+       - GSM / 3G triangulation
+       - Wifi
+       - IP address
+     - Prompt user to activate GPS, ask for a particular mean among
+       those available
+     - Track current position when it changes
+       - Useful for writing a navigation application
+       - Track in real time the position of different participants
+     - Support
+       - excellent on mobile and desktop!
+     - Typical use
+       #+BEGIN_SRC js
+
+         navigator.geolocation.getCurrentPosition(showPosition, onError);
+
+         function showPosition(position) {
+             console.log("latitude is: " + position.coords.latitude);
+             console.log("longitude is: " + position.coords.longitude);
+         }
+
+         function onError(err) {
+             console.log("Could not get the position");
+         }
+
+       #+END_SRC
+     - Check support for geolocation API
+     - Pass a callback function as a parameter
+       - When a current position is available, the callback function
+         is called asynchronously, and the input parameter of this
+         callback function will be the current position
+
+       - Position object has a coords property - holds the longitude
+         and latitude of the object.
+**** Properties
+     - coords object
+       - latitude: latitude of the position
+       - longitude: longitude of the position
+       - altitude: the altitude of the position
+       - accuracy: accuracy of the measure of the longitude and
+         latitude (in meters)
+       - altitudeAccuracy: accuracy of the measure of the altitude (in
+         meters)
+       - heading: gives the orientation relative to north, in degrees
+       - speed: current speed in meters per second
+     - These values may not be available in all Web browsers
+**** Geolocation error codes
+     - second parameter used for errors
+     - on error, gets passed an error object
+       - error.code
+         - error.TIMEOUT
+         - error.PERMISSION_DENIED
+         - error.POSITION_UNAVAILABLE
+         - error.UNKNOWN_ERROR
+**** Tracking a position in real time
+     - watchPosition(onSuccess, onError)
+     - gets the callback function only when the current position changes
+     - returns an id - so you can use clearWatch(id) method to stop
+       current tracking
+     - Use
+       #+BEGIN_SRC js
+
+         // get an id of the current tracking, the showPosition callback is like the one we saw in earlier examples.
+         var watchPosId = navigator.geolocation.watchPosition(showPosition);
+         
+         // stop the tracking
+         navigator.geolocation.clearWatch(watchPosId);
+
+       #+END_SRC
+     - Options
+       - third parameter can hold options
+       - enableHighAccuracy
+         - boolean
+         - indicates that you wish to obtain its most accurate
+           readings - use the GPS
+         - may or may not make a difference - depending on hardware,
+           GPS availability
+       - maximumAge
+         - integer in milliseconds
+         - maximum amount of time the position may remain in the cache
+         - appropriate as the device may cache readings to save power
+           and / or bandwidth
+         - ME: idea - use battery API to increase maximumAge!
+       - timeout
+         - integer in milliseconds
+         - maximum time you are prepared to allow the device to try to
+           obtain a Geolocation
+         - after this timeout value has elapsed, the onError callback
+           is called
+         - ME: idea - use network status to decrease or increase
+           timeout, or use battery api to decrease timeout
+     - example
+       #+BEGIN_SRC js
+         // Just ask to turn GPS on, if available
+         navigator.geolocation.getCurrentPosition(onSuccess, onError,
+                                              {enableHighAccuracy:true});
+         // maximumAge = 10 mins, the position can be cached for 10 mins,
+         // useful when in tunnels...When the device tries to get
+         // a position, if it does not succeed, then go on error
+         // immediately
+         navigator.geolocation.getCurrentPosition(onSuccess, onError,
+                                                  {maximumAge:600000, timeout:0});
+         // Position will never come from the cache (maximumAge: 0), and
+         // if after 0.1s the position could not be computed, then go on
+         // error
+         navigator.geolocation.getCurrentPosition(onSuccess, onError,
+                                                  {maximumAge:0, timeout:100});
+         // Ask for GPS, cache for 30s, 27s before going on error...
+         watchId=navigator.geolocation.watchPosition(onSuccess, onError,
+                                                     {enableHighAccuracy:true, maximumAge:30000, timeout:27000});
+       #+END_SRC
+**** Practical examples: use the geolocation API together with Google Maps
+     - get image centered at longitude and latitude
+     - display an interactive google map centered on the current
+       position
+     - get a physical address from longitude and latitude
+     - fill a form's address fields automatically
+**** Misc
+     - use developer tools to simulate position
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   - uses GPS, WiFi
+   #+BEGIN_SRC js
+     // Get the location.
+     navigator.geolocation.getCurrentPosition(function(position) {
+         // Get the positioning coordinates.
+         var lat = position.coords.latitude;
+         var lon = position.coords.longitude;
+
+         // Do something interesting...
+     });
+   #+END_SRC
+* Media Capture and Streams
+** Main
+*** Support
+    - Desktop
+      - Firefox 17+
+      - Chrome 21+
+      - Opera 12.0 - 12.1 / 18.0+ 
+    - Mobile
+      - Chrome 33+
+      - Firefox 26+
+      - Opera Mobile 12+
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   - get access to the camera
+     #+BEGIN_SRC js
+       // Request the camera.
+       navigator.getUserMedia(
+           // Constraints
+           {
+               video: true
+           },
+           // Success Callback
+           function(localMediaStream) {
+               // Get a reference to the video element on the page.
+               var vid = document.getElementById('camera-stream');
+
+               // Create an object URL for the video stream and use this 
+               // to set the video source.
+               vid.src = window.URL.createObjectURL(localMediaStream);
+           },
+           // Error Callback
+           function(err) {
+               // Log the error to the console.
+               console.log('The following error occurred when trying to use getUserMedia: ' + err);
+           }
+       );
+     #+END_SRC
+* Ambient Light
+** Main
+*** Support
+    - Limited
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   - Access the light sensor on the device
+   - Night mode - easier to use in dark surroundings
+     #+BEGIN_SRC js
+       window.addEventListener('devicelight', function(event) {
+           // Get the ambient light level in lux.
+           var lightLevel = event.value;
+       });
+     #+END_SRC
+* Proximity Events
+** Support
+   - Firefox
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   - Feed back data about objects that are close to the device
+   - Two events
+     - DeviceProximityEvent
+       - more accurate
+       - provides data about the distance an object is from the device
+         and the sensor's field of view
+     - UserProximityEvent
+       - provides a boolean attribute, near
+       - indicates if an object is close to the device or not
+   #+BEGIN_SRC js
+     // An event listener for a DeviceProximityEvent.
+     window.addEventListener('deviceproximity', function(event) {
+         // The maximum distance the sensor covers (in cm).
+         var max = event.max;
+
+         // The minimum distance the sensor covers (in cm).
+         var min = event.min;
+
+         // The device proximity (in cm).
+         var proximity = event.value;
+     });
+
+     // An event listener for a UserProximityEvent.
+     window.addEventListener('userproximity', function(event) {
+         if (event.near) {
+             // Do something.
+         } else {
+             // Do something else.
+         }
+     });
+   #+END_SRC
