@@ -2,7 +2,204 @@
   - introduce the window.navigator object
   - Device APIs Working Group:
     - specifications that provide access to user device information
+  - Karen McGrane
+    - If they can do it on their phone, they will do it on their
+      phone. 
+  - nngroup.com/articles/mobile-native-apps
+    - Discoverability. Web apps win the prize on
+      discoverability. Content is a lot more discoverable on the web
+      than in an app: When people have a question or an information
+      need, they go to a search engine, type in their query, and
+      choose a page from the search results. They do not go to the app
+      store, search for an app, download it, and then try to find
+      their answer within the app. Although there are app aficionados
+      who may fish for apps in app stores, most users don’t like
+      installing and maintaining apps (and also wasting space on their
+      device), and will install an app only if they expect to use it
+      often.
+    - Installation. Installing a native or hybrid app is a hassle for
+      users: They need to be really motivated to justify the
+      interaction cost. “Installing” a web app involves creating a
+      bookmark on the home screen; this process, while arguably
+      simpler than downloading a new app from an app store, is less
+      familiar to users, as people don’t use bookmarks that much on
+      mobile.
+    - Maintenance. Maintaining a native app can be complicated not
+      only for users, but also for developers (especially if they have
+      to deal with multiple versions of the same information on
+      different platforms): Changes have to be packaged in a new
+      version and placed in the app store. On the other hand,
+      maintaining a web app or a hybrid app is as simple as
+      maintaining a web page, and it can be done as often or as
+      frequently as needed. 
+    - Platform independence. While different browsers may support
+      different versions of HTML5, if platform independence is
+      important, you definitely have a better chance of achieving it
+      with web apps and hybrid apps than with native apps. As
+      discussed before, at least parts of the code can be reused when
+      creating hybrid or web apps.
+    - Development cost. It’s arguably cheaper to develop hybrid and
+      web apps, as these require skills that build up on previous
+      experience with the web. NN/g clients often find that going
+      fully native is a lot more expensive, as it requires more
+      specialized talent. But, on the other hand, HTML5 is fairly new,
+      and good knowledge of it, as well as a good understanding of
+      developing for the mobile web and hybrid apps are also fairly
+      advanced skills.
+  - environmental design?
+* Ambient Light Sensor
+** Main
+*** Support
+    - Limited
+    -
+** [[https://www.w3.org/TR/ambient-light/][Ambient Light Sensor]]
+   - W3C Working Draft 29 March 2016
+   - extends generic sensor API
+   - provides information about light levels detected by device's main
+     light detector in lux units
+   - light-level media feature in media queries 4 provides less
+     granular information
+   - quite different to the 2015 09 03 spec! Last year, you listen to
+     the window's devicelight event.
+   - based on the Generic Sensor API now
+   - code
+     #+BEGIN_SRC js
+     let sensor = new AmbientLightSensor();
+sensor.start();
+    
+sensor.onchange = function(event) {
+    console.log(event.reading.illuminance);
+};
+
+sensor.onerror = function(event) {
+    console.log(event.error.name, event.error.message);
+};
+     #+END_SRC
+     #+BEGIN_SRC js
+     [Constructor(optional SensorOptions sensorOptions)]
+interface AmbientLightSensor : Sensor {
+  readonly attribute AmbientLightSensorReading? reading;
+};
+     #+END_SRC
+     #+BEGIN_SRC js
+     [Constructor(AmbientLightSensorReadingInit ambientLightSensorReadingInit)]
+interface AmbientLightSensorReading : SensorReading {
+    readonly attribute unrestricted double illuminance;
+};
+  
+dictionary AmbientLightSensorReadingInit {
+  unrestricted double illuminance;
+};
+     #+END_SRC
+ 
+   - no security considerations
+   - current light level or illuminance: represents ambient light
+     levels around the hosting device
+   - precise lux value reported by different devices in the same light
+     can be different due to differences in detection method, sensor
+     construction, etc
+   - illuminance attribute
+     - represents current light level
+** [[https://www.w3.org/2016/05/12-dap-minutes.html][Device and Sensors Working Group Teleconference -- 12 May 2016]]
+   - Technical Architecture group would like to expose sensors in
+     workers.
+   - Small spec
+   - Device Orientation spec is built on gyroscope, magnometer, and
+     accelerometer. The way these are combined can vary a lot. Device
+     Orientation only provides a high level view, whilst the
+     underneath platforms have the lower level sensors. Firstly, work
+     on exposing the lower level sensors.
+     
+
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   - Access the light sensor on the device
+   - Night mode - easier to use in dark surroundings
+     #+BEGIN_SRC js
+       window.addEventListener('devicelight', function(event) {
+           // Get the ambient light level in lux.
+           var lightLevel = event.value;
+       });
+     #+END_SRC
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - uses light level sensor
+   - returns readings in lux units
+   - supported in Firefox
+   - CSS4 light-level media query :O
+   - code
+     #+BEGIN_SRC js
+       if('ondevicelight' in window) {
+           window.addEventListener("devicelight", function(event) {
+               //light level is returned in lux units
+               console.log(event.value + " lux");
+           });
+       }
+
+       if('onlightlevel' in window){
+           window.addEventListener("lightlevel", function(event) {
+               //light value can be dim, normal or bright
+               console.log(event.value);
+           });
+       }
+     #+END_SRC
+** TODO [[http://www.webondevices.com/predict-hand-distance-with-device-light-javascript-api/][Predict Hand Distance with the device light JavaScript API]]
+** HTML5 Device APIs
+   - code
+     #+BEGIN_SRC js
+       window.addEventListener('devicelight', function(e) {
+          alert(e.value); // returns double
+       });
+     #+END_SRC
+   - values
+     - < 400 lux (indoor)
+     - 400 - 1000 (office lighting)
+     - > 1000 (outdoor daylight)
+** HTML5 Mobile hardware
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('lightlevel', function(e) {
+          alert(e.value); // returns string
+       });
+     #+END_SRC
+   - lux ranges are left to implementation - hardware with different
+     sensitivities may map differently
+   - returned values:
+     - dim - illuminance of < 50 lux
+       - dark enough that light produced by a white background is eye
+         straining or distracting
+     - normal - illuminance of 50 - 10000 lux
+       - office building hallway, dark overcast day, office lighting,
+         sunrise or sunset on a clear day, overcast day
+     - bright - illuminance of > 10000 lux
+       - direct sunlight or similarly bright conditions that make it
+         hard to see things that are not high contrast
+
+
+** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+   - serve different versions depending on the environment
+   - code
+     #+BEGIN_SRC js
+window.addEventListener("devicelight", function (event) { 
+    /* The level of the ambient light in lux 
+       A lux value for "dim" typically begin below 50,
+       and a value for "bright" begin above 10000
+    */
+    console.log(event.value); 
+});
+ 
+window.addEventListener("lightlevel", function (event) {
+    // Possible values: "normal", "bright", "dim"
+    console.log(event.value); 
+});
+     #+END_SRC
+** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
+   - returns lux units (lx) - an international measurement of light
+     intensity
+   - e.g. e-reader
+   - adjust colour values, typography
 * Battery Status API
+** Tasks
+*** TODO check how often events fire
+*** TODO check battery vs getBattery support
 ** Talk Here: Battery Status API
 *** Use Cases
     - display notification if amount of power is not up to the app's
@@ -123,6 +320,158 @@
     - Provide users the choice.
     - Will it stay quite so granular?
     - ‘The leaking battery: A privacy analysis of the HTML5 Battery Status API’
+** [[https://www.w3.org/TR/battery-status/][Battery Status API]]
+   - proposed recommendation 29 March 2016
+   - changes
+     - more detailed privacy considerations e.g. advice regarding high
+       precision readout implications
+     - very little change to the spec since late 2014 12 09
+     - 2014 changes from 08 May 2012
+       - exposes BatteryManager via getBattery() which returns a
+         Promise instead of synchronous accessor 
+       - clarifies default values
+       - specifies behaviour for multiple batteries
+   - we develop sites assuming that the user has enough battery for
+     the task at hand
+     - videos?
+     - form completions?
+   - spec warns naive implementation can negative impact battery
+   - defer or scale back work
+     - email application does not check server as often
+     - save changes in word processors
+   - security
+     - originally - "has minimal impact on privacy or fingerprinting,
+       and therefore is exposed without permission grants."
+     - user agent should not expose high precision readouts of battery
+       status information that can be used as a fingerprinting vector
+     - MAY ask user for battery status information access -
+       alternatively, enforce user permission requirement in private
+       browsing modes
+     - should inform user of the API use by scripts in an uninstrusive
+       manner, aiding transparency, allowing user to revoke API access
+     - may obfuscate exposed value - authors cannot directly know if a
+       hosting device has no battery, is charging, or is exposing fake
+       values
+*** navigator
+    - Each browsing context has a battery promise.
+    - The battery promise is set to null.
+    - The Promise object holds a BatteryManager.
+    - Call the getBattery():
+      - if batteryPromise is not null, return the battery promise.
+      - Otherwise, set battery promise to a new Promise
+      - return battery promise, continue asynchronously
+      - Create a new BatteryManager object - let battery be that
+        object
+      - Resolve the battery promise with battery (BatteryManager
+        object)
+    - code
+      #+BEGIN_SRC js
+      partial interface Navigator {
+    Promise<BatteryManager> getBattery ();
+};
+      #+END_SRC
+*** BatteryManger
+    - represents current battery status information of hosting device
+    - attributes
+      - charging: charging state
+      - chargingTime: represents time remaining in seconds until
+        battery is fully charged
+      - dischargingTime: represents time remaining in seconds until
+        completely discharged
+      - level: level of system's battery
+    - default values, used when unable to report battery status
+      information - cannot report values for any attributes, due to a
+      system preference, limitation, or no battery
+      - charging = true
+      - chargingTime = 0
+      - dischargingTime = positive infinity
+      - level = 1.0
+    - emulates a full battery, to reduce potential for fingerprinting
+      and to prevent applications from degrading performance
+
+    - events
+      - chargingtimechange
+      - dischargingtimechange
+      - levelchange
+      - left to implementations - check!
+
+    - code
+      #+BEGIN_SRC js
+      interface BatteryManager : EventTarget {
+    readonly        attribute boolean             charging;
+    readonly        attribute unrestricted double chargingTime;
+    readonly        attribute unrestricted double dischargingTime;
+    readonly        attribute double              level;
+                    attribute EventHandler        onchargingchange;
+                    attribute EventHandler        onchargingtimechange;
+                    attribute EventHandler        ondischargingtimechange;
+                    attribute EventHandler        onlevelchange;
+};
+      #+END_SRC
+**** Multiple Batteries
+     - exposes a unified view of batteries
+     - if one is charging, charging is set to true
+     - chargingTime: set to maximum charging time of individual
+       batteries if charging in parallel, and the sum of the
+       individual charging times if charging serially
+     - dischargingTime - set to maximum discharging time of individual
+       batteries if discharging in parallel, and sum of individual
+       discharging times if discharging serially
+     - level - set to average of the levels of batteries of same
+       capacity, or weighted average of battery level attributes for
+       batteries of different capacities
+**** Event handlers
+     - chargingchange
+     - chargingtimechange
+     - dischargingtimechange
+     - levelchange
+**** Examples
+     #+BEGIN_SRC js
+     // We get the initial value when the promise resolves ...
+navigator.getBattery().then(function(battery) {
+  console.log(battery.level);
+  // ... and any subsequent updates.
+  battery.onlevelchange = function() {
+    console.log(this.level);
+  };
+});
+     #+END_SRC
+     #+BEGIN_SRC js
+     navigator.getBattery().then(function(battery) {
+  console.log(battery.level);
+  battery.addEventListener('levelchange', function() {
+    console.log(this.level);
+  });
+});
+     #+END_SRC
+     #+BEGIN_SRC js
+     window.onload = function () {
+      function updateBatteryStatus(battery) {
+        document.querySelector('#charging').textContent = battery.charging ? 'charging' : 'not charging';
+        document.querySelector('#level').textContent = battery.level;
+        document.querySelector('#dischargingTime').textContent = battery.dischargingTime / 60;
+      }
+
+      navigator.getBattery().then(function(battery) {
+        // Update the battery status initially when the promise resolves ...
+        updateBatteryStatus(battery);
+
+        // .. and for any subsequent updates.
+        battery.onchargingchange = function () {
+          updateBatteryStatus(battery);
+        };
+
+        battery.onlevelchange = function () {
+          updateBatteryStatus(battery);
+        };
+
+        battery.ondischargingtimechange = function () {
+          updateBatteryStatus(battery);
+        };
+      });
+    };
+     #+END_SRC
+
 ** The State of Browser APIs - 1
 *** [[http://hwclass.in/2016/03/09/the-next-generation-of-browser-apis/]]
     - 2016-03-09
@@ -536,50 +885,51 @@
 ** 10 HTML5 APIs Worth Looking Into
 *** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
 *** Battery Status
-* Vibration
-** Main
-*** Uses
-    - accessibility - notifications can use vibration rather than
-      sounds or visuals
-    - I'm imagining its use in an in-browser music app. Something like
-      Bandcamp. If a song fails to load, or there's some other
-      important notification, it should vibrate, because the user
-      likely isn't looking at the screen. It doesn't have many obvious
-      openings for value, but it can potentially be useful to have
-      around. 
-** [[https://www.joezimjs.com/javascript/top-5-9-favorite-html5-apis/]]
-*** Vibration
-    - Works on phones, tablets.
-**** Use cases
-     - Used with notifications to get user attention
-     - games
-**** Support
-     - limited on desktop
-     - use as an enhancement
-**** Use
-     - super easy! navigator.vibrate()
-     - Can send in a number of milliseconds for the device to vibrate
-     - Can send an array of numbers representing multiply vibrations -
-       length of time the device vibrates, pause lengths between the vibrations
-*** Network Information
-    - Depending on connection type
-** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
-*** Vibration API
-    - programatically produce a vibration
-    - vibrate during the game is reaction to a particular event
-    - window.navigator.vibrate() method
-      - accepts one parameter, either an integer or array of integers
-      - the array is alternating vibration times and pauses
-** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
-*** Vibration
-    #+BEGIN_SRC js
-      // Vibrate for 1 second (1000 milliseconds).
-      navigator.vibrate(1000);
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - prevent complex animations or calculations
+   - both mobile and laptop
+   - me: don't download double density images?
+   - code
+     #+BEGIN_SRC js
+       var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
 
-      // Vibrate in sequence.
-      navigator.vibrate([500, 250, 500]);
-    #+END_SRC
-    - build games, create accessible applications
+       function logBattery(battery) {
+           console.log(battery.level);
+           console.log(battery.charging);
+           console.log(dischargingTime);
+
+           battery.addEventListener('chargingchange', function() {
+               console.log('Battery chargingchange event: ' + battery.charging);
+           }, false);
+       }
+
+       if (navigator.getBattery) {
+           navigator.getBattery().then(logBattery);
+       } else if (battery) {
+           logBattery(battery);
+       }
+     #+END_SRC
+** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+   - code
+     #+BEGIN_SRC js
+       var battery = navigator.battery; 
+       if (battery) { 
+           var batteryLevel = Math.round(battery.level * 100) + "%", 
+               charging = (battery.charging)? "" : "not ", 
+               chargingTime = parseInt(battery.chargingTime / 60, 10), 
+               dischargingTime = parseInt(battery.dischargingTime / 60, 10);
+ 
+               // Set events 
+               battery.addEventListener("levelchange", showStatus);
+               battery.addEventListener("chargingchange", showStatus);
+               battery.addEventListener("chargingtimechange", showStatus);
+               battery.addEventListener("dischargingtimechange", showStatus);
+        }
+     #+END_SRC
+** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
+   - should not assume that small screen should get small images
+   - battery api provides not just a snapshot, but also events
+** TODO [[https://www.theguardian.com/technology/2015/aug/03/privacy-smartphones-battery-life][How your smartphone's battery life can be used to invade your privacy | Techn...]]
 * getUserMedia
 ** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
 *** getUserMedia API
@@ -590,18 +940,6 @@
     - can control the requested stream - high resolution or low
     - desktop browser support is Chrome 21+, Firefox 17+, Opera
       18+. Mobile support Chrome 32+, Firefox 26+, Opera 12+.
-* Network Information API
-** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
-*** Network Information APIs
-    - discover whether user is on a metered connection
-    - provide estimate of bandwidth
-    - change behaviour of pages to accommodate user
-    - window.navigator.connection property
-      - exposes two read only properties: bandwidth, metered
-      - bandwidth: represents current bandwidth
-      - metered: boolean - true if subject to limitation and bandwidth
-        usage
-    - support: Firefox 12+, Chrome
 * Device Orientation API
 ** Main
 *** Support
@@ -672,6 +1010,76 @@
          });
      }
    #+END_SRC
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - get rotation angles in three dimensions
+   - IE for Windows Phone supported from Version 11
+   #+BEGIN_SRC js
+     if (window.DeviceOrientationEvent) {
+         window.addEventListener('deviceorientation', function(eventData) {
+             // gamma is the left-to-right tilt in degrees
+             console.log(eventData.gamma);
+
+             // beta is the front-to-back tilt in degrees
+             console.log(eventData.beta);
+
+             // alpha is the compass direction the device is facing in degrees
+             console.log(eventData.alpha);
+         }, false);
+     }
+   
+   #+END_SRC
+** [[http://www.girliemac.com/presentation-slides/html5-mobile-2014/device.html#6][HTML5 Device APIs]]
+   - The device orientation event is fired when new data is available
+     from a magnetometer sensor. Device orientation supplies the
+     physical orientation of the device.
+   - code
+     #+BEGIN_SRC js
+     if (window.DeviceOrientationEvent) {
+         window.addEventListener('deviceorientation', function(e) {
+           compass   = e.alpha; // degree
+               frontBack = e.beta;
+               leftRight = e.gamma;
+               // ...
+         }, false);
+       }
+     #+END_SRC
+** HTML5 Mobile Hardware
+   - gyroscope
+   - accelerometer
+   - compass
+   - events
+     - deviceorientation
+     - devicemotion
+     - compassneedscalibration
+   - code
+     #+BEGIN_SRC js
+     if (window.DeviceOrientationEvent) {
+         window.addEventListener('deviceorientation', function(e) {
+           a = Math.floor(e.alpha);
+               b = Math.floor(e.beta);
+               g = Math.floor(e.gamma);
+               el.style.transform = 'rotateZ('+a+'deg) 
+                                  rotateX('+b+'deg) rotateY('+g+'deg)';
+         }, true);
+       } 
+                
+     #+END_SRC
+   - not raw sensor data
+   - high level data agnostic to the source of information - common
+     sources are gyroscope, accelerometer, compass
+   - deviceorientation fired when new information is fired from the
+     magnometer sensor, supplies physical orientation of the device
+   - devicemotion supplies acceleration of device
+   -
+** HTML5 Mobile Approach
+   - deviceorientation: expressed as a series of rotations from a
+     local coordinate frame
+   - devicemotion: expressed in Cartesian coordinates in a coordinate
+     frame defined in the device
+   - compassneedscalibration
+     - inform websites that a compass being used to provide data for
+       one of these events needs calibration
+     - webkitCompassHeading property in iOS5
 * Device Motion API
 ** EdX
 *** Introduction
@@ -767,6 +1175,348 @@
       sky's direction (vertical)
     - Z acceleration is an indicator for the face up / face down
       orientation of the device
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - uses accelerometer for device movement
+   - detects acceleration, not speed
+   - support iOS, Android
+   - IE for Windows Phone supported from Version 11
+*** code
+    #+BEGIN_SRC js
+      if (window.DeviceMotionEvent) {
+          window.addEventListener('devicemotion', function(eventData) {   
+              // Acceleration
+              console.log(eventData.acceleration.x);
+              console.log(eventData.acceleration.y);
+              console.log(eventData.acceleration.z);
+    
+              // Acceleration including gravity
+              console.log(eventData.accelerationIncludingGravity.x);
+              console.log(eventData.accelerationIncludingGravity.y);
+              console.log(eventData.accelerationIncludingGravity.z);
+
+              // Rotation rate
+              console.log(eventData.rotationRate.alpha);
+              console.log(eventData.rotationRate.beta);
+              console.log(eventData.rotationRate.gamma);
+          }, false);
+      }
+    #+END_SRC
+** [[http://www.girliemac.com/presentation-slides/html5-mobile-2014/device.html#6][HTML5 Device APIs]]
+   - Device motion supplies the acceleration of the
+     device. Compassneedscalibration iOS5 has webkitCompassingHeading
+     property, but is not a standard
+* Generic Sensor API
+** [[https://w3c.github.io/sensors/][Generic Sensor API]]
+   - Hot off the press! Editor's draft, 11 May 2016.
+   - framework for exposing sensor data
+   - provides an abstract Sensor interface to be extended to
+     accommodate different sensor types
+   - work in progress!
+*** Introduction
+    - used for geolocation, counting steps, head tracking
+    - especially true for mobile devices
+    - promotes consistency
+    - at this stage, no sensor discovery API - perhaps in the future
+      when there are enough sensors to warrant it.
+    - api interacts with the device's default sensor.
+*** Background
+    - geolocation
+    #+BEGIN_SRC js
+    let sensor = new GeolocationSensor({ accuracy: "high" });
+
+sensor.onchange = function(event) {
+    var coords = [event.reading.latitude, event.reading.longitude];
+    updateMap(null, coords, reading.data.accuracy);
+};
+
+sensor.onerror = function(error) {
+    updateMap(error);
+};
+    #+END_SRC
+    - tire example :)
+      #+BEGIN_SRC js
+      let sensor = new DirectTirePressureSensor({ position: "rear", side: "left" });
+sensor.onchange = event => console.log(event.reading.pressure);
+      #+END_SRC
+    - best practice recommended by the spec
+      - check for error thrown by Sensor
+      - listen to errors emitted
+      - handle gracefully 
+    - code
+      #+BEGIN_SRC js
+      try { // No need to feature detect thanks to try..catch block.
+    let sensor = new GeolocationSensor({});
+    sensor.start();
+    sensor.onerror = error => gracefullyDegrade(error);
+    sensor.onchange = data => updatePosition(data.coords);
+} catch(error) {
+    gracefullyDegrade(error);
+}
+      #+END_SRC
+*** Security
+    - privacy risks arise when used with each other or over time -
+      risk of fingerprinting
+    - User agents may reduce the risk by limiting event rates
+      available to web application developers
+      - may also provide an indication of when the sensor is used
+**** Browsing Context
+     - sensor readings only available in top-level browsing context to
+       avoid privacy risks
+     - top level browsing context: not a nested browsing context, has
+       no parent.. need to clarify this
+     - e.g. mobile device only fires event on active tab, and not on
+       the background tabs, or within iframes.
+**** Secure Context
+     - must only be available within a secure context (as with
+       geolocation Chrome 50)
+**** Obtaining Explicit User Permission
+     - obtained through the Permissions API
+*** Concepts
+    - sensor: measures different physical quantities
+      - provides raw sensor readings
+      - source of information about the user and their environment
+    - calibration
+      - used to correct known, predictable discrepancies between raw
+        sensor readings and the corresponding physical quantities
+    - sensor fusion
+      - known but unpredictable discrepancies are addressed
+        dynamically through sensor fusion
+    - sensor readings
+      - calibrated raw sensor readings (regardless of sensor fusion)
+    - sensor types
+      - measure different physical quantities e.g. temperature, air
+        pressure, heart-rate, luminosity
+    - low-level sensor types
+      - sensor types characterised by their implementation
+      - e.g. gyroscope
+    - high-level sensor types
+      - sensors named after their readings
+      - e.g. geolocation provides information about user's location,
+        but precise means by which this data is obtained is
+        purposefully opaque - could be GPS chip, network cell
+        triangulation, wifi-networks, combination, etc)
+      - depends on implementation-specific heuristics
+      - generally the result of applying algorithms to low-level sensors
+        - e.g. pedometer can be built using output of a gyroscope or
+          of sensor fusion
+    - distinction
+      - barometer that measures air pressure is generally low-level
+    - sensor readings from different sensor types combined through
+      sensor fusion - provides higher-level, more accurate data, at
+      the cost of increased latency
+      - e.g. a three axis magnetometer must be combined with the
+        readings of an accelerometer to provide a correct bearing
+    - sensor fusion can also be carried out in software
+      - e.g. raw output of a gyroscope needed for head tracking as
+        latency must be minimal - sensor fusion in software in this
+        case
+    - reporting modes
+      - periodic
+        - sensor readings reported at regular intervals
+        - at an adjustable (typo) frequency measured in hertz (Hz)
+        - much more fine-grained approach
+        - essential for use cases with low latency requirements
+      - auto reporting mode
+        - only reported upon measurable change
+        - gives the user agent more latitude to carry out power or CPU
+          saving strategies, and should be favoured
+        -
+*** Model
+**** Sensor type
+     - one or more associated sensors
+     - has associated Sensor subclass
+     - has associated SensorReading subclass
+       - attributes hold sensor readings that must be readonly
+     - may have a default sensor
+     - has associated supported reporting modes, that must be either
+       auto or periodic
+     - if it has more than one sensor, it must have a set of
+       identifying parameters to select the right sensor to associate
+       to each new Sensor object
+     - has an abstract operation for constructing a SensorReading object
+       - takes the sensor readings emitted by the sensor
+       - returns an initialised SensorReading object
+       - uses the sensor type's SensorReading subclass
+       -
+**** Sensor
+     - has a set of activated Sensor objects
+     - set is initially empty
+     - current reading
+       - initially null or a SensorReading object cached by user agent
+       - cached readings have privacy concerns
+     - supports period reporting mode if its sensor type's supported
+       reporting mode contains periodic reporting mode
+     - reporting flag initially unset
+     - current reporting mode initially undefined
+     - current polly frequency initially null
+     - has abstract operation to retrieve its permission, taking a
+       Sensor object as input, returns a permission and its associated
+       PermissionDescriptor
+*** API
+**** Sensor Interface
+     #+BEGIN_SRC js
+     interface Sensor : EventTarget {
+  readonly attribute SensorState state;
+  readonly attribute SensorReading? reading;
+  void start();
+  void stop();
+  attribute EventHandler onchange;
+  attribute EventHandler onstatechange;
+  attribute EventHandler onerror;
+};
+
+dictionary SensorOptions {
+  double? frequency;
+};
+
+enum SensorState {
+  "idle",
+  "activating",
+  "active",
+  "errored"
+};
+     #+END_SRC
+     - associated sensor
+     - associated state
+       - idle (default)
+       - activating
+       - active
+       - errored
+     - desired frequency
+       - initially null
+     - sensor task source
+       - initially empty
+       - can be enabled or disabled
+       - initially enabled
+       - enabled: event loop uses it as one of its task sources
+     - visibility state of document in top-level browsing context
+       changes, the current visibility state is updated - if
+       "visible", enable the sensor task source, otherwise, disable it
+     - user agents are encouraged to stop sensor polling when sensor
+       task sources are disabled to save battery
+***** Sensor.state
+      - state attribute
+      - represents a Sensor's state
+      - can be "active"
+      - idle (default)
+      - activating
+      - active
+      - errored
+***** Sensor.reading
+      - when state is "active", reading attribute points to current
+        reading, whatever the frequency
+***** Sensor.start()
+      - runs these steps:
+        - if neither idle nor errored state
+          - throw an InvalidStateError exception
+        - invoke update state with sensor instance and activating
+        - sub-steps in parallel
+          -
+***** Sensor.stop()
+      - if either idle or errored, then throw an invalidstateerror exception
+      - set reading to null
+      - invoke update state with sensor instance and idle
+      - invoke unregister a sensor
+      - return undefined
+***** Sensor.onerror
+***** Sensor.onchange
+***** Sensor.onstatechange
+***** Event handlers
+      - onchange
+      - onstatechange
+      - onerror
+**** SensorReading Interface
+     - represents state of a sensor
+       #+BEGIN_SRC js
+       interface SensorReading {
+  readonly attribute DOMHighResTimeStamp timeStamp;
+};
+       #+END_SRC
+***** SensorReading.timeStamp
+      - returns timestamp of time at which the reading was obtained
+        from the sensor
+      - expressed in milliseconds passed since time origin
+      -
+**** SensorReadingEvent interface
+     #+BEGIN_SRC js
+     [Constructor
+(DOMString type
+, SensorReadingEventInit eventInitDict
+)]
+interface SensorReadingEvent : Event {
+  readonly attribute SensorReading reading;
+};
+
+dictionary SensorReadingEventInit : EventInit {
+  SensorReading reading
+;
+};
+     #+END_SRC
+***** SensorReadingEvent.reading
+      - references current reading at the time of event dispatch
+**** SensorErrorEvent Interface
+     #+BEGIN_SRC js
+     [Constructor
+(DOMString type
+, SensorErrorEventInit errorEventInitDict
+)]
+interface SensorErrorEvent : Event {
+  readonly attribute Error error;
+};
+
+dictionary SensorErrorEventInit : EventInit {
+  Error error
+;
+};
+     #+END_SRC
+***** SensorErrorEvent.error
+*** Abstract Operations
+**** Construct Sensor Object
+     - input
+       - SensorOptions object
+     - output
+       - Sensor object
+     - If not a secure context nor a top-level browsing context, throw
+       a SecurityError
+*** Example WebIDL for proximity sensors
+    #+BEGIN_SRC js
+    Constructor(optional ProximitySensorOptions proximitySensorOptions)]
+interface ProximitySensor : Sensor {
+  readonly attribute ProximitySensorReading? reading;
+};
+
+interface ProximitySensorReading : SensorReading {
+    readonly attribute unrestricted double distance;
+};
+
+dictionary ProximitySensorOptions : SensorOptions {
+    double? min = -Infinity;
+    double? max = Infinity;
+    ProximitySensorPosition? position;
+    ProximitySensorDirection? direction;
+};
+    
+enum ProximitySensorPosition {
+    "top-left",
+    "top",
+    "top-right",
+    "middle-left",
+    "middle",
+    "middle-right",
+    "bottom-left",
+    "bottom",
+    "bottom-right"
+};
+
+enum ProximitySensorDirection {
+    "front",
+    "rear",
+    "left",
+    "right",
+    "top",
+    "bottom"
+};
+    #+END_SRC
 * Geolocation API
 ** Main
 *** Support
@@ -787,6 +1537,23 @@
       - IE 10
       - Safari 3.2
       - Opera 11
+*** Uses
+**** [[https://www.smashingmagazine.com/2015/10/takeaways-mobile-web-behavior/][Takeaways From Mobile Web Behavior – Smashing Magazine]]
+     - You’ve no doubt experienced the frustration of mistyping or
+       forgetting the context of an online form due to a phone’s small
+       screen. Because of the difficulty of submitting information,
+       around 50% of mobile web users choose to log in via social
+       networks in order to avoid having to type in text and remember
+       countless passwords. 
+     - Well, it doesn’t mean that it will automatically work for every
+       website, but you could compare the conversion rate with both
+       and see what works best. One thing to keep in mind though is
+       that sometimes users might not remember how they logged in or
+       signed up last time, so they might end up with a few duplicate
+       accounts and start wondering where their data has gone.
+     - pre-fill as many input fields as you can
+     - http://www.mobilecommercepress.com/geolocation-technology-focus-taken-latest-groupon-app/859403/
+
 ** EdX
 **** Introduction
      - implemented in most modern browsers
@@ -922,6 +1689,95 @@
          // Do something interesting...
      });
    #+END_SRC
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - uses GPS, GSM, Wi-Fi
+   - IE9 support
+   - code
+     #+BEGIN_SRC js
+     // Check support
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success);
+}
+
+function success(position) {
+    console.log('Latitude: ' + position.coords.latitude);
+    console.log('Longitude: ' + position.coords.longitude);
+}
+     #+END_SRC
+** [[https://www.smashingmagazine.com/2013/05/the-state-of-responsive-web-design/][The State of Responsive Web Design]]
+   - Another API that would be particularly useful for some mobile
+     users is geolocation. The good news is that it’s already well
+     supported. This API enables us to geolocate the user using GPS
+     and to infer their location from network signals such as IP
+     address, RFID, Wi-Fi and Bluetooth MAC addresses. This can be
+     used on some responsive websites to provide users with contextual
+     information. A big restaurant chain could enhance its mobile
+     experience by showing the user the locations of restaurants in
+     their area. The possibilities are endless.
+** [[https://www.smashingmagazine.com/2015/10/takeaways-mobile-web-behavior/][Takeaways From Mobile Web Behavior – Smashing Magazine]]
+   - An increasing number of people like the concept of geolocation,
+     which opens a gamut of opportunities for web designers and
+     marketers. For example, Groupon presents local offers to
+     customers and Google tailors search results according to where
+     you are.
+   - When geolocation is combined with push notification, marketing
+     can really come into play. For example, Starbucks sends potential
+     customers a push notification when they walk within a geofence
+     around a branch. A geofence is a virtual fence with a
+     geographical radius that triggers a tailored update notification,
+     offer or coupon to any customer who passes through the area. This
+     might be annoying if you push it over the edge, but sending an
+     update once and again with user’s consent might be worth
+     considering.
+   - In order for people to sign up for a geolocation-based service,
+     they must trust the brand and the quality of the app and believe
+     that something is in it for them. 
+   - Your website can go a long way to instilling confidence through
+     tone, consistency and branding. As with newsletter registrations,
+     always make clear the benefits users will get from registering
+     with you, and help users understand that their data will be
+     protected and that they will be able to opt out at any time. 
+   - As a developer, always bear in mind factors that could cause app
+     abandonment. Some of the most common reasons for one- and
+     two-star ratings in Apple’s App Store are bugs and overuse of a
+     device’s bandwidth or power. For example, a previous version of
+     Staples’ app continually used GPS actively and, therefore,
+     quickly drained the battery, ultimately discouraging people from
+     using the application. 
+   - Obvious but worth mentioning: start by going through Apple’s “App
+     Programming Guide for iOS” (PDF) to avoid making similar mistakes
+     and to ensure that your app delivers a fantastic experience
+     without these common pitfalls.
+** HTML5 Mobile 2014
+   #+BEGIN_SRC js
+     if (navigator.geolocation) {
+       navigator.geolocation.getCurrentPosition(success, fail);
+     }
+     function success(position) {
+       alert('Latitude: '+ position.coords.latitude + 
+       ', Longitude: '+ position.coords.longitude);
+     }
+                
+   #+END_SRC
+** HTML5 Mobile Hardware
+   - use GPS satellites
+   - GSM / CDMA cell IDs
+   - A-GPS
+   - Wi-Fi Base stations
+   - requires access permission
+   - code
+     #+BEGIN_SRC js
+             if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, fail);
+              }
+
+              function success(position) {
+                alert('Latitude: '+ position.coords.latitude + 
+                ', Longitude: '+ position.coords.longitude);
+              }
+                
+
+     #+END_SRC
 * Media Capture and Streams
 ** Main
 *** Support
@@ -958,20 +1814,67 @@
            }
        );
      #+END_SRC
-* Ambient Light
-** Main
-*** Support
-    - Limited
-** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
-   - Access the light sensor on the device
-   - Night mode - easier to use in dark surroundings
+* Network Information API
+** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
+*** Network Information APIs
+    - discover whether user is on a metered connection
+    - provide estimate of bandwidth
+    - change behaviour of pages to accommodate user
+    - window.navigator.connection property
+      - exposes two read only properties: bandwidth, metered
+      - bandwidth: represents current bandwidth
+      - metered: boolean - true if subject to limitation and bandwidth
+        usage
+    - support: Firefox 12+, Chrome
+** [[https://www.smashingmagazine.com/2013/05/the-state-of-responsive-web-design/][The State of Responsive Web Design]]
+   - Another API that has been highly discussed is the network
+     information API. The possibility of measuring a user’s bandwidth
+     and optimizing accordingly has seduced many developers. We would
+     be able to serve high-quality images to users with high bandwidth
+     and low-quality images to users with low bandwidth. With the
+     bandwidth attribute of the network API, it would be possible to
+     estimate the downloading bandwidth of a user in megabytes per
+     second. The second attribute, metered, is a Boolean that tells us
+     whether the user has a metered connection (such as from a prepaid
+     card). These two attributes are currently accessible only via
+     JavaScript. 
+   - Unfortunately, measuring a user’s connection is technically
+     difficult, and a connection could change abruptly. A user could
+     go into a tunnel and lose their connection, or their speed could
+     suddenly drop. So, a magical media query that measures bandwidth
+     looks hypothetical at the moment. Yoav Weiss has written a good
+     article about the problems that such a media query would create
+     and about bandwidth measurement, “Bandwidth Media Queries? We
+     Don’t Need ’Em!” 
+** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+   - code
      #+BEGIN_SRC js
-       window.addEventListener('devicelight', function(event) {
-           // Get the ambient light level in lux.
-           var lightLevel = event.value;
-       });
+var connection = window.navigator.mozConnection,
+    online = connection.bandwidth,
+    metered = connection.metered;
+ 
+// online can return:
+//    0 when offline
+//    Infinity when the bandwidth isn't known
+//    Estimation of MB/s
+ 
+// metered implies if the connection is being metered,
+//   meaning limited in some way from the ISP
      #+END_SRC
-* Proximity Events
+
+** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
+   - size of display does not indicate limited bandwidth
+   - low resolution images do not provide the best experience
+   - returns connection speed in MB per second
+   - provides true / false boolean value of bandwidth being metered in
+     any way by the ISP
+   - filter assets to manage browser
+   - returns a connection of 0 when a user is offline
+   - manage assets on page load - but modify interface
+   - run energy tests to give estimate about when battery might die
+   - detect performance bottlenecks
+
+* Proximity Sensor API
 ** Support
    - Firefox
 ** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
@@ -1006,3 +1909,280 @@
          }
      });
    #+END_SRC
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - proximity sensor found on front of device generally
+   - uses measurements to know when you put your phone against your
+     ear, or when you reach towards it
+   - can tell the distance
+   - supported in Firefox
+     #+BEGIN_SRC js
+       if('ondeviceproximity' in window) {
+           // Fired when object is in the detection zone
+           window.addEventListener('deviceproximity', function(event) {
+               // Object distance in centimeters 
+               console.log(event.value + " centimeters");
+           });
+       } else {
+           console.log("deviceproximity not supported");
+       }
+
+       if('ondeviceproximity' in window){
+           // Fired when object is in the detection zone
+           window.addEventListener('userproximity', function(event) {
+               if(event.near == true) {
+                   console.log("Object is near");
+               } else {
+                   console.log("Object is far");
+               }
+           });
+       } else {
+           console.log("userproximity not supported");
+       }
+     #+END_SRC
+** HTML5 Mobile Hardware
+   - http://www.girliemac.com/presentation-slides/html5-mobile-approach/deviceAPIs.html#27
+   - distance of a nearby physical object using the proximity sensor
+     of a device
+   - deviceproximity and userproximity events
+     - occur when the sensor detects something closer or further from
+       the device
+   - code
+     #+BEGIN_SRC js
+       window.addEventListener('deviceproximity', function(e) {
+           alert(e.value);
+       });
+     #+END_SRC
+
+** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+   - see how close device is to another object
+   - code
+     #+BEGIN_SRC js
+window.addEventListener("deviceproximity", function (event) { 
+    // Current device proximity, in centimeters 
+    console.log(event.value); 
+ 
+    // The maximum sensing distance the sensor is  
+    // able to report, in centimeters 
+    console.log(event.max); 
+ 
+    // The minimum sensing distance the sensor is  
+    // able to report, in centimeters 
+    console.log(event.min); });
+     #+END_SRC
+
+** [[http://www.sitepoint.com/5-javascript-apis-empower-mobile-web-pages/][5 JavaScript APIs to Empower Your Mobile Web Pages]]
+   - detect proximity of an object to the device
+   - distance measured by proximity sensor
+   - no properties or methods
+   - fires events on window object
+   - deviceproximity: information about the distance between device
+     and a nearby object
+   - userproximity: specifies when an object is nearby
+   - code
+     #+BEGIN_SRC js
+     if ('ondeviceproximity' in window) {
+   // API supported
+} else {
+   // Not supported
+}
+
+window.addEventListener('userproximity', function(event) {
+   console.log( (event.near ? '' : 'no ') + 'object detected nearby');
+});
+     #+END_SRC
+
+** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
+   - enables near field communication
+   - detect nearby objects enabled with NFC information
+   - 
+* Phone Calls / Text Messages
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   #+BEGIN_SRC html
+     <a href="tel:+44703567387625">
+       Call number!
+     </a>
+
+     <a href="sms:+44703567387625?body=Hello%20there!">
+       Compose SMS!
+     </a>
+   #+END_SRC
+* Hardware misc
+  - network service discovery?
+** Access
+   - GPS
+   - Camera, video, microphone
+   - Audio
+   - Vibration
+   - Battery
+   - NFC
+   -
+** Sensors
+   - Accelerometer
+   - Magnetometer
+   - Gyrometer
+   - Light
+   - Proximity
+   - Barometer (presure)
+   -
+* Web Bluetooth API
+** [[https://www.broken-links.com/2015/07/23/hardware-apis-coming-to-browsers/][Hardware APIs coming to browsers - Broken Links]]
+   - The first is the Web Bluetooth API, which has experimental
+     implementation in Chrome OS devices (running the Dev channel,
+     behind a flag). This Promise-based API allows the browser to scan
+     for local Bluetooth Low Energy (BLE) devices, such as speakers or
+     fitness tracking wearables, then interact with them. 
+   - Scanning is as easy as requesting a list of local devices,
+     filtered by a list of services – for example, to find a BLE
+     device which transmits battery data: 
+     #+BEGIN_SRC js
+     navigator.bluetooth.requestDevice({
+  filters: [{ services: ['battery_service'] }]
+}).then(function (device) {
+  console.log(device.name);
+});
+     #+END_SRC
+* Web NFC API
+** [[https://www.broken-links.com/2015/07/23/hardware-apis-coming-to-browsers/][Hardware APIs coming to browsers - Broken Links]]
+   - Further from implementation is the Web NFC API, which gives
+     access to Near Field Communication devices – such as tap-to-pay
+     systems. Currently only at the spec stage, it’s also
+     Promise-based so seems easy to get started with. 
+   - For example, this is how it’s proposed to read data from an NFC
+     device: 
+     #+BEGIN_SRC js
+       navigator.nfc.requestAdapter().then(function (adapter) {
+         adapter.onmessage = function (event) {
+           console.log(event.message.data);
+         }
+       });
+     #+END_SRC
+* Vibration
+** Main
+*** Uses
+    - accessibility - notifications can use vibration rather than
+      sounds or visuals
+    - I'm imagining its use in an in-browser music app. Something like
+      Bandcamp. If a song fails to load, or there's some other
+      important notification, it should vibrate, because the user
+      likely isn't looking at the screen. It doesn't have many obvious
+      openings for value, but it can potentially be useful to have
+      around.
+** [[https://www.w3.org/TR/2015/REC-vibration-20150210/][Vibration API]]
+   - Has been a W3C Recommendation for over a year!
+   - simple, tactile feedback
+   -
+*** Vibration Interface
+    - WebIDL
+    #+BEGIN_SRC js
+    typedef (unsigned long or sequence<unsigned long>) VibratePattern;
+
+partial interface Navigator {
+    boolean vibrate (VibratePattern pattern);
+};
+    #+END_SRC
+    - vibrate() invokes vibration
+    - Processing vibration patterns
+      - If not a list, add the pattern
+      - Max length is an implementation dependent maximum
+        - If length is greater than max length, implementation could
+          break request into shorter requests to achieve same effect
+      - Truncates patterns greater than max length
+      - Max duration:
+        - implementation dependent
+        - 
+    - Means that if submitting a pattern, it should be an odd length!
+    - Performing vibration
+      - may return false e.g. user preferences
+      - if vibration is happening, abort current vibration pattern
+      - vibrates if even index
+      - waits if odd index
+*** Examples
+    #+BEGIN_SRC js
+    // vibrate for 1000 ms
+navigator.vibrate(1000);
+
+// or alternatively
+navigator.vibrate([1000]);
+    #+END_SRC
+    #+BEGIN_SRC js
+    navigator.vibrate([50, 100, 150]);
+    #+END_SRC
+    #+BEGIN_SRC js
+    // cancel any existing vibrations
+navigator.vibrate(0);
+
+// or alternatively
+navigator.vibrate([]);
+    #+END_SRC
+** [[https://www.joezimjs.com/javascript/top-5-9-favorite-html5-apis/]]
+*** Vibration
+    - Works on phones, tablets.
+**** Use cases
+     - Used with notifications to get user attention
+     - games
+**** Support
+     - limited on desktop
+     - use as an enhancement
+**** Use
+     - super easy! navigator.vibrate()
+     - Can send in a number of milliseconds for the device to vibrate
+     - Can send an array of numbers representing multiply vibrations -
+       length of time the device vibrates, pause lengths between the vibrations
+*** Network Information
+    - Depending on connection type
+** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
+*** Vibration API
+    - programatically produce a vibration
+    - vibrate during the game is reaction to a particular event
+    - window.navigator.vibrate() method
+      - accepts one parameter, either an integer or array of integers
+      - the array is alternating vibration times and pauses
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+*** Vibration
+    #+BEGIN_SRC js
+      // Vibrate for 1 second (1000 milliseconds).
+      navigator.vibrate(1000);
+
+      // Vibrate in sequence.
+      navigator.vibrate([500, 250, 500]);
+    #+END_SRC
+    - build games, create accessible applications
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - haptic feedback
+   - progressive enhancement - works on modern browsers, doesn't break
+     anything not supporting it
+   - Chrome + Firefox + Opera support
+   - code
+     #+BEGIN_SRC js
+     var vibrate = navigator.vibrate || navigator.mozVibrate;
+
+     // vibrate for 1 second
+vibrate(1000);
+
+// vibrate for 1 second, then pause for half, then vibrate for another 1 second
+vibrate([1000, 500, 2000]);
+     #+END_SRC
+** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+   - code
+     #+BEGIN_SRC js
+     // Vibrate for one second 
+navigator.vibrate(1000);
+ 
+// Vibration pattern [vibrationTime, pause,…] 
+navigator.vibrate([200, 100, 200, 100]);
+ 
+// Vibrate for 5 seconds 
+navigator.vibrate(5000);
+ 
+// Turn off vibration 
+navigator.vibrate(0);
+     #+END_SRC
+* Wake Lock API
+  #+BEGIN_SRC js
+//request to keep the display awake when the recipe is showing:
+screen.keepAwake = true;
+
+//stop keeping the display awake:
+screen.keepAwake = false;
+  
+  #+END_SRC
