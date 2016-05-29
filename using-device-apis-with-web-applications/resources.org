@@ -46,12 +46,33 @@
       and good knowledge of it, as well as a good understanding of
       developing for the mobile web and hybrid apps are also fairly
       advanced skills.
-  - environmental design?
+  - environmental design? !!!!
+  -
+** Introduction
+   - What do I mean by device APIs?
+   - Device APIs could be high level, meaning they take into account a
+     number of different sources. We want information, rather than
+     pure data.
+   - Low level APIs return rudimentary levels, without processing and
+     generally from a single source. We use this data and do something
+     with it- it's probably not very useful by itself.
+* Ambient Humidity
+  - Unofficial draft as of 22 May 2016
 * Ambient Light Sensor
 ** Main
 *** Support
     - Limited
-    -
+    - Firefox supports new spec (I think)
+    - Chrome supports old spec lux level
+*** Use cases
+    - you'll notice that the main use case appears to revolve around
+      styling the user interface
+    - media queries level 4 of css actually denotes a light level
+      media query for this exact use
+    - only non-style use case I have seen is on in lieu of the
+      proximity api, that uses changes in light level to play sounds
+    - css is very high level, the sensor is low-level - allows for
+      very granular control
 ** [[https://www.w3.org/TR/ambient-light/][Ambient Light Sensor]]
    - W3C Working Draft 29 March 2016
    - extends generic sensor API
@@ -109,7 +130,11 @@ dictionary AmbientLightSensorReadingInit {
      Orientation only provides a high level view, whilst the
      underneath platforms have the lower level sensors. Firstly, work
      on exposing the lower level sensors.
-     
+** [[https://github.com/w3c/ambient-light/issues/8][Security and privacy considerations for Ambient Light Events · Issue #8]]
+   - Information leakage: identify videos or TV channels playing in
+     proximity. 
+   - Illuminance limited to steps of 6 lux
+   - CSS media query requires no permission - high level.
 
 ** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
    - Access the light sensor on the device
@@ -196,6 +221,180 @@ window.addEventListener("lightlevel", function (event) {
      intensity
    - e.g. e-reader
    - adjust colour values, typography
+** [[http://www.girliemac.com/blog/2014/01/12/luminosity/][Responsive UI with Luminosity Level – GirlieMac Blog]]
+   - Screen readability
+     - when outside, increase screen luminance
+   - Ambient Light Events API
+     - access light/photocensor
+     - DeviceLightEvent
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('devicelight', function(event) {
+  console.log(event.value + 'lux');
+});
+
+     #+END_SRC
+   - making web responsive to light
+     - change ui based on light level
+     - default: black text with light gray
+     - under bright light: black text and white background
+     - dark: white text and dark background
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('devicelight', function(e) {
+  var lux = e.value;
+
+  if(lux < 50) { // dim
+    document.body.className = 'dim';
+  }
+  if(lux >= 50 && lux <= 1000) {
+    document.body.className = 'normal';
+  }
+  if(lux > 1000)  { // bright
+    document.body.className = 'bright';
+  } 
+});
+
+     #+END_SRC
+   - support
+     - Firefox 22+
+** [[http://www.webondevices.com/predict-hand-distance-with-device-light-javascript-api/][Predict hand distance with the device light JavaScript API]]
+   - access light sensor
+   - code
+     #+BEGIN_SRC js
+     if('ondevicelight' in window){
+    window.addEventListener('devicelight', function(event) {
+        // light level is returned in lux units
+        console.log(event.value);
+    });
+}
+
+if('onlightlevel' in window){
+    window.addEventListener('lightlevel', function(event) {
+        // light value can be dim, normal or bright
+    console.log(event.value);
+    });
+}
+     #+END_SRC
+** [[http://www.smartjava.org/content/adjust-colors-your-page-based-lighting-room-html5-webrtc-and-webcam][Adjust colors of your page based on the lighting of the room with HTML5, webr...]]
+   - interesting alternative that uses webcam and media streams
+   - code
+     #+BEGIN_SRC js
+         video = document.getElementById("live")
+ 
+    navigator.webkitGetUserMedia("video",
+            function (stream) {
+                console.log(stream);
+                video.src = webkitURL.createObjectURL(stream);
+            },
+            function (err) {
+                console.log("Unable to get video stream!")
+            }
+    )
+
+  // create a dummy context
+   var ctx = $('<canvas />', {width:'320', height:'240'})[0].getContext('2d');
+   ctx.drawImage(video, 0, 0, 320, 240);
+   var imgd = ctx.getImageData(0, 0, 320, 240);
+    var pix = imgd.data;
+
+   function calculateLuminance(w, h) {
+ 
+        // draw the current image
+        ctx.drawImage(video, 0, 0, w, h);
+        var imgd = ctx.getImageData(0, 0, w, h);
+        var pix = imgd.data;
+ 
+        var totalL = 0;
+        for (var i = 0, n = pix.length; i < n; i += 4) {
+            // Red, Green and Blue have different influence on the total luminance
+            totalL += pix[i  ] * .3 + pix[i + 1] * .59 + pix[i + 2] * .11;
+        }
+ 
+        return totalL;
+    }
+
+            function LightenDarkenColor(col, amt) {
+                var usePound = false;
+                if (col[0] == "#") {
+                    col = col.slice(1);
+                    usePound = true;
+                }
+ 
+                var num = parseInt(col, 16);
+ 
+                var r = (num >> 16) + amt;
+ 
+                if (r > 255) r = 255;
+                else if (r < 0) r = 0;
+ 
+                var b = ((num >> 8) & 0x00FF) + amt;
+ 
+                if (b > 255) b = 255;
+                else if (b < 0) b = 0;
+ 
+                var g = (num & 0x0000FF) + amt;
+ 
+                if (g > 255) g = 255;
+                else if (g < 0) g = 0;
+ 
+                return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+            }
+
+    // luminance for dark is around 300.000
+    var lower = 300000;
+    // luminance for bright is around 6.000.000, could be different per webcam
+    var higher = 6400000;
+ 
+    // base color that we change
+    var baseColor = "666666";
+ 
+    timer = setInterval(
+            function () {
+                var luminance = calculateLuminance(320, 240);
+                // based on the luminance we need to set the background
+                // color to a specific value. We do this by calculating
+                // the required target offset
+                var offsetFromCenter = ((luminance - lower) / (higher - lower)) * 100;
+ 
+                // now we can increase the luminance of the background
+                var targetColor = LightenDarkenColor(baseColor, offsetFromCenter);
+ 
+                console.log(luminance);
+ 
+                $("body").animate({
+                    backgroundColor:"#" + targetColor
+                }, 2000);
+ 
+            }, 2000);
+     #+END_SRC
+** [[https://www.sitepoint.com/mobile-web-superpowers-ambient-light-api/][Mobile Web Superpowers - Ambient Light API]]
+   - readability use case - ensure adequate contrast
+   - lux: light intensity
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener("devicelight", function (event) {
+  var luminosity = event.value;
+  console.log(luminosity);
+});
+
+window.addEventListener("devicelight", function (event) {
+    var luminosity = event.value;
+
+    if (luminosity <= 5) {
+      document.body.className = "darkness";
+    } else if (luminosity <= 50) {
+      document.body.className = "dim";
+    } else if (luminosity <= 1000) {
+      document.body.className = "bright";
+    } else if (luminosity > 1000) {
+      document.body.className = "ahhhmyeyes";
+    }
+  });
+     #+END_SRC
+   - use cases
+     - 
+
 * Battery Status API
 ** Tasks
 *** TODO check how often events fire
@@ -303,6 +502,7 @@ window.addEventListener("lightlevel", function (event) {
      - Global: 64.66%
 *** Misc
     - similar uses to page visibility
+    - blink has one promise per document
 *** Security
     - Can be used to identify your online presence - creating a
       digital fingerprint of your device.
@@ -993,95 +1193,6 @@ navigator.getBattery().then(function(battery) {
      - Mix orientation API and websockets
      - Control the movement of the logo shown!
      - Cool use case :D
-** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
-   #+BEGIN_SRC js
-     // Check to make sure the browser supprots DeviceOrientationEvents
-     if (window.DeviceOrientationEvent) {
-         // Create an event listener
-         window.addEventListener('deviceorientation', function(event) {
-             // Get the left-to-right tilt (in degrees).
-             var tiltLR = event.gamma;
-
-             // Get the front-to-back tilt (in degrees).
-             var titleFB = event.beta;
-
-             // Get the direction of the device (in degrees).
-             var direction = event.alpha;
-         });
-     }
-   #+END_SRC
-** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
-   - get rotation angles in three dimensions
-   - IE for Windows Phone supported from Version 11
-   #+BEGIN_SRC js
-     if (window.DeviceOrientationEvent) {
-         window.addEventListener('deviceorientation', function(eventData) {
-             // gamma is the left-to-right tilt in degrees
-             console.log(eventData.gamma);
-
-             // beta is the front-to-back tilt in degrees
-             console.log(eventData.beta);
-
-             // alpha is the compass direction the device is facing in degrees
-             console.log(eventData.alpha);
-         }, false);
-     }
-   
-   #+END_SRC
-** [[http://www.girliemac.com/presentation-slides/html5-mobile-2014/device.html#6][HTML5 Device APIs]]
-   - The device orientation event is fired when new data is available
-     from a magnetometer sensor. Device orientation supplies the
-     physical orientation of the device.
-   - code
-     #+BEGIN_SRC js
-     if (window.DeviceOrientationEvent) {
-         window.addEventListener('deviceorientation', function(e) {
-           compass   = e.alpha; // degree
-               frontBack = e.beta;
-               leftRight = e.gamma;
-               // ...
-         }, false);
-       }
-     #+END_SRC
-** HTML5 Mobile Hardware
-   - gyroscope
-   - accelerometer
-   - compass
-   - events
-     - deviceorientation
-     - devicemotion
-     - compassneedscalibration
-   - code
-     #+BEGIN_SRC js
-     if (window.DeviceOrientationEvent) {
-         window.addEventListener('deviceorientation', function(e) {
-           a = Math.floor(e.alpha);
-               b = Math.floor(e.beta);
-               g = Math.floor(e.gamma);
-               el.style.transform = 'rotateZ('+a+'deg) 
-                                  rotateX('+b+'deg) rotateY('+g+'deg)';
-         }, true);
-       } 
-                
-     #+END_SRC
-   - not raw sensor data
-   - high level data agnostic to the source of information - common
-     sources are gyroscope, accelerometer, compass
-   - deviceorientation fired when new information is fired from the
-     magnometer sensor, supplies physical orientation of the device
-   - devicemotion supplies acceleration of device
-   -
-** HTML5 Mobile Approach
-   - deviceorientation: expressed as a series of rotations from a
-     local coordinate frame
-   - devicemotion: expressed in Cartesian coordinates in a coordinate
-     frame defined in the device
-   - compassneedscalibration
-     - inform websites that a compass being used to provide data for
-       one of these events needs calibration
-     - webkitCompassHeading property in iOS5
-* Device Motion API
-** EdX
 *** Introduction
     - Deals with accelerations
     - Uses
@@ -1175,7 +1286,41 @@ navigator.getBattery().then(function(battery) {
       sky's direction (vertical)
     - Z acceleration is an indicator for the face up / face down
       orientation of the device
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   #+BEGIN_SRC js
+     // Check to make sure the browser supprots DeviceOrientationEvents
+     if (window.DeviceOrientationEvent) {
+         // Create an event listener
+         window.addEventListener('deviceorientation', function(event) {
+             // Get the left-to-right tilt (in degrees).
+             var tiltLR = event.gamma;
+
+             // Get the front-to-back tilt (in degrees).
+             var titleFB = event.beta;
+
+             // Get the direction of the device (in degrees).
+             var direction = event.alpha;
+         });
+     }
+   #+END_SRC
 ** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - get rotation angles in three dimensions
+   - IE for Windows Phone supported from Version 11
+   #+BEGIN_SRC js
+     if (window.DeviceOrientationEvent) {
+         window.addEventListener('deviceorientation', function(eventData) {
+             // gamma is the left-to-right tilt in degrees
+             console.log(eventData.gamma);
+
+             // beta is the front-to-back tilt in degrees
+             console.log(eventData.beta);
+
+             // alpha is the compass direction the device is facing in degrees
+             console.log(eventData.alpha);
+         }, false);
+     }
+   
+   #+END_SRC
    - uses accelerometer for device movement
    - detects acceleration, not speed
    - support iOS, Android
@@ -1202,9 +1347,391 @@ navigator.getBattery().then(function(battery) {
       }
     #+END_SRC
 ** [[http://www.girliemac.com/presentation-slides/html5-mobile-2014/device.html#6][HTML5 Device APIs]]
+   - The device orientation event is fired when new data is available
+     from a magnetometer sensor. Device orientation supplies the
+     physical orientation of the device.
+   - code
+     #+BEGIN_SRC js
+     if (window.DeviceOrientationEvent) {
+         window.addEventListener('deviceorientation', function(e) {
+           compass   = e.alpha; // degree
+               frontBack = e.beta;
+               leftRight = e.gamma;
+               // ...
+         }, false);
+       }
+     #+END_SRC
    - Device motion supplies the acceleration of the
      device. Compassneedscalibration iOS5 has webkitCompassingHeading
      property, but is not a standard
+** HTML5 Mobile Hardware
+   - gyroscope
+   - accelerometer
+   - compass
+   - events
+     - deviceorientation
+     - devicemotion
+     - compassneedscalibration
+   - code
+     #+BEGIN_SRC js
+     if (window.DeviceOrientationEvent) {
+         window.addEventListener('deviceorientation', function(e) {
+           a = Math.floor(e.alpha);
+               b = Math.floor(e.beta);
+               g = Math.floor(e.gamma);
+               el.style.transform = 'rotateZ('+a+'deg) 
+                                  rotateX('+b+'deg) rotateY('+g+'deg)';
+         }, true);
+       } 
+                
+     #+END_SRC
+   - not raw sensor data
+   - high level data agnostic to the source of information - common
+     sources are gyroscope, accelerometer, compass
+   - deviceorientation fired when new information is fired from the
+     magnometer sensor, supplies physical orientation of the device
+   - devicemotion supplies acceleration of device
+   -
+** HTML5 Mobile Approach
+   - deviceorientation: expressed as a series of rotations from a
+     local coordinate frame
+   - devicemotion: expressed in Cartesian coordinates in a coordinate
+     frame defined in the device
+   - compassneedscalibration
+     - inform websites that a compass being used to provide data for
+       one of these events needs calibration
+     - webkitCompassHeading property in iOS5
+** [[http://w3c.github.io/deviceorientation/spec-source-orientation.html][DeviceOrientation Event Specification]] W3C Working Draft 1 December 2011
+*** Introduction
+    - Obtain information about physical orientation and movement
+    - Not raw sensor data- provides high level data.
+    - Common sources
+      - Gyroscope
+      - Compass
+      - Accelerometer
+    - deviceorientation
+      - physical orientation of the device
+      - expressed as rotations from a local coordinate frame
+      - code
+        #+BEGIN_SRC js
+              window.addEventListener("deviceorientation", function(event) {
+          // process event.alpha, event.beta and event.gamma
+      }, true);
+        #+END_SRC
+      - device lying flat on a horizontal surface with the top of the
+        screen pointing west:
+        #+BEGIN_SRC js
+        {alpha: 90,
+       beta: 0,
+       gamma: 0};
+        #+END_SRC
+      - to get the compass heading
+        - subtract alpha from 360
+        - 
+      
+    - devicemotion
+      - acceleration of the device
+      - expressed in Cartesian coordinates in a coordinate frame
+        defined in the device
+      - supplies rotation rate of the device about a local coordinate
+        frame
+      - should provide acceleration of the device's center of mass
+        where practical
+      - code
+        #+BEGIN_SRC js
+        window.addEventListener("devicemotion", function(event) {
+          // Process event.acceleration, event.accelerationIncludingGravity,
+          // event.rotationRate and event.interval
+      }, true);
+        #+END_SRC
+        - device has an acceleration of zero and
+          accelerationIncludingGravity of
+          #+BEGIN_SRC js
+                {x: 0,
+       y: 0,
+       z: -9.81};
+          #+END_SRC
+        - device in free fall
+          #+BEGIN_SRC js
+          {x: 0,
+       y: 0,
+       z: -9.81};
+          #+END_SRC
+        - device in vehicle
+          #+BEGIN_SRC js
+          {acceleration: {x: v^2/r, y: 0, z: 0},
+       accelerationIncludingGravity: {x: v^2/r, y: 0, z: 9.81},
+       rotationRate: {alpha: 0, beta: 0, gamma: -v/r*180/pi} };
+          #+END_SRC
+    - compassneedscalibration
+      - inform web sites that the compass used needs calibration
+      - code
+        #+BEGIN_SRC js
+              window.addEventListener("compassneedscalibration", function(event) {
+          alert('Your compass needs calibrating! Wave your device in a figure-eight motion');
+          event.preventDefault();
+      }, true);
+        #+END_SRC
+*** Description
+**** deviceorientation
+     - fires on window object
+     - fires whenever a significant change in orientation occurs, this
+       is left up to the implementation
+     - properties
+       - specify orientation of device in terms of the transformation
+         from a coordinate frame fixed on Earth to a coordinate frame
+         fixed in the device
+     - Earth coordinate frame
+       - East, North, Up frame at the user's location
+       - 3 axes: the ground plane is tangent to the spheriod of the
+         World Geodetic System 1984 at the user's location
+       - East (X): in the ground plane, perpendicular to the North
+         axis and positive towards the East
+       - North (Y): in the ground plane and positive towards True
+         North (towards the North Pole)
+       - Up (Z): perpendicular to the ground plane and positive upwards
+     - Mobile device:
+       - device coordinate frame relative to the screen in its
+         standard orientation - typically portrait
+     - Laptop:
+       - device coordinate frame defined relative to the integrated keyboard
+     - x: plane of screen / keyboard is positive towards the right
+       hand side of the screen or keyboard
+     - y: plane of the screen or keyboard is positive towards the top
+       of the screen or keyboard
+     - z: perpendicular to the screen or keyboard, positive out of the
+       screen or keyboard
+     - transformation from the Earth coordinate frame to the device
+       coordinate frame
+     - Rotations must use the right hand convention: positive rotation
+       around an axis is clockwise when viewed along the positive
+       direction of the axis
+     - With two frames aligned, the rotations are applied:
+       - rotate the device frame around its axis by alpha degrees [0, 360]
+       - rotate the device frame around its x axis by beta degrees,
+         with beta in [-180, 180]
+       - rotate the device frame around its y axis by gamma degrees,
+         with gamma in [-90, 90]
+     - Angles alpha, beta and gamma form intrinsic Tait-Bryan angles
+       of type Z-X'-Y"
+       - choice of angles follows mathematical convention
+       - alpha is in the opposite sense to a compass heading
+     - implementations unable to provide absolute values for the three
+       angles may provide values relative to some arbitrary
+       orientation (see iphones)
+       - absolute property must be set to true in this case
+     - if implementations cannot provide all three angles, must set
+       values to null. if it can never provide orientation
+       information, event must be fired with all properties set to null
+**** compassneedscalibration
+     - user agent determines if compass needs calibration
+     - only fire event if calibrating the compass will increase
+       accuracy of the data provided by the deviceorientation
+     - user agent should present calibration details - or websites can
+       provide alternative calibration ui
+**** devicemotion
+     - acceleration provides acceleration relative to the Earth frame,
+       expressed in the body frame
+       - expressed in m/s^2
+     - implementations unable to provide acceleration data without the
+       effect of gravity (e.g. due to lack of gyroscope) can supply
+       acceleration including the effect of gravity
+       - less useful
+       - accelerationIncludingGravity
+     - rotationRate
+       - provides rate of rotation of hosting device in space
+       - expressed as rate of change of the angles
+       - expressed in degrees per second
+     - interval
+       - provide interval at which data is obtained from underlying hardware
+       - expressed in milliseconds
+     - if it cannot provide all properties, those are set to null
+*** Use Cases
+    - controlling a game
+      - interpret tilting via device orientation
+    - gesture recognition
+      - monitor device acceleration
+      - apply signal processing to recognise certain gestures
+      - e.g. shake to clear a web form
+    - mapping
+      - align map with reality
+      -
+**** Requirement
+     - provide data that describes the physical orientation
+     - provide data describing motion in space of the device
+     - allow web applications to register changes
+     - aganostic to the underlying sources of orientation and motion
+       data
+     - uses DOM event framework
+*** Worked example
+    - shows how to determine compass heading that the user is facing
+      when holding the device with the screen vertical
+    - e.g. augmented reality system
+** [[http://w3c.github.io/deviceorientation/spec-source-orientation.html][DeviceOrientation Event Specification]] Editor's Draft 26 February 2016
+   - Introduces deviceorientationabsolute
+     - additional sensors such as the magnetometer can be used to
+       provide an absolute orientation
+     - absolute is set to true
+** [[http://www.html5rocks.com/en/tutorials/device/orientation/][This End Up: Using Device Orientation and Device Motion As An Input Method - ...]]
+*** Device Orientation Data
+    - align device with local earth frame
+      - lay device flat
+      - device pointing north
+      - laptop screen 90 deg + keyboard inline with the surface
+*** Device Motion Data
+    - acceleration data returned as a coordinate frame with three axes
+      x y and z
+      - x: side to side across mobile screen
+      - y: front to back across mobile screen
+      - z: straight up out
+    - rotation uses Euler angles to represent difference between the
+      device and its normal position and its current position
+      - returns the number of degrees different from normal
+    - beta: number of degrees the device is tilted front to back
+    - gamma: number of degrees the device is tilted side-to-side
+    - alpha: number of degrees the device is rotated around z-axis
+    - most people use phone rotated around the x axis so screen is
+      facing them
+*** Differences in Browsers
+    - most browsers return compass heading for alpha - when the device
+      is pointing north, it is zero
+    - iOS Safari alpha is based on the direction the device was
+      pointing when device orientation was first requested
+    - the compass heading is available in the webkitCompassHeading
+      parameter
+*** Events
+    - Device orientation
+      - returns rotation data
+      - beta: how much device is leaning front to back
+      - gamma: side to side
+      - alpha: direction device is facing (if it has a compass)
+    - Device motion
+      - superset of the device orientation event
+      - returns rotation data
+      - also returns acceleration information
+      - acceleration excludes the effects of gravity
+      - normal position
+        - not accelerating
+          - acceleration: {0, 0, 0}
+          - accelerationIncludingGravity: {0, 0, 9.81}
+        - accelerating up
+          - acceleration: {0, 0, 5}
+          - accelerationIncludingGravity: {0, 0, 14.81}
+        - accelerating forward
+          - acceleration: {0, 2, 0}
+          - accelerationIncludingGravity: {0, 2, 9.81}
+        - accelerating right
+          - acceleration: {3, 0, 0}
+          - accelerationIncludingGravity: {3, 0, 9.81}
+        - accelerating up and to the right
+          - acceleration: {5, 0, 5}
+          - accelerationIncludingGravity: {5, 0, 14.81}
+      - mobile phone rotated along the x-axis so screen is
+        perpendicular to its normal position
+        - not accelerating
+          - acceleration: {0, 0, 0}
+          - accelerationIncludingGravity: {0, 9.81, 0}
+        - accelerating up
+          - acceleration: {0, 5, 0}
+          - accelerationIncludingGravity: {0, 14.81, 0}
+        - accelerating forward
+          - acceleration: {0, 0, 2}
+          - accelerationIncludingGravity: {0, 9.81, 2}
+        - accelerating right
+          - acceleration: {3, 0, 0}
+          - accelerationIncludingGravity: {3, 9.81, 0}
+        - accelerating up and to the right
+          - acceleration: {5, 5, 0}
+          - accelerationIncludingGravity: {5, 14.81, 0}
+*** Use
+    - Check for compatability
+    - code
+      #+BEGIN_SRC js
+      if (window.DeviceOrientationEvent) {
+ console.log("DeviceOrientation is supported");
+}
+      #+END_SRC
+    - add event listener
+      #+BEGIN_SRC js
+      if (window.DeviceOrientationEvent) {
+  // Listen for the event and handle DeviceOrientationEvent object
+  window.addEventListener('deviceorientation', devOrientHandler, false);
+}
+      #+END_SRC
+    - handle event
+      #+BEGIN_SRC js
+      if (window.DeviceOrientationEvent) {
+  document.getElementById("doEvent").innerHTML = "DeviceOrientation";
+  // Listen for the deviceorientation event and handle the raw data
+  window.addEventListener('deviceorientation', function(eventData) {
+    // gamma is the left-to-right tilt in degrees, where right is positive
+    var tiltLR = eventData.gamma;
+
+    // beta is the front-to-back tilt in degrees, where front is positive
+    var tiltFB = eventData.beta;
+
+    // alpha is the compass direction the device is facing in degrees
+    var dir = eventData.alpha
+
+    // call our orientation event handler
+    deviceOrientationHandler(tiltLR, tiltFB, dir);
+  }, false);
+} else {
+  document.getElementById("doEvent").innerHTML = "Not supported."
+}
+      #+END_SRC
+*** Use
+    - Check for compatability
+    - Add event listener
+    - code
+      #+BEGIN_SRC js
+      if (window.DeviceMotionEvent) {
+  console.log("DeviceMotionEvent supported");
+} 
+
+if ((window.DeviceMotionEvent) {
+  window.addEventListener('devicemotion', deviceMotionHandler, false);
+} else {
+  document.getElementById("dmEvent").innerHTML = "Not supported."
+}
+
+      #+END_SRC
+    - event handler
+      #+BEGIN_SRC js
+function deviceMotionHandler(eventData) {
+  var info, xyz = "[X, Y, Z]";
+
+  // Grab the acceleration from the results
+  var acceleration = eventData.acceleration;
+  info = xyz.replace("X", acceleration.x);
+  info = info.replace("Y", acceleration.y);
+  info = info.replace("Z", acceleration.z);
+  document.getElementById("moAccel").innerHTML = info;
+
+  // Grab the acceleration including gravity from the results
+  acceleration = eventData.accelerationIncludingGravity;
+  info = xyz.replace("X", acceleration.x);
+  info = info.replace("Y", acceleration.y);
+  info = info.replace("Z", acceleration.z);
+  document.getElementById("moAccelGrav").innerHTML = info;
+
+  // Grab the rotation rate from the results
+  var rotation = eventData.rotationRate;
+  info = xyz.replace("X", rotation.alpha);
+  info = info.replace("Y", rotation.beta);
+  info = info.replace("Z", rotation.gamma);
+  document.getElementById("moRotation").innerHTML = info;
+
+  // // Grab the refresh interval from the results
+  info = eventData.interval;
+  document.getElementById("moInterval").innerHTML = info;       
+}
+      
+      #+END_SRC
+** [[https://hacks.mozilla.org/2015/04/mobile-game-development-with-the-device-orientation-and-vibration-apis/][Mobile game development with the Device Orientation and Vibration APIs &#x260...]]
+   - All implementations missing the compassneedscalibration event.
+   - 
+
 * Generic Sensor API
 ** [[https://w3c.github.io/sensors/][Generic Sensor API]]
    - Hot off the press! Editor's draft, 11 May 2016.
@@ -1517,6 +2044,18 @@ enum ProximitySensorDirection {
     "bottom"
 };
     #+END_SRC
+** [[https://github.com/w3c/sensors/issues/98][Javascript 120Hz devicemotion events for high end inertial applications · Iss...]]
+   - Browsers only sample sensor data at a varying 67Hz
+   - Makes readings unusable for high end use cases
+   - Require 120Hz steady samply rate
+   - iOS / Android have this natively
+   - Current browsers do not have same quality
+
+* Geofencing
+  - Currently abandoned.
+  - Allows web apps to setup geographic boundaries around specific
+    locations, then receive notifications when the hosting device
+    enters or leaves those areas.
 * Geolocation API
 ** Main
 *** Support
@@ -1553,7 +2092,236 @@ enum ProximitySensorDirection {
        accounts and start wondering where their data has gone.
      - pre-fill as many input fields as you can
      - http://www.mobilecommercepress.com/geolocation-technology-focus-taken-latest-groupon-app/859403/
+** [[https://www.w3.org/TR/geolocation-API/][Geolocation API Specification]] W3C Recommendation 24 October 2013
+   - High level interface to location information
+   - Agnostic to the underling location information sources
+   - Common sources
+     - Global Positioning System (GPS)
+     - Location inferred from network signals such as
+       - IP address
+       - RFID
+       - WiFi
+       - Bluetooth Mac addresses
+     - GSM/CDMA cell ids
+     - User input
+   - Designed for both singular position requests and updates
+   - Ability to explicitly query the cached positions
+   - Location information is represented by latitue / longitude
+     coordinates
+   - singular
+     #+BEGIN_SRC js
+     navigator.geolocation.getCurrentPosition(showMap);
+     #+END_SRC
+   - repeated position updates
+     #+BEGIN_SRC js
+     function scrollMap(position) {
+      // Scrolls the map so that it is centered at (position.coords.latitude, position.coords.longitude).
+    }
 
+    // Request repeated updates.
+    var watchId = navigator.geolocation.watchPosition(scrollMap);
+
+    function buttonClickHandler() {
+      // Cancel the updates when the user clicks a button.
+      navigator.geolocation.clearWatch(watchId);
+    }
+     #+END_SRC
+   - error handling
+     #+BEGIN_SRC js
+         function scrollMap(position) {
+      // Scrolls the map so that it is centered at (position.coords.latitude, position.coords.longitude).
+    }
+
+    function handleError(error) {
+      // Update a div element with error.message.
+    }
+
+    // Request repeated updates.
+    var watchId = navigator.geolocation.watchPosition(scrollMap, handleError);
+
+    function buttonClickHandler() {
+      // Cancel the updates when the user clicks a button.
+      navigator.geolocation.clearWatch(watchId);
+    }
+     #+END_SRC
+   - requesting cached position
+     #+BEGIN_SRC js
+         // Request a position. We accept positions whose age is not
+    // greater than 10 minutes. If the user agent does not have a
+    // fresh enough cached position object, it will automatically
+    // acquire a new one.
+    navigator.geolocation.getCurrentPosition(successCallback,
+                                             errorCallback,
+                                             {maximumAge:600000});
+
+    function successCallback(position) {
+      // By using the 'maximumAge' option above, the position
+      // object is guaranteed to be at most 10 minutes old.
+    }
+
+    function errorCallback(error) {
+      // Update a div element with error.message.
+    }
+     #+END_SRC
+   - return fresh cached position
+     #+BEGIN_SRC js
+         // Request a position. We only accept cached positions whose age is not
+    // greater than 10 minutes. If the user agent does not have a fresh
+    // enough cached position object, it will immediately invoke the error
+    // callback.
+    navigator.geolocation.getCurrentPosition(successCallback,
+                                             errorCallback,
+                                             {maximumAge:600000, timeout:0});
+
+    function successCallback(position) {
+      // By using the 'maximumAge' option above, the position
+      // object is guaranteed to be at most 10 minutes old.
+      // By using a 'timeout' of 0 milliseconds, if there is
+      // no suitable cached position available, the user agent 
+      // will asynchronously invoke the error callback with code
+      // TIMEOUT and will not initiate a new position
+      // acquisition process.
+    }
+
+    function errorCallback(error) {
+      switch(error.code) {
+        case error.TIMEOUT:
+          // Quick fallback when no suitable cached position exists.
+          doFallback();
+          // Acquire a new position object.
+          navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+          break;
+        case ... // treat the other error cases.
+      };
+    }
+
+    function doFallback() {
+      // No fresh enough cached position available.
+      // Fallback to a default position.
+    }
+     #+END_SRC
+   - return any available cached position
+     #+BEGIN_SRC js
+         // Request a position. We only accept cached positions, no matter what 
+    // their age is. If the user agent does not have a cached position at
+    // all, it will immediately invoke the error callback.
+    navigator.geolocation.getCurrentPosition(successCallback,
+                                             errorCallback,
+                                             {maximumAge:Infinity, timeout:0});
+
+    function successCallback(position) {
+      // By setting the 'maximumAge' to Infinity, the position
+      // object is guaranteed to be a cached one.
+      // By using a 'timeout' of 0 milliseconds, if there is
+      // no cached position available at all, the user agent 
+      // will immediately invoke the error callback with code
+      // TIMEOUT and will not initiate a new position
+      // acquisition process.
+      if (position.timestamp < freshness_threshold && 
+          position.coords.accuracy < accuracy_threshold) {
+        // The position is relatively fresh and accurate.
+      } else {
+        // The position is quite old and/or inaccurate.
+      }
+    }
+
+    function errorCallback(error) {
+      switch(error.code) {
+        case error.TIMEOUT:
+          // Quick fallback when no cached position exists at all.
+          doFallback();
+          // Acquire a new position object.
+          navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+          break;
+        case ... // treat the other error cases.
+      };
+    }
+
+    function doFallback() {
+      // No cached position available at all.
+      // Fallback to a default position.
+    }
+     #+END_SRC
+*** Security
+    - must protect user's privacy
+    - no location information is available without user's express
+      permission
+    -
+**** Location information recipients
+     - only use location for task it was provided to them for
+     - must dispose of location information once task is completed,
+       unless expressly permitted
+     -
+*** API
+**** Geolocation interface
+     - creates position object
+     - getCurrentPosition()
+       - 1, 2 or 3 arguments
+       - asynchronously attempts to obtain current location of the
+         device
+       - calls successCallback when successful
+       - calls errorCallback with PositionError object
+       - 3rd: positionOptions
+     - steps
+       - PositionOptions: set maximumAge, timeout attributes,
+         enableHighAccuracy attributes
+       - Get cached Position object
+     - watchPosition()
+       - return value that uniquely identifies watch operation
+**** Position
+     - coords
+     - timestamp
+**** Coordinates interface
+     - latitude: geographic coordinate specified in decimal degrees
+     - longitude: geographic coordinate specified in decimal degrees
+     - accuracy: denotes accuracy level - specified in meters
+     - altitude: height of position, specified in meters above the
+       ellipsoid 
+     - altitudeAccuracy: specified in meters. should correspond to 95%
+       confidence level
+     - heading: denotes direction of travel of the hosting device and
+       is specified in degrees
+     - speed: denotes magnitude of the horizontal component of the
+       hosting device's current velocity, and is specified in meters
+       per second.
+**** PositionError
+     - PERMISSION_DENIED 1
+       - failed due to permission
+     - POSITION_UNAVAILABLE 2
+       - location could not be determined
+       - e.g. location provider used reported an error
+     - TIMEOUT 3
+       - length of time specified has elasped
+     - code
+     - message - used for debugging
+**** Use Cases
+     - find points of interest
+       - rank search results by proximity
+     - annotate content with location information
+       - record details when blogging
+     - show user's position on a map
+     - turn by turn route navigation
+     - alerts when points of interest are in the user's vicinity
+       - trigger visual or audio notifications
+       - trigger to do when near something
+     - local information
+       - get location updates
+       - show weather, news
+     - social networking applications
+** [[http://w3c.github.io/geolocation-api/spec-source.html][Geolocation API Specification]] Editors Draft 5 May 2014
+** [[https://www.w3.org/2014/04/geo-charter.html][Geolocation WG Charter]]
+   - group: secure and privacy sensitive interface for using
+     client-side location information in location aware Web
+     applications 
+*** Scope
+    - Web enabled devices location aware: mobile phones with cell
+      triangulation or Global Positioning System capabilities
+    - laptops with Wi-Fi triangulation capabilities and GPS receivers
+    - Geolocation API Level 2
+      - adds geofencing functionality to the initial API
+      - work better with Web APIs
+    - Device Orientation Event
+      - physical orientation of the host device
 ** EdX
 **** Introduction
      - implemented in most modern browsers
@@ -1778,6 +2546,65 @@ function success(position) {
                 
 
      #+END_SRC
+** [[http://blog.teamtreehouse.com/getting-started-with-the-geolocation-api][Getting Started with the GeoLocation API - Treehouse Blog]]
+   - check if the browser supports geolocation
+     #+BEGIN_SRC js
+     // Check to see if the browser supports the GeoLocation API.
+if (navigator.geolocation) {
+
+} else {
+  // Print out a message to the user.
+  document.write('Your browser does not support GeoLocation');
+}
+     #+END_SRC
+   - get location
+     #+BEGIN_SRC js
+     // Get the location
+navigator.geolocation.getCurrentPosition(function(position) {
+
+});
+     #+END_SRC
+** [[http://www.html5rocks.com/en/tutorials/geolocation/trip_meter/][A Simple Trip Meter using the Geolocation API - HTML5 Rocks]]
+   - Handle errors
+     #+BEGIN_SRC js
+     window.onload = function() {
+  var startPos;
+  navigator.geolocation.getCurrentPosition(function(position) {
+    // same as above
+  }, function(error) {
+    alert('Error occurred. Error code: ' + error.code);
+    // error.code can be:
+    //   0: unknown error
+    //   1: permission denied
+    //   2: position unavailable (error response from locaton provider)
+    //   3: timed out
+  });
+};
+     #+END_SRC
+   - Monitor user location
+     #+BEGIN_SRC js
+     navigator.geolocation.watchPosition(function(position) {
+  document.getElementById('currentLat').innerHTML = position.coords.latitude;
+  document.getElementById('currentLon').innerHTML = position.coords.longitude;
+});
+     #+END_SRC
+   - Get distance between two coordinates
+     #+BEGIN_SRC js
+     function calculateDistance(lat1, lon1, lat2, lon2) {
+  var R = 6371; // km
+  var dLat = (lat2 - lat1).toRad();
+  var dLon = (lon2 - lon1).toRad(); 
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+          Math.sin(dLon / 2) * Math.sin(dLon / 2); 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+  var d = R * c;
+  return d;
+}
+Number.prototype.toRad = function() {
+  return this * Math.PI / 180;
+}
+     #+END_SRC
 * Media Capture and Streams
 ** Main
 *** Support
@@ -1789,6 +2616,83 @@ function success(position) {
       - Chrome 33+
       - Firefox 26+
       - Opera Mobile 12+
+** [[https://www.w3.org/TR/mediacapture-streams/][Media Capture and Streams]]
+   - Is a W3C Candidate Recommendation as of 19 May!
+   - Allows local media to be requested from a platform via JavaScript
+     APIs.
+** [[https://www.sitepoint.com/whats-media-capture-streams-use/][What are Media Capture and Streams and How Do I Use Them?]]
+   - access to device's media capture mechanism
+   - HTML Media Capture
+     - extends the HTMLInputELement with a capture attribute
+     - code
+       #+BEGIN_SRC html
+        <input type="file" capture>
+        <input type="file" accept="image/*" capture>
+       #+END_SRC
+     - using accept provides hint on the preferred MIME type
+   - Media Capture and Streams is a set of JavaScript APIs
+   - Allow local media to be requested from a platform
+   - MediaStream API: control where stream data is consumed, provides
+     control over the devices that produce the media.
+     - exposes information about devices able to capture and render
+       media
+   - getUserMedia()
+     - provides access to user's local camera/microphone stream
+     - syntax
+       #+BEGIN_SRC js
+       var stream = navigator.getUserMedia(constraints, successCallback, errorCallback);
+       #+END_SRC
+     - constraints
+       - MediaStreamConstraints object
+       - video boolean
+       - audio boolean
+       - either or both must be specified to validate the constraint
+         argument
+     - returns LocalMediaStream object
+   - LocalMediaStream
+   - error
+     - permission_denied
+     - not_supported_error
+     - mandatory_unsatisfied_error
+   - code
+     #+BEGIN_SRC js
+     
+		if (navigator.getUserMedia) {
+            navigator.getUserMedia(
+			// constraints
+            {
+                video: true,
+                audio: true
+            },
+			// successCallback
+			function (localMediaStream) {
+				var video = document.querySelector('video');
+                video.src = window.URL.createObjectURL(localMediaStream);
+				// do whatever you want with the video
+                video.play();
+            },
+			// errorCallback
+			function (err) {
+                console.log("The following error occured: " + err);
+            });
+        } else {
+            alert("getUserMedia not supported by your web browser or Operating system version");
+        }
+	
+     #+END_SRC
+   - you are prompted
+   - supported on Edge, Chrome 21+, Opera 18+, Firefox 17+
+   - vendor prefixes
+   - code
+     #+BEGIN_SRC js
+     navigator.getUserMedia = (navigator.getUserMedia ||
+	navigator.webkitGetUserMedia ||
+	navigator.mozGetUserMedia
+);
+
+     #+END_SRC
+
+
 ** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
    - get access to the camera
      #+BEGIN_SRC js
@@ -1814,6 +2718,41 @@ function success(position) {
            }
        );
      #+END_SRC
+** 
+* firefox
+** getUserMedia
+   - firefox 42
+     - Improved ability for applications to monitor and control which
+       devices are used in getUserMedia
+   - firefox 20
+     - getUserMedia implemented for web access to the user's camera
+       and microphone (with user permission) 
+** navigator.onLine
+   - Navigator.onLine now varies with actual internet connectivity
+     (Windows and Mac OS X only) 41
+** geo
+   - 35 android Improve Mozilla's geolocation service by sharing your wi-fi
+     and cellular signals. Enable this feature by opening the Settings
+     menu and in the "Mozilla" section check the "Mozilla Location
+     Services" option under Data Choices.
+   - Firefox now has the Mozilla Location Service.
+   - [1] Firefox includes support for locating you based on your WiFi
+     information using Google Location Services. In the transaction
+     between Firefox and Google, data is exchanged including WiFi
+     Access Point data, an access token (similar to a 2 week cookie),
+     and the user's IP address. For more information, please check out
+     Mozilla's Privacy Policy and Google's Privacy Policy covering how
+     this data can be used.
+   - 
+
+As part of the insecure HTTP deprecation, the Geolocation API will soon be available only to sites using a secure connection. Chrome 50 has already introduced this limitation.
+
+Update: Updated this document as Mozilla developers have decided to disable not only watchPosition but also the getCurrentPosition method on non-secure sites.
+* Webkit
+  - Navigator.hardwareConcurrency provides the total number of logical
+    processors available to the user agent. 
+
+
 * Network Information API
 ** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
 *** Network Information APIs
@@ -1875,8 +2814,158 @@ var connection = window.navigator.mozConnection,
    - detect performance bottlenecks
 
 * Proximity Sensor API
+** Main
+   - Won't spend much time on this. It's only implemented in Firefox,
+     and the current spec is most likely going to change to reflect
+     the Generic Sensor API.
 ** Support
-   - Firefox
+   - Firefox 15+
+   - Australia: 6.69%
+   - Global: 8.14%
+** [[https://www.w3.org/TR/proximity/][Proximity Events]] W3C Working Draft 03 September 2015
+   - will be updated to Generic Sensor API
+** [[https://www.sitepoint.com/introducing-proximity-api/][Introducing the Proximity API]]
+   - defines events that provide information about the distance and an
+     object measured by a proximity sensor
+   - reached W3C candidate recommendation 1st October 2013
+   - used to save battery - phone near ear, turn off screen
+   - use case: listening to music, use a gesture to turn off music
+   - events
+     - fire on the window object
+     - deviceproximity
+       - provides information about the distance between the hosting
+         device and a nearby object
+       - event properties
+         - value: represents proximity of device in centimetres
+         - min: minimum distance the sensor can detect
+         - max: maximum distance the sensor can detect
+     - userproximity
+       - specifies if device has sensed a nearby object
+       - properties
+         - near: boolean specifying if an object is close enough to
+           the device
+         - close enough: object is within the detectable range for the
+           specific device
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('deviceproximity', function(event) {
+   console.log('An object is ' + event.value + ' centimeters far away');
+});
+     #+END_SRC
+   - support
+     - Firefox mobile / desktop 15+
+     - code
+       #+BEGIN_SRC js
+       if ('ondeviceproximity' in window) {
+   // API supported. Don't get too close, I can feel you
+} else {
+   // API not supported
+}
+       #+END_SRC
+   - demo
+     #+BEGIN_SRC html
+     <!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <meta name="author" content="Aurelio De Rosa">
+      <title>Proximity API Demo by Aurelio De Rosa</title>
+      <style>
+         *
+         {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+         }
+
+         body
+         {
+            max-width: 500px;
+            margin: 2em auto;
+            padding: 0 0.5em;
+            font-size: 20px;
+         }
+
+         h1
+         {
+            text-align: center;
+         }
+
+         .api-support
+         {
+            display: block;
+         }
+
+         .hidden
+         {
+            display: none;
+         }
+
+         .value
+         {
+            font-weight: bold;
+         }
+
+         .author
+         {
+            display: block;
+            margin-top: 1em;
+         }
+      </style>
+   </head>
+   <body>
+      <h1>Proximity API</h1>
+
+      <span id="dp-unsupported" class="api-support hidden">deviceproximity event not supported</span>
+      <span id="up-unsupported" class="api-support hidden">userproximity event not supported</span>
+
+      <ul>
+         <li>
+            An object is at a distance of <span id="dp-value" class="value">null</span> centimeters
+            (within a detectable range of <span id="dp-min" class="value">null</span> -
+            <span id="dp-max" class="value">null</span> centimeters).
+         </li>
+         <li>
+            Object close to the device? <span id="up-value" class="value">unavailable</span>
+         </li>
+      </ul>
+
+      <small class="author">
+         Demo created by <a href="http://www.audero.it">Aurelio De Rosa</a>
+         (<a href="https://twitter.com/AurelioDeRosa">@AurelioDeRosa</a>).<br />
+         This demo is part of the <a href="https://github.com/AurelioDeRosa/HTML5-API-demos">HTML5 API demos repository</a>.
+      </small>
+
+      <script>
+         if (!('ondeviceproximity' in window)) {
+            document.getElementById('dp-unsupported').classList.remove('hidden');
+         } else {
+            var proximityValue = document.getElementById('dp-value');
+            var proximityMax = document.getElementById('dp-max');
+            var proximityMin = document.getElementById('dp-min');
+
+            window.addEventListener('deviceproximity', function(event) {
+               proximityValue.innerHTML = event.value;
+               proximityMax.innerHTML = event.max;
+               proximityMin.innerHTML = event.min;
+            });
+         }
+
+         if (!('onuserproximity' in window)) {
+            document.getElementById('up-unsupported').classList.remove('hidden');
+         } else {
+            var inProximity = document.getElementById('up-value');
+
+            window.addEventListener('userproximity', function(event) {
+               inProximity.innerHTML = event.near;
+            });
+         }
+      </script>
+   </body>
+</html>
+     #+END_SRC
+
 ** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
    - Feed back data about objects that are close to the device
    - Two events
@@ -1994,7 +3083,102 @@ window.addEventListener('userproximity', function(event) {
 ** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
    - enables near field communication
    - detect nearby objects enabled with NFC information
-   - 
+   -
+** [[https://developer.mozilla.org/en-US/docs/Web/API/Proximity_Events][Proximity Events - Web APIs | MDN]]
+   - e.g. shut down screen during voice calls
+   - device proximity sensor detects change between the device and an
+     object, then notifies the browser
+   - fires a DeviceProximityEvent for changes
+   - fires UserProximityEvent for rough change(?)
+   - captured at the window level
+   - listen for either deviceproximity or userproximity
+   - DeviceProximityEvent
+     - value: provides exact match for distance between device and
+       object
+       - in cm: float
+     - min/max: closest/furthest distance the device can detect
+       - 0 if not available
+       - float in cm
+       - min usually zero
+
+   - UserProximityEvent
+     - expressed through boolean
+     - rough approximation of distance
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('userproximity', function(event) {
+  if (event.near) {
+    // let's power off the screen
+    navigator.mozPower.screenEnabled = false;
+  } else {
+    // Otherwise, let's power on the screen
+    navigator.mozPower.screenEnabled = true;
+  }
+});
+     #+END_SRC
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('deviceproximity', function(event) {
+  console.log("value: " + event.value, "max: " + event.max, "min: " + event.min);
+});
+     #+END_SRC
+** [[https://hacks.mozilla.org/2013/06/the-proximity-api/][The Proximity API &#x2605; Mozilla Hacks – the Web developer blog]]
+   - code
+     #+BEGIN_SRC js
+     window.ondeviceproximity = function (event) {
+    // Check proximity, in centimeters
+    var prox = "<strong>Proximity: </strong>" + event.value + " cm<br />";
+        prox += "<strong>Min value supported: </strong>" + event.min + " cm<br />";
+        prox += "<strong>Max value supported: </strong>" + event.max + " cm";
+    proximityDisplay.innerHTML = prox;
+};
+     #+END_SRC
+   - sensors can generally return between 0 - 5, 0 - 10 cm
+   - code
+     #+BEGIN_SRC js
+     window.onuserproximity = function (event) {
+    // Check user proximity
+    var userProx = "<strong>User proximity - near: </strong>" + event.near + "<br />";
+    userProximityDisplay.innerHTML = userProx;
+};
+     #+END_SRC
+
+** [[https://developer.mozilla.org/en-US/Apps/Fundamentals/gather_and_modify_data/Near_or_far_responding_to_proximity][Near or far? Responding to proximity - App Center | MDN]]
+   - often implemented as a light sensor chip
+   - some sensors only support binary near or not near measurement
+     values
+   - userProximityEvent
+     #+BEGIN_SRC js
+     window.onuserproximity = function(event) {
+  console.log(event.near);  // current user proximity state (boolean)
+});
+     #+END_SRC
+   - DeviceProximityEvent
+     #+BEGIN_SRC js
+     window.ondeviceproximity = function(event) {
+  console.log(event.value); // current device proximity (cm)
+  console.log(event.max);   // maximum sensing distance (cm)
+  console.log(event.min);   // minimum sensing distance (cm)
+});
+     #+END_SRC
+   - ProximityManager
+
+** [[https://hacks.mozilla.org/2015/04/mobile-game-development-with-the-device-orientation-and-vibration-apis/][Mobile game development with the Device Orientation and Vibration APIs &#x260...]]
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('deviceproximity', function(event) {
+    if(event.value < 20) {
+        // something is closer than 20 centimeters to the sensor, make action
+    }
+});
+
+window.addEventListener('userproximity', function(event) {
+    if(event.near) {
+        // something is near the sensor, perform action
+    }
+});
+     #+END_SRC
+
 * Phone Calls / Text Messages
 ** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
    #+BEGIN_SRC html
@@ -2006,8 +3190,9 @@ window.addEventListener('userproximity', function(event) {
        Compose SMS!
      </a>
    #+END_SRC
-* Hardware misc
+* Misc
   - network service discovery?
+  - Camera access
 ** Access
    - GPS
    - Camera, video, microphone
@@ -2024,6 +3209,26 @@ window.addEventListener('userproximity', function(event) {
    - Proximity
    - Barometer (presure)
    -
+** [[https://www.viget.com/articles/native-or-not-the-untapped-power-of-web-apps][Native or Not? The Untapped Power of Web Apps | Viget]]
+   - Camera access
+     - 
+   - Motion, Orientation, and Location
+   - Motion
+   - deviceorientation
+     - alpha (0 - 360) around z axis
+     - beta (-180 to 180) front to back
+     - gamma (-90 to 90) left to right
+     - webkitCompassHeading (360deg)
+   - devicemotion.acceleration
+     - x east/west
+     - y north/south
+     - z up/down
+   - devicemotion.rotatationRate
+     - alpha
+     - beta
+     - gamma
+   - Geolocation
+     - 
 * Web Bluetooth API
 ** [[https://www.broken-links.com/2015/07/23/hardware-apis-coming-to-browsers/][Hardware APIs coming to browsers - Broken Links]]
    - The first is the Web Bluetooth API, which has experimental
@@ -2114,6 +3319,14 @@ navigator.vibrate(0);
 // or alternatively
 navigator.vibrate([]);
     #+END_SRC
+** Vibration API Security
+   - Cross Device Tracking threat
+   - using vibration patterns to create a unique pattern that can
+     allow the device to be recognised. Also might be applicable to
+     Ambient Light.
+   - Identification threat - causing device to vibrate one to identify
+     an individual in a room.
+   - 
 ** [[https://www.joezimjs.com/javascript/top-5-9-favorite-html5-apis/]]
 *** Vibration
     - Works on phones, tablets.
@@ -2178,11 +3391,1188 @@ navigator.vibrate(5000);
 navigator.vibrate(0);
      #+END_SRC
 * Wake Lock API
-  #+BEGIN_SRC js
-//request to keep the display awake when the recipe is showing:
+** [[https://www.w3.org/TR/wake-lock/][Wake Lock API]]
+   - Working Draft 16 March 2016
+   - Prevent aspect of device from entering power saving state
+   - E.g. turning off the screen
+   - Allows web applications to request a wake lock
+   - Working draft
+*** Examples
+      #+BEGIN_SRC js
+// request to keep the display awake when the recipe is showing:
 screen.keepAwake = true;
 
-//stop keeping the display awake:
+// stop keeping the display awake:
 screen.keepAwake = false;
   
   #+END_SRC
+*** Wake Lock
+    - only deals with screen wake lock.
+    -
+*** Extension to Screen interface
+    -
+*** Requesting Wake Locks
+    - Each browsing context has a request flag for the wake lock.
+    - Set to false to cancel.
+    - Can only request - you would not get an error.
+    - 
+    -
+*** Managing Wake Locks
+    - Browser requests the operating system to apply the lock.
+    - Browser requests the operating system to release the lock.
+    - Browsing context is only relevant with its visible
+    - For a user:
+      - browser tab / window is closed
+      - change tabs
+      - browser minimised
+      - navigate or reload page
+      - wake lock applies again if the keepAwake attribute is still true
+*** Additional lock types
+    - E.g. prevent cpu, radio, etc from entering power saving state,
+      whilst letting the screen switch off.
+** [[https://www.w3.org/TR/wake-lock-use-cases/][Wake Lock: Use cases]]
+   - 14 August 2014 - W3C Interest Group Note
+   -
+*** Keeping the screen awake
+    - Flashlight
+    - Cooking recipes
+    - Navigate to a destination
+    - reading an e-book
+    - touch enabled signage
+*** Keeping the system awake
+    - Display uses a large amount of power - prolong battery life of a
+      device
+    - applications should not necessarily stop running -
+      e.g. attaching large files to an email
+* Misc Geo
+** [[https://dxr.mozilla.org/mozilla-central/source/dom/system/nsDeviceSensors.cpp][nsDeviceSensors.cpp - DXR]]
+           <code>static bool
+WindowCannotReceiveSensorEvent (nsPIDOMWindowInner* aWindow)
+{
+  // Check to see if this window is in the background.  If
+  // it is and it does not have the "background-sensors" permission,
+  // don't send any device motion events to it.
+  if (!aWindow || !aWindow->IsCurrentInnerWindow()) {
+    return true;
+  }</code>
+        <code>
+// Holds the device orientation in Euler angle degrees (azimuth, pitch, roll).
+struct Orientation
+{
+  enum OrientationReference
+  {
+    kRelative = 0,
+    kAbsolute
+  };
+
+  static Orientation RadToDeg(const Orientation& aOrient)
+  {
+    const static double kRadToDeg = 180.0 / M_PI;
+    return { aOrient.alpha * kRadToDeg,
+             aOrient.beta * kRadToDeg,
+             aOrient.gamma * kRadToDeg };
+  }
+
+  double alpha;
+  double beta;
+  double gamma;
+};
+        </code>
+        <code>
+static Orientation
+RotationVectorToOrientation(double aX, double aY, double aZ, double aW)
+{
+  static const double kFuzzyOne = 1.0 - 1e-6;
+  static const double kCircleRad = 2.0 * M_PI;
+
+  Orientation orient = { 2.0 * std::atan2(aY, aW),
+                         M_PI_2,
+                         0.0 };
+
+  const double sqX = aX * aX;
+  const double sqY = aY * aY;
+  const double sqZ = aZ * aZ;
+  const double sqW = aW * aW;
+  const double unitLength = sqX + sqY + sqZ + sqW;
+  const double xwyz = 2.0 * (aX * aW + aY * aZ) / unitLength;
+
+  if (xwyz < -kFuzzyOne) {
+    orient.alpha *= -1.0;
+    orient.beta *= -1.0;
+  } else if (xwyz <= kFuzzyOne) {
+    const double gammaX = -sqX - sqY + sqZ + sqW;
+    const double gammaY = 2.0 * (aY * aW - aX * aZ);
+    const double alphaX = -sqX + sqY - sqZ + sqW;
+    const double alphaY = 2.0 * (aZ * aW - aX * aY);
+    const double fac = gammaX > 0 ? 1.0 : -1.0;
+
+    orient.alpha = std::fmod(kCircleRad + std::atan2(fac * alphaY, fac * alphaX),
+                             kCircleRad);
+    orient.beta = fac * std::asin(xwyz);
+    orient.gamma = std::atan2(fac * gammaY, fac * gammaX);
+    if (fac < 0.0) {
+      orient.beta = fmod(M_PI + orient.beta, M_PI);
+    }
+  }
+
+  return Orientation::RadToDeg(orient);
+}
+
+        </code>
+        <code>
+if (nsCOMPtr&#60;nsIDOMDocument&#62; domDoc = do_QueryInterface(pwindow->GetDoc())) {
+          nsCOMPtr&#60;mozilla::dom::EventTarget&#62; target = do_QueryInterface(windowListeners[i]);
+          if (type == nsIDeviceSensorData::TYPE_ACCELERATION ||
+          type == nsIDeviceSensorData::TYPE_LINEAR_ACCELERATION ||
+          type == nsIDeviceSensorData::TYPE_GYROSCOPE) {
+          FireDOMMotionEvent(domDoc, target, type, timestamp, x, y, z);
+          } else if (type == nsIDeviceSensorData::TYPE_ORIENTATION) {
+          FireDOMOrientationEvent(target, x, y, z, Orientation::kAbsolute);
+          } else if (type == nsIDeviceSensorData::TYPE_ROTATION_VECTOR) {
+          const Orientation orient = RotationVectorToOrientation(x, y, z, w);
+          FireDOMOrientationEvent(target, orient.alpha, orient.beta, orient.gamma,
+          Orientation::kAbsolute);
+          } else if (type == nsIDeviceSensorData::TYPE_GAME_ROTATION_VECTOR) {
+          const Orientation orient = RotationVectorToOrientation(x, y, z, w);
+          FireDOMOrientationEvent(target, orient.alpha, orient.beta, orient.gamma,
+          Orientation::kRelative);
+          } else if (type == nsIDeviceSensorData::TYPE_PROXIMITY) {
+          FireDOMProximityEvent(target, x, y, z);
+          } else if (type == nsIDeviceSensorData::TYPE_LIGHT) {
+          FireDOMLightEvent(target, x);
+          }
+          }
+        </code>
+        <code>void
+nsDeviceSensors::FireDOMLightEvent(mozilla::dom::EventTarget* aTarget,
+                                   double aValue)
+{
+  DeviceLightEventInit init;
+  init.mBubbles = true;
+  init.mCancelable = false;
+  init.mValue = aValue;
+  RefPtr&#60;DeviceLightEvent&#62; event =
+          DeviceLightEvent::Constructor(aTarget, NS_LITERAL_STRING("devicelight"), init);
+
+          event->SetTrusted(true);
+
+          bool defaultActionEnabled;
+          aTarget->DispatchEvent(event, &defaultActionEnabled);
+          }
+        </code>
+        <code>void
+nsDeviceSensors::FireDOMProximityEvent(mozilla::dom::EventTarget* aTarget,
+                                       double aValue,
+                                       double aMin,
+                                       double aMax)
+{
+  DeviceProximityEventInit init;
+  init.mBubbles = true;
+  init.mCancelable = false;
+  init.mValue = aValue;
+  init.mMin = aMin;
+  init.mMax = aMax;
+  RefPtr&#60;DeviceProximityEvent&#62; event =
+          DeviceProximityEvent::Constructor(aTarget,
+          NS_LITERAL_STRING("deviceproximity"),
+          init);
+          event->SetTrusted(true);
+
+          bool defaultActionEnabled;
+          aTarget->DispatchEvent(event, &defaultActionEnabled);
+
+          // Some proximity sensors only support a binary near or
+          // far measurement. In this case, the sensor should report
+          // its maximum range value in the far state and a lesser
+          // value in the near state.
+
+          bool near = (aValue < aMax);
+          if (mIsUserProximityNear != near) {
+          mIsUserProximityNear = near;
+          FireDOMUserProximityEvent(aTarget, mIsUserProximityNear);
+          }
+          }</code>
+          <code>void
+nsDeviceSensors::FireDOMUserProximityEvent(mozilla::dom::EventTarget* aTarget,
+                                           bool aNear)
+{
+  UserProximityEventInit init;
+  init.mBubbles = true;
+  init.mCancelable = false;
+  init.mNear = aNear;
+  RefPtr<UserProximityEvent> event =
+            UserProximityEvent::Constructor(aTarget,
+            NS_LITERAL_STRING("userproximity"),
+            init);
+
+            event->SetTrusted(true);
+
+            bool defaultActionEnabled;
+            aTarget->DispatchEvent(event, &defaultActionEnabled);
+            }</code>
+            <code>void
+nsDeviceSensors::FireDOMOrientationEvent(EventTarget* aTarget,
+                                         double aAlpha,
+                                         double aBeta,
+                                         double aGamma,
+                                         bool aIsAbsolute)
+{
+  DeviceOrientationEventInit init;
+  init.mBubbles = true;
+  init.mCancelable = false;
+  init.mAlpha.SetValue(aAlpha);
+  init.mBeta.SetValue(aBeta);
+  init.mGamma.SetValue(aGamma);
+  init.mAbsolute = aIsAbsolute;
+
+  auto Dispatch = [&](EventTarget* aEventTarget, const nsAString& aType)
+  {
+    RefPtr<DeviceOrientationEvent> event =
+              DeviceOrientationEvent::Constructor(aEventTarget, aType, init);
+              event->SetTrusted(true);
+              bool dummy;
+              aEventTarget->DispatchEvent(event, &dummy);
+              };
+
+              Dispatch(aTarget, aIsAbsolute ? NS_LITERAL_STRING("absolutedeviceorientation") :
+              NS_LITERAL_STRING("deviceorientation"));
+
+              // This is used to determine whether relative events have been dispatched
+              // during the current session, in which case we don't dispatch the additional
+              // compatibility events.
+              static bool sIsDispatchingRelativeEvents = false;
+              sIsDispatchingRelativeEvents = sIsDispatchingRelativeEvents || !aIsAbsolute;
+
+              // Android devices with SENSOR_GAME_ROTATION_VECTOR support dispatch
+              // relative events for "deviceorientation" by default, while other platforms
+              // and devices without such support dispatch absolute events by default.
+              if (aIsAbsolute && !sIsDispatchingRelativeEvents) {
+              // For absolute events on devices without support for relative events,
+              // we need to additionally dispatch type "deviceorientation" to keep
+              // backwards-compatibility.
+              Dispatch(aTarget, NS_LITERAL_STRING("deviceorientation"));
+              }
+              }</code>
+void
+nsDeviceSensors::FireDOMMotionEvent(nsIDOMDocument *domdoc,
+                                    EventTarget* target,
+                                    uint32_t type,
+                                    PRTime timestamp,
+                                    double x,
+                                    double y,
+                                    double z)
+{
+  // Attempt to coalesce events
+  TimeDuration sensorPollDuration =
+    TimeDuration::FromMilliseconds(DEFAULT_SENSOR_POLL);
+  bool fireEvent =
+    (TimeStamp::Now() > mLastDOMMotionEventTime + sensorPollDuration) ||
+    sTestSensorEvents;
+
+  switch (type) {
+  case nsIDeviceSensorData::TYPE_LINEAR_ACCELERATION:
+    if (!mLastAcceleration) {
+      mLastAcceleration.emplace();
+    }
+    mLastAcceleration->mX.SetValue(x);
+    mLastAcceleration->mY.SetValue(y);
+    mLastAcceleration->mZ.SetValue(z);
+    break;
+  case nsIDeviceSensorData::TYPE_ACCELERATION:
+    if (!mLastAccelerationIncludingGravity) {
+      mLastAccelerationIncludingGravity.emplace();
+    }
+    mLastAccelerationIncludingGravity->mX.SetValue(x);
+    mLastAccelerationIncludingGravity->mY.SetValue(y);
+    mLastAccelerationIncludingGravity->mZ.SetValue(z);
+    break;
+  case nsIDeviceSensorData::TYPE_GYROSCOPE:
+    if (!mLastRotationRate) {
+      mLastRotationRate.emplace();
+    }
+    mLastRotationRate->mAlpha.SetValue(x);
+    mLastRotationRate->mBeta.SetValue(y);
+    mLastRotationRate->mGamma.SetValue(z);
+    break;
+  }
+
+  if (fireEvent) {
+    if (!mLastAcceleration) {
+      mLastAcceleration.emplace();
+    }
+    if (!mLastAccelerationIncludingGravity) {
+      mLastAccelerationIncludingGravity.emplace();
+    }
+    if (!mLastRotationRate) {
+      mLastRotationRate.emplace();
+    }
+  } else if (!mLastAcceleration ||
+             !mLastAccelerationIncludingGravity ||
+             !mLastRotationRate) {
+    return;
+  }
+
+  nsCOMPtr<nsIDOMEvent> event;
+  domdoc->CreateEvent(NS_LITERAL_STRING("DeviceMotionEvent"), getter_AddRefs(event));
+
+  DeviceMotionEvent* me = static_cast<DeviceMotionEvent*>(event.get());
+
+  me->InitDeviceMotionEvent(NS_LITERAL_STRING("devicemotion"),
+                            true,
+                            false,
+                            *mLastAcceleration,
+                            *mLastAccelerationIncludingGravity,
+                            *mLastRotationRate,
+                            Nullable<double>(DEFAULT_SENSOR_POLL),
+                            Nullable<uint64_t>(timestamp));
+
+  event->SetTrusted(true);
+
+  bool defaultActionEnabled = true;
+  target->DispatchEvent(event, &defaultActionEnabled);
+
+  mLastRotationRate.reset();
+  mLastAccelerationIncludingGravity.reset();
+  mLastAcceleration.reset();
+  mLastDOMMotionEventTime = TimeStamp::Now();
+}
+** [[https://dxr.mozilla.org/mozilla-central/source/dom/system/NetworkGeolocationProvider.js][NetworkGeolocationProvider.js - DXR]]
+/*
+   The gLocationRequestTimeout controls how long we wait on receiving an update
+   from the Wifi subsystem.  If this timer fires, we believe the Wifi scan has
+   had a problem and we no longer can use Wifi to position the user this time
+   around (we will continue to be hopeful that Wifi will recover).
+
+   This timeout value is also used when Wifi scanning is disabled (see
+   gWifiScanningEnabled).  In this case, we use this timer to collect cell/ip
+   data and xhr it to the location server.
+*/
+
+var gLocationRequestTimeout = 5000;
+
+var gWifiScanningEnabled = true;
+var gCellScanningEnabled = false;
+** https://hg.mozilla.org/mozilla-central/file/tip/dom/geolocation/nsGeolocation.h
+   #+BEGIN_SRC cpp
+/* -*- Mode: C++; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* vim: set ts=8 sts=2 et sw=2 tw=80: */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#ifndef nsGeoLocation_h
+#define nsGeoLocation_h
+
+// Microsoft's API Name hackery sucks
+#undef CreateEvent
+
+#include "mozilla/StaticPtr.h"
+#include "nsCOMPtr.h"
+#include "nsAutoPtr.h"
+#include "nsTArray.h"
+#include "nsITimer.h"
+#include "nsIObserver.h"
+#include "nsWrapperCache.h"
+
+#include "nsWeakPtr.h"
+#include "nsCycleCollectionParticipant.h"
+
+#include "nsGeoPosition.h"
+#include "nsIDOMEventListener.h"
+#include "nsIDOMGeoGeolocation.h"
+#include "nsIDOMGeoPosition.h"
+#include "nsIDOMGeoPositionError.h"
+#include "nsIDOMGeoPositionCallback.h"
+#include "nsIDOMGeoPositionErrorCallback.h"
+#include "mozilla/dom/GeolocationBinding.h"
+#include "mozilla/dom/PositionErrorBinding.h"
+#include "mozilla/dom/CallbackObject.h"
+
+#include "nsIGeolocationProvider.h"
+#include "nsIContentPermissionPrompt.h"
+#include "mozilla/Attributes.h"
+
+class nsGeolocationService;
+class nsGeolocationRequest;
+
+namespace mozilla {
+namespace dom {
+class Geolocation;
+typedef CallbackObjectHolder<PositionCallback, nsIDOMGeoPositionCallback> GeoPositionCallback;
+typedef CallbackObjectHolder<PositionErrorCallback, nsIDOMGeoPositionErrorCallback> GeoPositionErrorCallback;
+} // namespace dom
+} // namespace mozilla
+
+struct CachedPositionAndAccuracy {
+  nsCOMPtr<nsIDOMGeoPosition> position;
+  bool isHighAccuracy;
+};
+
+/**
+ * Singleton that manages the geolocation provider
+ */
+class nsGeolocationService final : public nsIGeolocationUpdate,
+                                   public nsIObserver
+   public:
+
+  static already_AddRefed<nsGeolocationService> GetGeolocationService();
+  static mozilla::StaticRefPtr<nsGeolocationService> sService;
+
+  NS_DECL_THREADSAFE_ISUPPORTS
+  NS_DECL_NSIGEOLOCATIONUPDATE
+  NS_DECL_NSIOBSERVER
+
+  nsGeolocationService() {
+      mHigherAccuracy = false;
+  }
+
+  nsresult Init();
+
+  void HandleMozsettingChanged(nsISupports* aSubject);
+  void HandleMozsettingValue(const bool aValue);
+
+  // Management of the Geolocation objects
+  void AddLocator(mozilla::dom::Geolocation* locator);
+  void RemoveLocator(mozilla::dom::Geolocation* locator);
+
+  void SetCachedPosition(nsIDOMGeoPosition* aPosition);
+  CachedPositionAndAccuracy GetCachedPosition();
+
+  // Find and startup a geolocation device (gps, nmea, etc.)
+  nsresult StartDevice(nsIPrincipal* aPrincipal);
+
+  // Stop the started geolocation device (gps, nmea, etc.)
+  void     StopDevice();
+
+  // create, or reinitalize the callback timer
+  void     SetDisconnectTimer();
+  void     StopDisconnectTimer();
+
+  // Update the accuracy and notify the provider if changed
+  void     UpdateAccuracy(bool aForceHigh = false);
+  bool     HighAccuracyRequested();
+
+private:
+
+  ~nsGeolocationService();
+
+  // Disconnect timer.  When this timer expires, it clears all pending callbacks
+  // and closes down the provider, unless we are watching a point, and in that
+  // case, we disable the disconnect timer.
+  nsCOMPtr<nsITimer> mDisconnectTimer;
+
+  // The object providing geo location information to us.
+  nsCOMPtr<nsIGeolocationProvider> mProvider;
+
+  // mGeolocators are not owned here.  Their constructor
+  // adds them to this list, and their destructor removes
+  // them from this list.
+  nsTArray<mozilla::dom::Geolocation*> mGeolocators;
+
+  // This is the last geo position that we have seen.
+  CachedPositionAndAccuracy mLastPosition;
+
+  // Current state of requests for higher accuracy
+  bool mHigherAccuracy;
+};
+
+namespace mozilla {
+namespace dom {
+
+/**
+ * Can return a geolocation info
+ */
+class Geolocation final : public nsIDOMGeoGeolocation,
+                          public nsIGeolocationUpdate,
+                          public nsWrapperCache,
+                          public nsIDOMEventListener
+{
+public:
+
+  NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+  NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS_AMBIGUOUS(Geolocation, nsIDOMGeoGeolocation)
+
+  NS_DECL_NSIGEOLOCATIONUPDATE
+  NS_DECL_NSIDOMGEOGEOLOCATION
+
+  NS_DECL_NSIDOMEVENTLISTENER
+
+  Geolocation();
+
+  nsresult Init(nsPIDOMWindowInner* aContentDom = nullptr);
+
+  nsPIDOMWindowInner* GetParentObject() const;
+  virtual JSObject* WrapObject(JSContext *aCtx, JS::Handle<JSObject*> aGivenProto) override;
+
+  int32_t WatchPosition(PositionCallback& aCallback, PositionErrorCallback* aErrorCallback, const PositionOptions& aOptions, ErrorResult& aRv);
+  void GetCurrentPosition(PositionCallback& aCallback, PositionErrorCallback* aErrorCallback, const PositionOptions& aOptions, ErrorResult& aRv);
+
+  // Returns true if any of the callbacks are repeating
+  bool HasActiveCallbacks();
+
+  // Register an allowed request
+  void NotifyAllowedRequest(nsGeolocationRequest* aRequest);
+
+  // Check if callbacks arrays already contain this request
+  bool ContainsRequest(nsGeolocationRequest* aRequest);
+
+  // Remove request from all callbacks arrays
+  void RemoveRequest(nsGeolocationRequest* request);
+
+  // Check if there is already ClearWatch called for current
+  // request & clear if yes
+  bool ClearPendingRequest(nsGeolocationRequest* aRequest);
+
+  // Shutting down.
+  void Shutdown();
+
+  // Getter for the principal that this Geolocation was loaded from
+  nsIPrincipal* GetPrincipal() { return mPrincipal; }
+
+  // Getter for the window that this Geolocation is owned by
+  nsIWeakReference* GetOwner() { return mOwner; }
+
+  // Check to see if the window still exists
+  bool WindowOwnerStillExists();
+
+  // Check to see if any active request requires high accuracy
+  bool HighAccuracyRequested();
+
+  // Notification from the service:
+  void ServiceReady();
+
+private:
+
+  ~Geolocation();
+
+  nsresult GetCurrentPosition(GeoPositionCallback& aCallback, GeoPositionErrorCallback& aErrorCallback, PositionOptions* aOptions);
+  nsresult WatchPosition(GeoPositionCallback& aCallback, GeoPositionErrorCallback& aErrorCallback, PositionOptions* aOptions, int32_t* aRv);
+
+  bool RegisterRequestWithPrompt(nsGeolocationRequest* request);
+
+  // Methods for the service when it's ready to process requests:
+  nsresult GetCurrentPositionReady(nsGeolocationRequest* aRequest);
+  nsresult WatchPositionReady(nsGeolocationRequest* aRequest);
+
+  // Check if clearWatch is already called
+  bool IsAlreadyCleared(nsGeolocationRequest* aRequest);
+
+  // Two callback arrays.  The first |mPendingCallbacks| holds objects for only
+  // one callback and then they are released/removed from the array.  The second
+  // |mWatchingCallbacks| holds objects until the object is explictly removed or
+  // there is a page change. All requests held by either array are active, that
+  // is, they have been allowed and expect to be fulfilled.
+
+  nsTArray<RefPtr<nsGeolocationRequest> > mPendingCallbacks;
+  nsTArray<RefPtr<nsGeolocationRequest> > mWatchingCallbacks;
+
+  // window that this was created for.  Weak reference.
+  nsWeakPtr mOwner;
+
+  // where the content was loaded from
+  nsCOMPtr<nsIPrincipal> mPrincipal;
+
+  // the protocols we want to measure
+  enum class ProtocolType: uint8_t { OTHER, HTTP, HTTPS };
+
+  // the protocol used to load the content
+  ProtocolType mProtocolType;
+
+  // owning back pointer.
+  RefPtr<nsGeolocationService> mService;
+
+  // Watch ID
+  uint32_t mLastWatchId;
+
+  // Pending requests are used when the service is not ready
+  nsTArray<RefPtr<nsGeolocationRequest> > mPendingRequests;
+
+  // Array containing already cleared watch IDs
+  nsTArray<int32_t> mClearedWatchIDs;
+};
+
+class PositionError final : public nsIDOMGeoPositionError,
+                            public nsWrapperCache
+{
+public:
+  NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+  NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(PositionError)
+
+  NS_DECL_NSIDOMGEOPOSITIONERROR
+
+  PositionError(Geolocation* aParent, int16_t aCode);
+
+  Geolocation* GetParentObject() const;
+
+  virtual JSObject* WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto) override;
+
+  int16_t Code() const {
+    return mCode;
+  }
+
+  void NotifyCallback(const GeoPositionErrorCallback& callback);
+private:
+  ~PositionError();
+  int16_t mCode;
+  RefPtr<Geolocation> mParent;
+};
+
+} // namespace dom
+
+inline nsISupports*
+ToSupports(dom::Geolocation* aGeolocation)
+{
+  return ToSupports(static_cast<nsIDOMGeoGeolocation*>(aGeolocation));
+}
+
+} // namespace mozilla
+
+   #+END_SRC
+** https://hg.mozilla.org/mozilla-central/file/tip/dom/geolocation/nsGeolocationSettings.h
+   #+BEGIN_SRC cpp
+   /* -*- Mode: C++; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* vim: set ts=8 sts=2 et sw=2 tw=80: */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#ifndef nsGeolocationSettings_h
+#define nsGeolocationSettings_h
+
+#include "mozilla/Attributes.h"
+#include "mozilla/StaticPtr.h"
+#include "nsCOMPtr.h"
+#include "nsAutoPtr.h"
+#include "nsClassHashtable.h"
+#include "nsString.h"
+#include "nsIObserver.h"
+#include "nsJSUtils.h"
+#include "nsTArray.h"
+
+#if (defined(MOZ_GPS_DEBUG) && defined(ANDROID))
+#include <android/log.h>
+#define GPSLOG(fmt, ...) __android_log_print(ANDROID_LOG_WARN, "GPS", "%12s:%-5d " fmt,  __FILE__, __LINE__, ##__VA_ARGS__)
+#else
+#define GPSLOG(...) {;}
+#endif // MOZ_GPS_DEBUG && ANDROID
+
+// The settings key.
+#define GEO_ENABLED             "geolocation.enabled"
+#define GEO_ALA_ENABLED         "ala.settings.enabled"
+#define GEO_ALA_TYPE            "geolocation.type"
+#define GEO_ALA_FIXED_COORDS    "geolocation.fixed_coords"
+#define GEO_ALA_APP_SETTINGS    "geolocation.app_settings"
+#define GEO_ALA_ALWAYS_PRECISE  "geolocation.always_precise"
+#ifdef MOZ_APPROX_LOCATION
+#define GEO_ALA_APPROX_DISTANCE "geolocation.approx_distance"
+#endif
+
+enum GeolocationFuzzMethod {
+  GEO_ALA_TYPE_PRECISE, // default, GPS/AGPS location
+  GEO_ALA_TYPE_FIXED,   // user supplied lat/long
+  GEO_ALA_TYPE_NONE,    // no location given
+#ifdef MOZ_APPROX_LOCATION
+  GEO_ALA_TYPE_APPROX   // approximate, grid-based location
+#endif
+};
+
+#define GEO_ALA_TYPE_DEFAULT    (GEO_ALA_TYPE_PRECISE)
+#define GEO_ALA_TYPE_FIRST      (GEO_ALA_TYPE_PRECISE)
+#ifdef MOZ_APPROX_LOCATION
+#define GEO_ALA_TYPE_LAST       (GEO_ALA_TYPE_APPROX)
+#else
+#define GEO_ALA_TYPE_LAST       (GEO_ALA_TYPE_NONE)
+#endif
+
+/**
+ * Simple class for holding the geolocation settings values.
+ */
+
+class GeolocationSetting final {
+public:
+  explicit GeolocationSetting(const nsString& aOrigin) :
+    mFuzzMethod(GEO_ALA_TYPE_DEFAULT),
+#ifdef MOZ_APPROX_LOCATION
+    mDistance(0),
+#endif
+    mLatitude(0.0),
+    mLongitude(0.0),
+    mOrigin(aOrigin) {}
+
+  GeolocationSetting(const GeolocationSetting& rhs) :
+    mFuzzMethod(rhs.mFuzzMethod),
+#ifdef MOZ_APPROX_LOCATION
+    mDistance(rhs.mDistance),
+#endif
+    mLatitude(rhs.mLatitude),
+    mLongitude(rhs.mLongitude),
+    mOrigin(rhs.mOrigin) {}
+
+  ~GeolocationSetting() {}
+
+  GeolocationSetting& operator=(const GeolocationSetting& rhs) {
+    mFuzzMethod = rhs.mFuzzMethod;
+#ifdef MOZ_APPROX_LOCATION
+    mDistance = rhs.mDistance;
+#endif
+    mLatitude = rhs.mLatitude;
+    mLongitude = rhs.mLongitude;
+    mOrigin = rhs.mOrigin;
+    return *this;
+  }
+
+  void HandleTypeChange(const JS::Value& aVal);
+  void HandleApproxDistanceChange(const JS::Value& aVal);
+  void HandleFixedCoordsChange(const JS::Value& aVal);
+
+  inline GeolocationFuzzMethod GetType() const { return mFuzzMethod; }
+#ifdef MOZ_APPROX_LOCATION
+  inline int32_t GetApproxDistance() const { return mDistance; }
+#endif
+  inline double GetFixedLatitude() const { return mLatitude; }
+  inline double GetFixedLongitude() const { return mLongitude; }
+  inline const nsString& GetOrigin() const { return mOrigin; }
+
+private:
+  GeolocationSetting() :
+#ifdef MOZ_APPROX_LOCATION
+    mDistance(0),
+#endif
+    mLatitude(0),
+    mLongitude(0)
+  {} // can't default construct
+
+  GeolocationFuzzMethod mFuzzMethod;
+#ifdef MOZ_APPROX_LOCATION
+  int32_t         mDistance;
+#endif
+  double          mLatitude,
+                  mLongitude;
+  nsString        mOrigin;
+};
+
+/**
+ * Singleton that holds the global and per-origin geolocation settings.
+ */
+class nsGeolocationSettings final : public nsIObserver
+{
+public:
+  static already_AddRefed<nsGeolocationSettings> GetGeolocationSettings();
+  static mozilla::StaticRefPtr<nsGeolocationSettings> sSettings;
+
+  NS_DECL_THREADSAFE_ISUPPORTS
+  NS_DECL_NSIOBSERVER
+
+  nsGeolocationSettings() : mAlaEnabled(false), mGlobalSetting(NullString()) {}
+  nsresult Init();
+
+  void HandleGeolocationSettingsChange(const nsAString& aKey, const JS::Value& aVal);
+  void HandleGeolocationSettingsError(const nsAString& aName);
+
+  void PutWatchOrigin(int32_t aWatchID, const nsCString& aOrigin);
+  void RemoveWatchOrigin(int32_t aWatchID);
+  void GetWatchOrigin(int32_t aWatchID, nsCString& aOrigin);
+  inline bool IsAlaEnabled() const { return mAlaEnabled; }
+
+  // given a watch ID, retrieve the geolocation settings.  the watch ID is
+  // mapped to the origin of the listener/request which is then used to
+  // retreive the geolocation settings for the origin.
+  // if the origin is in the always-precise list, the settings will always be
+  // 'precise'. if the origin has origin-specific settings, that will be returned
+  // otherwise the global geolocation settings will be returned.
+  // NOTE: this returns a copy of the settings to enforce read-only client access
+  GeolocationSetting LookupGeolocationSetting(int32_t aWatchID);
+
+private:
+  ~nsGeolocationSettings() {}
+  nsGeolocationSettings(const nsGeolocationSettings&) :
+    mGlobalSetting(NullString()) {} // can't copy obj
+
+  void HandleMozsettingsChanged(nsISupports* aSubject);
+  void HandleGeolocationAlaEnabledChange(const JS::Value& aVal);
+  void HandleGeolocationPerOriginSettingsChange(const JS::Value& aVal);
+  void HandleGeolocationAlwaysPreciseChange(const JS::Value& aVal);
+
+private:
+  bool mAlaEnabled;
+  GeolocationSetting mGlobalSetting;
+  nsClassHashtable<nsStringHashKey, GeolocationSetting> mPerOriginSettings;
+  nsTArray<nsString> mAlwaysPreciseApps;
+  nsClassHashtable<nsUint32HashKey, nsCString> mCurrentWatches;
+};
+
+#endif /* nsGeolocationSettings_h */
+   #+END_SRC
+** links
+   -
+     https://code.google.com/p/chromium/codesearch#chromium/src/content/browser/geolocation/location_arbitrator_impl.cc&rcl=1407097784&l=43
+** Stack Overflow
+
+
+The data sent by Firefox to Google is for all visible access points, public or private. For each access point detected, it sends the following data to https://www.google.com/loc/json:
+
+  "mac_address": "01-23-45-67-89-ab",
+  "signal_strength": 8,
+  "age": 0,
+  "SSID": "MyAccessPoint"
+
+where
+
+    mac_address is the mac address of the WiFi node.
+    signal_strength is current signal strength measured in dBm.
+    age is the number of milliseconds since the WiFi node was detected.
+    SSID is the name or ESSID of the WiFi node.
+
+The georeferenced WiFi data used to geocode your request was collected when Google was driving around taking pictures for StreetView.
+
+It is important to note that, however, that this is how the HTML5 geolocation API is implmeneted on Firefox using Google's Geolocation Services. This is an implementation, not a specification. If your device has a built-in GPS, it is probably desirable that your HTML5 implementation queries the GPS directly, rather than using a geolocation service.
+
+Even firefox implements this feature differently on Windows and Linux. Using a current Firefox on Windows, details of all visible WiFi nodes are sent to Google. Using a current Firefox on Linux, only details of the currently connected WiFi node is sent, due to the reliance on libiw for access point data.
+
+As another answerer noted, Safari uses Skyhook Wireless's service which does much the same thing as Google's Location Services.
+
+Data is gathered by Skyhook Wireless (Wikipedia), and they make no
+distinction between public and private wifi points - they log the
+locations of all of them. I wouldn't be surprised if the Google Street
+View vans also logged location data for access points.
+The Google street cars do log wifi data - they are currently being
+investigated in several european and apac countries for the practice
+because it potentially breaks privacy laws.
+http://www.skyhookwireless.com/
+https://www.wired.com/2012/05/google-wifi-fcc-investigation/
+And if Google had its way, the public would have never learned the
+software on Google’s Street View mapping cars was “intended” to
+collect payload data from open Wi-Fi networks.
+
+The design document showed that, in addition to collecting data that
+Google could use to map the location of wireless access points,
+Engineer Doe intended to collect, store, and analyze payload data from
+unencrypted Wi-Fi networks. The design document notes that
+‘[w]ardriving can be used in a number of ways,’ including ‘to observe
+typical Wi-Fi usage snapshots.’ In a discussion of ‘Privacy
+Considerations,’ the design document states, ‘A typical concern might
+be that we are logging user traffic along with sufficient data to
+precisely triangulate their position at a given time, along with
+information about what they were doing.’ That statement plainly refers
+to the collection of payload data because MAC addresses, SSIDs,
+signal-strength measurements. and other information used to map the
+location of wireless access points would reveal nothing about what end
+users ‘were doing.'” Engineer Doe evidently intended to capture the
+content of Wi-Fi communications transmitted when Street View cars were
+in the vicinity, such as e-mail, and text messages sent to or from
+wireless access points. Engineer Doe identified privacy as an issue
+but concluded that it was not a significant concern because the Street
+View cars would not be ‘in proximity to any given user for an extended
+period of time,’ and ‘[n]one of the data gathered … [would] be
+presented to end users of [Google’s] services in raw
+form. Nevertheless, the design document listed as a ‘to do’ item,
+‘[D]iscuss privacy considerations with Product Counsel.’ That never
+occurred. The design document also states that the Wi-Fi data Google
+gathered ‘be analyzed offline for use in other initiatives,’ and that
+‘[analysis of the gathered data [was] a non goal (though it [would]
+happen.’
+** http://arstechnica.com/uncategorized/2008/10/google-gears-enhances-geolocation-with-wifi-positioning/
+<p>Firefox uses Firefox gathers information about nearby wireless access points and your computer’s IP address. Then Firefox sends this information to the default geolocation service provider, Google Location Services, to get an estimate of your location. That location estimate is then shared with the requesting website.</p>
+        <p>Accuracy varies greatly from location to location. In some places, our service providers may be able to provide a location to within a few meters. However, in other areas it might be much more than that. All locations returned by our service providers are estimates only and we do not guarantee the accuracy of the locations provided. Please do not use this information for emergencies. Always use common sense.</p>
+        <p>By default, Firefox uses Google Location Services to determine your location by sending:
+
+          your computer’s IP address,
+          information about the nearby wireless access points, and
+          a random client identifier, which is assigned by Google, that expires every 2 weeks.
+        </p>
+        <p>Searching the Firefox codebase for getCurrentPosition yields the source file nsGeolocation.cpp. As you see in the linked source line, it creates an instance of a geolocation provider. Assuming Firefox for Desktop, there is only the NetworkGeolocationProvider (FirefoxOS may also use GPS). In essence, Gecko opens an XMLHttpRequest to the URL specified in about:config as geo.wifi.uri. Per default this is https://www.googleapis.com/geolocation/v1/geolocate?key=%GOOGLE_API_KEY%</p>
+        <p>Internet Explorer</p>
+        <p>If you allow, Internet Explorer will approximate your location with the help of the Microsoft Location Service and works without the need for additional hardware. Given an IP address or a list of nearby WiFi hotspots, it can approximate your physical location using a database of IP addresses and a database of known hotspot locations.</p>
+        <p>Chrome and Firefox uses the MAC of nearby wifi access points to obtain geolocation by sending it to googlesapi.com.</p>
+** eg
+<p>EDIT: The Geolocation API lets you find out where the user is, with the user's consent. The API is device-agnostic; it doesn't care how the browser determines location, so long as clients can request and receive location data in a standard way. The underlying mechanism might be via GPS, wifi, or simply asking the user to enter their location manually. Since any of these lookups is going to take some time, the API is asynchronous; you pass it a callback method whenever you request a location.</p>
+        
+        <p>Assume users will not give you their location
+
+          It might be a pain, but many of your users will not want to give you their location so you need to adopt a defensive development style.
+
+          Handle all errors out of the geolocation API so that you can adapt your site to this condition.
+          Be clear and explicit about your need for the location.
+          Use a fallback solution if needed.
+
+          Use a fallback if geolocation is required
+
+          Our recommendation is to not tie your site or application in to requiring access to the user’s current location, but if your application or site absolutely requires it there are 3rd party solutions that allow you to obtain a best guess of where the person currently is.
+
+          These solutions often work by looking at the user’s IP address and mapping that to the physical addresses registered with the RIPE database. These locations are often not very accurate normally giving you a position of the nearest telecommunications hub to the user, or the nearest cell phone tower. In many cases, they might not even be that accurate, especially if the user is on VPN or some other proxy service.
+          Always request access to location on a user gesture
+
+          Make sure users understand why you’re asking for their location, and what the benefit to them will be. Asking for it immediately on the homepage as the site loads results in a poor user experience.</p>
+        <p>Instead you should give the user a clear call-to-action or an indication that an operation will require access to their location. The user will then be able to more easily associate the system prompt for access with the action just initiated.
+          Give clear indication that an action will request their location
+
+          In a study by the Google Ads team, when a user was asked to book a hotel room in Boston for an upcoming conference on one particular hotels site, they were prompted to share their GPS location immediately after tapping the ‘Find and Book’ call-to-action on the homepage.
+
+          In some cases, the user became frustrated because they struggled to understand why they were being shown hotels in San Francisco when they wanted to book a room in Boston.
+
+          A better experience is to make sure users understands why you’re asking them for location. Add in a well known signifier that is common across devices, such as range finder, or an explicit call to action such as “Find Near Me.”</p>
+        <p>When to use Geolocation to watch the user’s location
+
+          You want to obtain a more precise lock on the user location.
+          Your application needs to update the user interface based on new location information.
+          You applications needs to update business logic when the user enters a certain defined zone.</p>
+        <p>Watching the users location
+
+          The Geolocation API allows you to obtain the user’s location (with user consent) with a single call to getCurrentPosition().
+
+          If you want to continually monitor the location of the user, the geolocation API has a method called watchPosition(). It operates in a similar way to getCurrentPosition() yet it will fire multiple times as the positioning software:
+
+          Gets a more accurate lock on the user.
+          The user’s position changes.
+
+          var watchId = navigator.geolocation.watchPosition(function(position) {
+          document.getElementById('currentLat').innerHTML = position.coords.latitude;
+          document.getElementById('currentLon').innerHTML = position.coords.longitude;
+          });</p>
+        <p>Always clear up and conserve battery
+
+          Watching for changes to a geolocation is not a free operation. Whilst operating systems might be introducing platform features to let applications hook in to the geo subsystem, you as a web developer have no idea what support the user’s device has for monitoring the user’s location and whilst you are watching a position you are engaging the device in a lot of extra processing
+
+          Once you have no need to track the user’s position call clearWatch to turn off the geolocation systems.
+        </p>
+        <p>Always Handle Errors
+
+          Unfortunately, not all location lookups are successful. Perhaps a GPS could not be located or the user has suddenly disabled location lookups. A second, optional, argument to getCurrentPosition() will be called in the event of an error, so you can notify the user inside the callback:
+
+          window.onload = function() {
+          var startPos;
+          var geoSuccess = function(position) {
+          startPos = position;
+          document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+          document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+          };
+          var geoError = function(position) {
+          console.log('Error occurred. Error code: ' + error.code);
+          // error.code can be:
+          //   0: unknown error
+          //   1: permission denied
+          //   2: position unavailable (error response from location provider)
+          //   3: timed out
+          };
+          navigator.geolocation.watchPosition(geoSuccess, geoError);
+          };</p>
+        <p>Use Cases</p>
+        <ul>
+          <li>Maps</li>
+          <li>Filling out forms</li>
+          <li>Streamlining access to information</li>
+        </ul>
+        <p>EDIT:     Find where the user is closest to a physical location of yours to tailor the user experience.
+          Tailor information (such as news) to the user’s location.
+          Show the position of a user on a map.
+          Tag data created inside your application with the user’s location (i.e, geo-tagging a picture).</p>
+        <p>If this is the first time an application on this domain has requested permissions, the browser will typically check for user consent. Depending on the browser, there may also be preferences to always allow - or disallow - permission lookups, in which case the confirmation process will be bypassed.
+
+          Depending on the location device your browser is using, the position object might actually contain a lot more than just latitude and longitude, for example, it could include an altitude or a direction. You can’t tell what extra information that location system will use until it actually returns the data.</p>
+        <p>
+          Error handling
+          
+        </p>
+        <code>window.onload = function() {
+  var startPos;
+  var geoSuccess = function(position) {
+    startPos = position;
+    document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+    document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+  };
+  var geoError = function(error) {
+    console.log('Error occurred. Error code: ' + error.code);
+    // error.code can be:
+    //   0: unknown error
+    //   1: permission denied
+    //   2: position unavailable (error response from location provider)
+    //   3: timed out
+  };
+  navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+};</code>
+        <p>Reduce the need to start-up geo location hardware
+
+          For many use-cases you don’t need to use the most up to date location of the user, you just need a rough estimate.
+
+          Use the maximumAge optional property to tell the browser to use a recently obtained geolocation result. This not only returns quicker if the user has requested the data before it also stops the browser from having to start up its geolocation hardware interfaces such as Wifi triangulation or the GPS.</p>
+        <code>window.onload = function() {
+  var startPos;
+  var geoOptions = {
+  	maximumAge: 5 * 60 * 1000,
+  }
+
+  var geoSuccess = function(position) {
+    startPos = position;
+    document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+    document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+  };
+  var geoError = function(position) {
+    console.log('Error occurred. Error code: ' + error.code);
+    // error.code can be:
+    //   0: unknown error
+    //   1: permission denied
+    //   2: position unavailable (error response from location provider)
+    //   3: timed out
+  };
+
+  navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+};</code>
+        <p>Don’t keep the user waiting, set a timeout
+
+          Unless you set a timeout, your request to get the current position might never return.</p>
+        <code>window.onload = function() {
+  var startPos;
+  var geoOptions = {
+     timeout: 10 * 1000
+  }
+
+  var geoSuccess = function(position) {
+    startPos = position;
+    document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+    document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+  };
+  var geoError = function(error) {
+    console.log('Error occurred. Error code: ' + error.code);
+    // error.code can be:
+    //   0: unknown error
+    //   1: permission denied
+    //   2: position unavailable (error response from location provider)
+    //   3: timed out
+  };
+
+  navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+};</code>
+        <p>Prefer a coarse location over a fine grained location
+
+          If you want to find the nearest store to a user it is unlikely that you need 1 meter precision to work that out. The API is designed to give a coarse location that returns as quickly as possible.
+
+          If you do need high-precision it is possible to override the default setting with the enableHighAccuracy option. Use this sparingly: it will be slower to resolve and use more battery.</p>
+        <code>window.onload = function() {
+  var startPos;
+  var geoOptions = {
+    enableHighAccuracy: true
+  }
+
+  var geoSuccess = function(position) {
+    startPos = position;
+    document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+    document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+  };
+  var geoError = function(error) {
+    console.log('Error occurred. Error code: ' + error.code);
+    // error.code can be:
+    //   0: unknown error
+    //   1: permission denied
+    //   2: position unavailable (error response from location provider)
+    //   3: timed out
+  };
+
+  navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+};</code>
+<p>Note: As of Chrome 50, the Geolocation API will only work on secure contexts such as HTTPS. If your site is hosted on an non-secure origin (such as HTTP) the requests to get the users. location will no longer function.</p>
+        <p>It is not a requirement that the whole app be served via HTTPS to use Geolocation. Only pages that use Geolocation need to be served over a secure context. A secure context currently is anything hosted at the top level on HTTPS or localhost. For example, an iframe that points to a secure origin but is hosted on unsecured origin (http://paul.kinlan.me/) would not be allowed to call the geolocation API.</p>
+        <p>Can I detect at runtime if the geolocation was blocked because of not being on a secure context
+
+          Yes. The geolocation spec defines a PositionError object that is passed in to the failure callback of the Geolocation APIs. The object defines a code and message properties.
+
+          Errors due to this secure-context issue will return a code of 1 which is a “Permission Denied Error”. You can get this error when a user has denied access or the system has denied access to the user’s locations. This means you will have to check the message to see what the exact reason was.
+
+          This can be quite brittle as it might change in the future, but a strong signal that it was a non-secure content issue is to look for the string “Only secure origins are allowed”.
+
+          navigator.geolocation.getCurrentPosition(function(success) { /* Do some magic. */ },
+          function(failure) {
+          if(failure.message.indexOf("Only secure origins are allowed") == 0) {
+          // Secure Origin issue.
+          }
+          };
+          });
+
+          Remember, you can’t just check for the origin of the page because your page could be on https but inside an iframe that is hosted from an unsecure context.</p>
+** http://www.nordicclick.com/blog/geolocation-api/
+How does it work on mobile?
+
+Most iPhone and Android phones support two methods of geolocation which are through cellular towers and dedicated GPS hardware. Through the use of cellular towers, geolocation may occur via multilateration of radio signals between several cellular towers of the network and the phone. This method only gives a rough idea of where the customer is, but it is fast and does not require the use of GPS hardware.
+
+Dedicated GPS hardware on the customer’s device reaches out to dedicated GPS positioning satellites and can usually pinpoint their location within a few meters. The downside of this is that mobile devices usually turn off the GPS chip until it is needed because the chip on their device draws too much power. This leads to a startup delay while the chip is initializing its connection with the GPS satellites. We see this happen when we use Google Maps on our iPhones or Android phones.
+** https://en.wikipedia.org/wiki/Multilateration
+** http://www.neilson.co.za/mobile-network-geolocation-obtaining-the-cell-ids-the-signal-strength-of-surrounding-towers-from-a-gsm-modem/
+** https://developers.google.com/maps/documentation/geolocation/intro
+** http://www.neilson.co.za/demos/google-geolocation-api.html
+** http://www.pcmag.com/article2/0,2817,2407896,00.asp
+** http://cellphones.about.com/od/phoneglossary/g/gsm.htm
+** https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
+** https://developer.mozilla.org/en-US/Apps/Fundamentals/gather_and_modify_data/Plotting_yourself_on_the_map
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIDOMGeoGeolocation
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIDOMGeoPosition
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMGeoPositionAddress
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIDOMGeoPositionCallback
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIDOMGeoPositionCoords
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIDOMGeoPositionError
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIDOMGeoPositionOptions
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIGeolocationProvider
+** https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/NsIGeolocationUpdate
+** https://developer.mozilla.org/en-US/Apps/Fundamentals/gather_and_modify_data
+** https://hacks.mozilla.org/2013/10/who-moved-my-geolocation/
+Best practices for apps using GPS
+
+There are a couple of things you need to keep in mind when you are building an application that needs geolocation. First, you need to think about the accuracy of the result you’ll receive. What you need to know is that using getCurrentPosition tries to return a result as fast as possible: sometimes it means using wifi or the IP address to get the result. When using the GPS device, it may take minutes before it connects to satellites, so in that situation, you have two choices:
+
+    You can get the accuracy of the result, in meters, by getting accuracy for the coordinates returned by getCurrentPosition (see code below);
+    Alternatively, you can define a HighAccuracy option when you call getCurrentPosition (see code below).
+
+var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+};
+ 
+function success(pos) {
+    var crd = pos.coords;
+ 
+    console.log('Your current position is:');
+    console.log('Latitude : ' + crd.latitude);
+    console.log('Longitude: ' + crd.longitude);
+    console.log('More or less ' + crd.accuracy + ' meters.');
+};
+ 
+function error(err) {
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+};
+ 
+navigator.geolocation.getCurrentPosition(success, error, options);
+
+You also need to think about the fact that the user may move, so you need to re-estimate the user’s coordinates every so often, depending on what you are trying to achieve. You can do this either manually or by using the watchPosition method of the geolocation API in Firefox OS.
+
+var watchID = navigator.geolocation.watchPosition(function(position) {
+    do_something(position.coords.latitude, position.coords.longitude);
+});
+
+In that situation, if the position changes, either because the devices moves or because more accurate geolocation information arrives, your function will be called, and you’ll be able to handle the new information.
+
+If you want more information about how to use geolocation in your
+application, you can always check the Mozilla Developer Network
+documentation on using geolocation. If you have any questions about
+using geolocation in your Firefox OS application, please leave a
+question in the comments’ section.
+** https://developers.google.com/web/fundamentals/native-hardware/user-location/obtain-location?hl=en
+** misc
+If you let Google Chrome share your location with a site, Chrome sends
+information to Google Location Services to get an estimate of where
+you are. Chrome can then share that info with the site that wants your
+location.
+** http://webcache.googleusercontent.com/search?q=cache:PtixgVtSTmoJ:nathansh.com/2015/07/13/creepy-to-helpful/+&cd=6&hl=en&ct=clnk&gl=us
+** misc
+<p>    Check for Compatibility before you use the API.
+          Prefer a coarse location over a fine location.
+          Always handle errors.
+          Don't poll for the data too frequently to save the user's battery.</p>
+<pre><code>
+navigator.permissions.query({name:'geolocation'}).then(function(result) {
+  if (result.state === 'granted') {
+    showMap();
+  } else if (result.state === 'prompt') {
+    showButtonToEnableMap();
+  }
+  // Don't do anything if the permission was denied.
+});
+        </code></pre>
