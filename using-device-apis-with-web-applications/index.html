@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Using Device APIs With Web Applications</title>
+    <link rel="stylesheet" href="./styles/index.css" />
+  </head>
+  <body>
+    <section>
+      <section><h1>Using Device APIs with Web Applications</h1></section>
+      <footer>
+        <address></address>
+        <span></span>
+      </footer>
+    </section>
+    <section>
+      <header>
+      </header>
+      <section>
+        <h1>What?</h1>
+      </section>
+      <footer>
+        <address></address>
+        <span></span>
+      </footer>
+    </section>
+    <section>
+      <header></header>
+      <section>
+        <h1>Why Should you Care?</h1>
+      </section>
+      <footer>
+        <address></address>
+        <span></span>
+      </footer>
+    </section>
+    <section data-api="geolocation">
+      <section>
+        <h1>Geolocation API</h1>
+      </section>
+      <footer>
+        <address>Geolocation API</address>
+        <span></span>
+      </footer>
+    </section>
+    <section data-api="geolocation">
+      <header>
+        
+      </header>
+      <section>
+        <ul>
+          <li>GPS</li>
+          <li>GSM / CDMA Cell Ids</li>
+          <li>IP address</li>
+          <li>RFID - Radio-frequency identification</li>
+          <li>Network signals</li>
+          <li>Cell towers</li>
+          <li>The unique identifiers (SSID) of wireless networks at your location and signal strengths</li>
+        </ul>
+      </section>
+      <footer>
+        <address>Geolocation API</address>
+        <span></span>
+      </footer>
+    </section>
+    <section data-api="geolocation">
+      <header>
+      </header>
+      <section>
+        <h2><code>navigator.geolocation</code></h2>
+      </section>
+      <footer>
+        <address>Geolocation API</address>
+        <span></span>
+      </footer>
+    </section>
+    <section data-api="geolocation">
+      <header>
+      </header>
+      <section>
+        <h2><code>navigator.geolocation.getCurrentPosition</code></h2>
+        <section>
+          <pre><code>
+navigator.geolocation.getCurrentPosition(showPositionCallback);
+
+function showPositionCallback(position) {
+  console.info(<span class="green">`
+    Latitude: <var>${ position.coords.latitude }</var>
+    Longitude: <var>${ position.coords.longitude }</var>
+    Accuracy: <var>${ position.coords.accuracy }</var>
+            
+    Altitude: <var>${ position.coords.longitude }</var>
+    Altitude Accuracy: <var>${ position.coords.longitude }</var>
+
+    Heading: <var>${ position.coords.heading }</var>
+    Speed: <var>${ position.coords.speed }</var>
+  `</span>);
+}
+          </code></pre>
+        </section>
+       
+      </section>
+      <footer>
+        <address>Geolocation API</address>
+        <span></span>
+      </footer>
+    </section>
+    <section data-api="geolocation">
+      <header>
+      </header>
+      <section>
+        <h2><code>navigator.geolocation.getCurrentPosition</code></h2>
+        <section>
+          <pre><code>
+navigator.geolocation.getCurrentPosition(showPositionCallback, errorCallback);
+
+function errorCallback(error) {
+  console.error(error.message);
+  <span class="darkgrey">
+  // error.TIMEOUT
+  // error.PERMISSION_DENIED
+  // error.POSITION_UNAVAILABLE
+  // error.UNKNOWN_ERROR
+}
+          </code></pre>
+        </section>
+        
+      </section>
+      <footer>
+        <address>Geolocation API</address>
+        <span></span>
+      </footer>
+    </section>
+    <section data-api="geolocation">
+      <header>
+      </header>
+      <section>
+        <h2><code>navigator.geolocation.getCurrentPosition</code></h2>
+        <section>
+          <pre><code>
+var <var>positionOptions</var> = {
+  enableHighAccuracy: true,
+  maximumAge: 10000,
+  timeOut: 5000
+}
+
+navigator.geolocation.getCurrentPosition(showPositionCallback, errorCallback, <var>positionOptions</var>);
+
+</code></pre>
+        </section>
+        
+      </section>
+      <footer>
+        <address>Geolocation API</address>
+        <span></span>
+      </footer>
+    </section>
+    
+    <section data-api="geolocation">
+      <header>
+      </header>
+      <section>
+        <h2><code>navigator.geolocation.watchPosition</code></h2>
+        <section>
+          <pre><code>var <var>watchPositionId</var> = navigator.geolocation.watchPosition(showPositionCallback);
+
+navigator.geolocation.clearWatch(<var>watchPositionId</var>);
+</code></pre>
+        </section>
+        
+      </section>
+      <footer>
+        <address>Geolocation API</address>
+        <span></span>
+      </footer>
+    </section>
+    
+    <section data-api="geolocation">
+      <header>
+        <h1>Support</h1>
+        
+      </header>
+      <section>
+        <section class="support"><img src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img src="./assets/opera_logo.svg" alt="Opera Logo" /><img src="./assets/safari_logo.svg" alt="Safari Logo" /><img src="./assets/edge_logo.svg" alt="Edge Logo" /><img src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+        </section>
+      </section>
+      <footer>
+        <address>Geolocation API</address>
+        <span></span>
+      </footer>
+    </section>
+    
+    <section data-api="battery-status">
+      <header>
+        
+      </header>
+      <section>
+        <h1>Battery Status API</h1>
+      </section>
+      <footer>
+        <address></address><span></span>
+      </footer>
+    </section>
+    <section data-api="battery-status">
+      <header></header>
+      <section>
+        <pre><code>
+<span class="darkgrey">// Old Synchronous Way</span>
+var <var>batteryManager</var> = navigator.battery;
+        </code></pre>
+        <pre><code>
+<span class="darkgrey">// Shiny New Asynchronous Way</span>
+navigator.getBattery().then(function(<var>batteryManager</var>) {
+  console.info(<span class="green">`
+          charging: <var>${ batteryManager.charging }</var> <span class="darkgrey">             // Boolean</span>
+          chargingTime: <var>${ batteryManager.chargingTime }</var><span class="darkgrey">      // Integer</span>
+          dischargingTime: <var>${ batteryManager.dischargingTime }</var><span class="darkgrey">// Integer</span>
+          level: <var>${ batteryManager.dischargingTime }</var><span class="darkgrey">          // Double</span>
+  `</span>);
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Battery Status API</address>
+        <span></span>
+      </footer>
+    </section>
+    <section data-api="battery-status">
+      <header></header>
+      <section>
+        <pre><code>
+          
+navigator.getBattery().then(function(<var>batteryManager</var>) {
+  battery.onchargingchange = function () {
+    <span class="darkgrey">// fired when battery goes from a charging status to a discharging status,
+    // or vice versa </span>
+  };
+
+  battery.onlevelchange = function () {
+    <span class="darkgrey">// fired when the battery level increases or decreases</span>
+  };
+
+  battery.onchargingtimechange = function () {
+    <span class="darkgrey">// fired when time until battery is finished charging changes</span>
+  };
+
+  battery.ondischargingtimechange = function () {
+    <span class="darkgrey">// fired when time until battery is depleted changes</span>
+  };
+
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Battery Status API</address>
+        <span></span>
+      </footer>
+    </section>
+    
+    <section data-api="battery-status">
+      <header>
+        <h1>Support</h1>
+      </header>
+      <section>
+        <section class="support"><img src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+        </section>
+      </section>
+      <footer>
+        <address>Battery Status API</address>
+        <span></span>
+      </footer>
+    </section>
+
+    
+    <section data-api="ambient-light">
+      <header>
+        
+      </header>
+      <section>
+        <h1>Ambient Light Sensor</h1>
+        
+      </section>
+      <footer>
+        <address></address><span></span>
+      </footer>
+    </section>
+    <section data-api="ambient-light">
+      <header>
+        
+      </header>
+      <section>
+        <h2><code>devicelight event</code></h2>
+        <pre><code>
+window.addEventListener('devicelight', function(event) {
+  <span class="darkgrey">// Get the ambient light level in lux.</span>
+  <span class="darkgrey">// < 400 lux (indoors)</span>
+  <span class="darkgrey">// 400 - 1000 lux (office lighting)</span>
+  <span class="darkgrey">// > 1000 lux (outdoors)</span>
+  console.info(event.value);
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Ambient Light Sensor</address>
+        <span></span>
+      </footer>
+    </section>
+
+    
+    
+    <section data-api="ambient-light">
+      <header>
+        
+      </header>
+      <section>
+        <h2><code>lightlevel event</code></h2>
+        <pre><code>
+window.addEventListener('lightlevel', function(event) {
+  <span class="darkgrey">// Either dim, normal or bright.</span>
+  console.info(event.value);
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Ambient Light Sensor</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section data-api="ambient-light">
+      <header>
+        
+      </header>
+      <section>
+        <h2><code>AmbientLightSensor</code></h2>
+        <pre><code>
+let sensor = new <var>AmbientLightSensor()</var>;
+sensor.start();
+    
+sensor.onchange = function(event) {
+    console.log(event.reading.illuminance);
+};
+
+sensor.onerror = function(event) {
+    console.log(event.error.name, event.error.message);
+};
+        </code></pre>
+      </section>
+      <footer>
+        <address>Ambient Light Sensor</address>
+        <span></span>
+      </footer>
+    </section>
+    
+    
+    <section data-api="ambient-light">
+      <header>
+        <h2>Support</h2>
+      </header>
+      <section>
+        <section class="support"><img class="some-support" src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img class="no-support" src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img class="no-support" src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img class="some-support" src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+        </section>
+      </section>
+      <footer>
+        <address>Ambient Light Sensor</address>
+        <span></span>
+      </footer>
+    </section>
+
+    
+
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1>Device Orientation API</h1>
+      </section>
+      <footer>
+        <address></address><span></span>
+      </footer>
+    </section>
+    
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1><code>deviceorientation</code></h1>
+        <img src="assets/z-axis-alpha.png" style="object-fit: contain;" />
+      </section>
+      <footer>
+        <address>Device Orientation API</address>
+        <span></span>
+      </footer>
+    </section>
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1><code>deviceorientation</code></h1>
+        <img src="assets/z-axis-alpha-c-rotation.png" style="object-fit: contain;" />
+        <pre><code>
+window.addEventListener("deviceorientation", function(event) {
+  console.info(<span class="green">`Rotation around the Z axis: <var>${ event.alpha }</var>`</span>);
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Device Orientation API</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1><code>deviceorientation</code></h1>
+        <img src="assets/beta-a-rotation.png" style="object-fit: contain;" />
+        <pre><code>
+window.addEventListener("deviceorientation", function(event) {
+  console.info(<span class="green">`Rotation around the X axis: <var>${ event.beta }</var>`</span>);
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Device Orientation API</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1><code>deviceorientation</code></h1>
+        <img src="assets/gamma-b-rotation.png" style="object-fit: contain;" />
+        <pre><code>
+window.addEventListener("deviceorientation", function(event) {
+  console.info(<span class="green">`Rotation around the Y axis: <var>${ event.gamma }</var>`</span>);
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Device Orientation API</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1><code>deviceorientationabsolute</code></h1>
+        <pre><code>
+window.addEventListener("deviceorientationabsolute", function(event) {
+    <span class="darkgrey">// Separate Event for Absolute Values - Useful for Augmented Reality</span>
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Device Orientation API</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1><code>devicemotion</code></h1>
+      </section>
+      <footer>
+        <address>Device Orientation API</address>
+        <span></span>
+      </footer>
+    </section>
+    
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1><code>devicemotion</code></h1>
+        <pre><code>
+window.addEventListener("devicemotion", function(event) {
+
+  console.info(<span class="green">`Acceleration:
+          <var>${ event.acceleration.x }</var>,
+          <var>${ event.acceleration.y }</var>,
+          <var>${ event.acceleration.z }</var>`</span>);
+
+  console.info(<span class="green">`Acceleration including gravity:
+          <var>${ event.accelerationIncludingGravity.x }</var>,
+          <var>${ event.accelerationIncludingGravity.y }</var>,
+          <var>${ event.accelerationIncludingGravity.z }</var>`</span>);
+
+  console.info(<span class="green">`Rotation rate:
+          <var>${ event.rotationRate.alpha }</var>,
+          <var>${ event.rotationRate.beta }</var>
+          <var>${ event.rotationRate.gamma }</var>`</span>);  
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Device Orientation API</address>
+        <span></span>
+      </footer>
+    </section>
+
+    
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1><code>compassneedscalibration</code></h1>
+        <pre><code>
+window.addEventListener("compassneedscalibration", function(event) {
+
+  alert('Your compass is useless, fix it');
+  event.preventDefault();
+
+});
+        </code></pre>
+      </section>
+      <footer>
+        <address>Device Orientation API</address>
+        <span></span>
+      </footer>
+    </section>
+    
+    <section data-api="device-orientation">
+      <header>
+        <h2>Support</h2>
+      </header>
+      <section>
+        <section class="support"><img src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img src="./assets/opera_logo.svg" alt="Opera Logo" /><img src="./assets/safari_logo.svg" alt="Safari Logo" /><img src="./assets/edge_logo.svg" alt="Edge Logo" /><img src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+        </section>
+      </section>
+      <footer>
+        <address>Device Orientation API</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section>
+      <header>
+        
+      </header>
+      <section>
+        <h1>Vibration API</h1>
+      </section>
+      <footer>
+        <address></address><span></span>
+      </footer>
+    </section>
+
+    <section data-api="vibration">
+      <header></header>
+      <section>
+        <h1><code>navigator.vibrate</code></h1>
+        <pre><code>
+navigator.vibrate(1000);
+
+<span class="darkgrey">// same as:</span>
+
+navigator.vibrate([1000]);
+        </code></pre>
+      </section>
+      <footer>
+        <address>Vibration</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section data-api="vibration">
+      <header></header>
+      <section>
+        <h1><code>navigator.vibrate(0)</code></h1>
+        <pre><code>
+<span class="darkgrey">// cancel!</span>
+navigator.vibrate(0);
+navigator.vibrate([]);
+        </code></pre>
+      </section>
+      <footer>
+        <address>Vibration API</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section data-api="vibration">
+      <header></header>
+      <section>
+        <h1><code>navigator.vibrate()</code></h1>
+        <pre><code>
+navigator.vibrate([1000, 50, 2000]);
+
+        </code></pre>
+      </section>
+      <footer>
+        <address>Vibration API</address>
+        <span></span>
+      </footer>
+    </section>
+    
+   <section data-api="vibration">
+      <header>
+        <h2>Support</h2>
+      </header>
+      <section>
+        <section class="support"><img src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+        </section>
+      </section>
+      <footer>
+        <address>Vibration</address>
+        <span></span>
+      </footer>
+    </section>
+    
+    <section data-api="media-capture">
+      <header>
+        
+      </header>
+      <section>
+        <h1>Media Capture & Streams</h1>
+      </section>
+      <footer>
+        <address></address><span></span>
+      </footer>
+    </section>
+
+    <section data-api="media-capture">
+      <header>
+      </header>
+      <section>
+        <h1><code>navigator.mediaDevices.getUserMedia</code></h1>
+      </section>
+      <footer>
+        <address>Media Capture</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section data-api="media-capture">
+      <header>
+      </header>
+      <section>
+        <h1><code>navigator.mediaDevices.getUserMedia</code></h1>
+        <pre><code>
+var constraints = { video: true, audio: false };
+
+<span class="darkgrey">// returns a Promise</span>
+navigator.mediaDevices.getUserMedia(constraints)
+        </code></pre>
+      </section>
+      <footer>
+        <address>Media Capture</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section data-api="media-capture">
+      <header>
+      </header>
+      <section>
+        <h1><code>navigator.mediaDevices.getUserMedia</code></h1>
+        <pre><code>
+var constraints = { video: true, audio: false };
+
+navigator.getUserMedia(constraints)
+         .then(handleMediaStream)
+         .catch(function(error) { console.error(error) });
+
+function handleMediaStream(localMediaStream) {
+  document.querySelector('video').src = window.URL.createObjectURL(localMediaStream);
+}
+        </code></pre>
+      </section>
+      <footer>
+        <address>Media Capture</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section style="display: none" data-api="media-capture">
+      <header>
+      </header>
+      <section>
+        <video></video>
+        <button onclick="getVideo()"></button>
+      </section>
+      <footer>
+        <address>Media Capture</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section data-api="geolocation">
+      <header>
+        <h1>Support</h1>
+        
+      </header>
+      <section>
+        <section class="support"><img src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img class="some-support" src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img class="some-support" src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+        </section>
+      </section>
+      <footer>
+        <address>Media Capture</address>
+        <span></span>
+      </footer>
+    </section>
+    
+    <section data-api="network-information">
+      <header>
+        
+      </header>
+      <section>
+        <h1>Network Information API</h1>
+      </section>
+      <footer>
+        <address>Network Information API</address><span></span>
+      </footer>
+    </section>
+
+    <section data-api="network-information">
+      <header>
+        
+      </header>
+      <section>
+        <h1><code>navigator.connection</code></h1>
+      </section>
+      <footer>
+        <address>Network Information API</address><span></span>
+      </footer>
+    </section>
+
+    <section data-api="network-information">
+      <header>
+      </header>
+      <section>
+        <h1><code>navigator.connection.type</code></h1>
+        <ul>
+          <li>bluetooth</li>
+          <li>cellular</li>
+          <li>ethernet</li>
+          <li>none</li>
+          <li>wifi</li>
+          <li>wimax</li>
+          <li>other</li>
+          <li>unknown</li>
+        </ul>
+      </section>
+      <footer>
+        <address>Network Information API</address><span></span>
+      </footer>
+    </section>
+
+    <section data-api="network-information">
+      <header>
+      </header>
+      <section>
+        <h1><code>navigation.connection.downlinkMax</code></h1>
+        <h2>Maximum download speed in megabits per second (MB/s)</h2>
+        
+      </section>
+      <footer>
+        <address>Network Information API</address><span></span>
+      </footer>
+    </section>
+
+    <section data-api="network-information">
+      <header>
+      </header>
+      <section>
+        <h1><code>navigation.connection change event</code></h1>
+        <pre><code>
+navigator.connection.addEventListener('change', handleNetworkTypeChange());
+        </code></pre>
+      </section>
+      <footer>
+        <address>Network Information API</address><span></span>
+      </footer>
+    </section>
+
+    <section data-api="geolocation">
+      <header>
+        <h1>Support</h1>
+        
+      </header>
+      <section>
+        <section class="support"><img class="some-support" src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img class="some-support" src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+        </section>
+      </section>
+      <footer>
+        <address>Network Information API</address>
+        <span></span>
+      </footer>
+    </section>
+
+    <section data-api="network-information">
+      <header></header>
+      <section>
+        <h1>What Else?</h1>
+      </section>
+      <footer>
+        <address></address><span></span>
+      </footer>
+    </section>
+    
+    <section data-api="network-information">
+      <header></header>
+      <section>
+        <h2>Web Bluetooth</h2>
+        <h2>Web NFC (Near Field Communication)</h2>
+        <h2>Web VR</h2>
+        <h2>Game Pad API</h2>
+      </section>
+      <footer>
+        <address></address><span></span>
+      </footer>
+    </section>
+
+    <section style="background: url('./assets/sponsors.png') center / contain;">
+
+    </section>
+    
+    
+    
+    <script>
+     console.log(window.navigator);
+     function getLocation() {
+       navigator.geolocation.getCurrentPosition(showPositionCallback);
+     }
+     
+     function showPositionCallback(position) {
+       document.querySelector(".location").innerText = `
+         Latitude: ${ position.coords.latitude }
+         Longitude: ${ position.coords.longitude }
+         Accuracy: ${ position.coords.accuracy }
+         
+         Altitude: ${ position.coords.longitude }
+         Altitude Accuracy: ${ position.coords.longitude }
+
+         Heading: ${ position.coords.heading }
+         Speed: ${ position.coords.speed }
+         `
+       
+     }
+
+     var constraints = { video: true, audio: false };
+
+     function getVideo() {
+       navigator.mediaDevices.getUserMedia(constraints)
+                .then(handleMediaStream)
+                .catch(function(error) { console.error(error) })
+     }
+     
+     function handleMediaStream(localMediaStream) {
+       document.querySelector('video').src = window.URL.createObjectURL(localMediaStream);
+     }
+    </script>
+  </body>
+</html>

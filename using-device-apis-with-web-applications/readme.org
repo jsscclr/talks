@@ -1,0 +1,5 @@
+#+TITLE: Using Device APIs with Web Applications
+#+AUTHOR: Jessica Claire Edwards
+#+EMAIL: jessica@eml.cc
+#+TWITTER: @jsscclr
+#+GITHUB: @jessicace

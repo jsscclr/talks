@@ -1,0 +1,128 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  max-width: 100%;
+  counter-reset: slides;
+  font-family: 'Fira Sans', sans-serif;
+  scroll-snap-type: mandatory;
+  font-size: 1.5em;
+}
+
+header, h1, h2 {
+  text-align: center;
+}
+
+.support {
+  display: flex;
+}
+
+pre {
+  background-color: black;
+  color: white;
+  padding: 1em;
+  border-radius: 0.5em;
+}
+
+
+body > section {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+  padding: 1em;
+  scroll-snap-coordinate: top;
+}
+
+body > section > section {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-around;
+}
+
+h1 {
+  font-size: 3em;
+}
+
+code[data-language="javascript"] {
+  font-family: 'Fira Code';
+  font-weight: 600;
+}
+
+footer {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+}
+
+footer span::before {
+  counter-increment: slides;
+  content: counter(slides);  
+}
+
+.no-support {
+  opacity: 0.5;
+}
+
+.some-support {
+  opacity: 0.9;
+}
+
+.red {
+  color: red;
+}
+
+.darkgrey {
+  color: darkgrey;
+}
+
+section[data-api="vibration"][data-example="basic"]:hover img {
+  animation: 0.1s 2s 10 vibrate;
+}
+
+section[data-api="vibration"][data-example="alternating"]:hover img {
+  animation: 0.1s linear 2s 10 vibrate, 0.1s linear 3.5s 10 vibrate;
+}
+
+@keyframes vibrate {
+  50% { transform: rotate(1deg) translateX(1px); }
+  100% { transform: rotate(-1deg) translateX(-1px);}
+}
+
+.green {
+  color: green;
+}
+
+code var {
+  color: purple;
+}
+
+.input {
+  text-align: center;
+}
+
+.input button {
+  font-size: 1.25em;
+  border-radius: 0.5em;
+  font-weight: 300;
+  background: skyblue;
+  font-family: 'Fira Code';
+  padding: 0.5em;
+}
+
+.support img {
+  height: 100px;
+}
+
+
+@media all and (display-mode: fullscreen) {
+  body {
+    cursor: none;
+  }
+}
