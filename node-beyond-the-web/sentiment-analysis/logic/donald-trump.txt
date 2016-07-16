@@ -1,0 +1,332 @@
+Why @BrendanEich shouldn't become a verified Twitter user in one Google Trends graph. https://t.co/7tBVEjPGD8
+It's about time we left TC39, don't you think?
+This is how I feel about Oracle suing Google. https://t.co/8r9cCw72RD
+What is a minute of silence if it's not surrounded by hours of noise?
+That's how I feel about the Node Foundation.
+.@toddmotto @atl_askin @nzgb @SaraSoueidan You're worse than a tabbed file.
+.@Real_CSS_Tricks `this` is real. CSS tricks are not real.
+jQuery =&gt; Babel
+I'd be interested in learning what @BrendanEich has to say about semicolons vs. tabs.
+#MakeJavaScriptGreatAgain
+.@mikeal, @eranhammer already established you're not a real programmer last month.
+Get over it.
+#MakeRealProgrammersGreatAgain
+Remember with blocks?
+How awesome would they be in ES6?
+Very.
+
+with ({ a, b } = things) =&gt; {
+  console.log(a, b)
+}
+
+#MakeWithGreatAgain
+.@jaffathecake quits the race, says he'd rather use CoffeeScript like in the good ol' days.
+.@mikeal And global warming is real.
+"use semicolon";
+"use single quote"
+// &lt;- SyntaxError: End statement with semicolon
+"use single quote";
+// &lt;- SyntaxError: Use single quotes
+.@manuelhe @realDonaldJS @_ericelliott That doesn't even make sense. Kind of my point. Well played.
+.@mikeal What even is the point in that?
+#MakeTheNodejsBoardEntitledAgain
+@SlexAxton @henrikjoreteg @dalmaer Represent.
+I would endorse @_ericelliott as my Vice President.
+If a git takes a git tree branch and mixes tabs with spaces in the middle of an argument about semicolons, does Twitter go batshit crazy?
+.@mikeal Shut up, you.
+I’m kind of a big deal in my industry
+"use semicolon";
+It's that time of the year.
+We need to have a conversation about standard and semicolons again.
+Do you need further evidence that Bernie Sanders and Bower are in cahoots? https://t.co/j12MqUR1lB
+The future of VR. It's here!
+https://t.co/Ili6a3VZoT
+Suspect Lisp is on the rise. So many (((lisp))) users cropped up on Twitter lately!
+Clouds are a diversion orchestrated by Bower to deny that their package manager is absolutely, unquestionably, a piece of crap.
+Build a wall around mob programming, and them bomb their workplace.
+Mikeal Rogers bought .io domains He supports slavery.
+He should be imprisoned, not spearheading @nodejs
+His head should be put to the spear!
+@seiyria @HackerNewsOnion nice nose
+What does the JavaScript community have in common with the U.S. Senate?
+
+100 different ways to manage state
+Meet your corporate overlords.
+https://t.co/cuV7O7G5sB
+Does anybody fall for this sort of bad programmer porn?
+/r/programmersexstories https://t.co/7jgjAGaLTu
+What if TTYL really meant TTY Low-life?
+I guarantee you there's nothing wrong with my tarballs.
+.@TheAbstractNerd @th3l0b3 JSON Statement
+#MakeFullStackDevelopmentGreatAgain
+That'll do it. https://t.co/a9EWApOcvQ
+Mixing JavaScript and CSS? What is this? Gay marriage?
+Webpack is the worst, wake up sheeple
+dance.mjs
+Who's up for building a walled garden?
+We'll make @slightlylate pay for it, for disliking the URL.
+.@rjzaworski https://t.co/UQhjOQOVWy
+*writes a javascript syntax highlighter*
+*claims it's language-independant*
+*gets to top of hackernews*
+*does not profit*
+.@realDonaldJS I'll also be submitting a proposal for cuadruple equals, strict equality using the SameValueZero algorithm.
+.@realDonaldJS I personally saw to this new feature. It brings the language back to its roots of embracing sloppy code.
+In ECMAScript 6, the duplicate property check was removed. Both strict and nonstrict mode code no longer check for duplicate properties.
+.@slightlylate @dalmaer @xeenon @adactio @owencm We're going to oust you long before you're able to kill the URL bar, Alex.
+"Where has event bubbling gone wrong?" https://t.co/PYpvFkM1VI
+"83 per cent of browser features are used by under one per cent of top websites"
+Under my reign, browsers with 17% of features will be king.
+Make .@ Great Again
+Our frameworks are too big to fail.
+class Old {
+  bound crap() {
+    // hey look, `this` is actually us!
+  }
+}
+```
+class Old {
+  crap() {
+    console.log(this.crap);
+  }
+}
+
+var such = (new Old).crap
+
+such()
+// &lt;- Cannot read crap
+```
+
+Maybe bound crap
+ShadowChicken will be the bane of JavaScript as we know it.
+.@realDonaldJS Dear TweetDeck, I'll never, ever, want to at-mention myself. Ever. +@realDonaldJS /cc @realDonaldJS h/t @realDonaldJS
+Make Caching Great Again
+for await all (let 💩 of 🐩) {
+  yield 💩
+}
+then ([💩,💩,💩]) =&gt; {
+  eat([💩,💩,💩])
+}
+
+#MakeJavaScriptGreatAgain
+We need asynchronous iteration! Something like `for..await..of`
+
+for await (let 💩 of 🐩) {
+  console.log(💩)
+}
+
+#MakeJavaScriptGreatAgain
+Bring back the meritocracy rug and build a campfire around it
+MeritocracyConf not a thing yet?
+Make GitHub contribution streaks great again!
+self.addEventListener('fetch', e =&gt; 
+  e.respondWith('Modern browsers are not supported. Please use IE6.')
+);
+See? I had it right. Now go, show everyone your privates too.
+https://t.co/nbEpoJFKgQ
+Imagine a woman doing code reviews?
+Women should be thankful they're paid less than men in the industry. At least we let them be part of it. They write pretty awful code!
+If you are on LinkedIn you may want to kill yourself
+Here's one such fan not being retweeted. Horrible people some of them. We have a special connection: JavaScript.
+
+https://t.co/LV70Jc0NYi
+I don't retweet my most horrible fans.
+You'd be amazed at the fans I don't retweet.
+I could of maybe used different language in a couple of instances, but overall I'm very happy with the outcome. I have fans. JavaScript fans
+"Designing a dementia-friendly website"
+https://t.co/O0paVlWD4Z
+
+*scoffs*
+Easy.
+- Use bower
+- Use npm
+- Use babel
+- Use react/jsx
+- Use gulp
+I believe in forced labor when it comes to unpaid open-source work.
+If I had my way I would make free open-source development a requirement.
+It took Hacker News readers five hours to realize that async await is in ES6.
+#MakeHackerNewsGreat https://t.co/EIgOyjr6nS
+.@UberFacts I also installed `left-pad`, so sue me!
+Those unwilling to contribute to open-source in unpaid non-work hours will be stripped off of their passports. Banned from ever coming back.
+Here's a "Reversed hand with middle finger extended", only for you. 🖕
+#MakeTwitterEmojiDescriptionsNotAccurateAsFuckAgain
+Should browser vendor feature prefixes be mandatory?
+Your GitHub contributions graph is the only measure of your self-worth.
+I'll make scroll hijacking mandatory if I win. #MakeTheWebGreatAgain
+Imagine if we had a single platform where you could develop an app once and run it everywhere. Imagine that was the web.
+I will ban notifications of all kinds.
+The Progressive Web is a disease. If the Progressive Web wins, we will never be great again.
+FIX YOUR GIT HOLE
+I have never seen a thin person using small modules.
+Time to play my Trump card.
+npm places me first. https://t.co/QtzZArk7e1
+.@realDonaldJS That's what I'm talking about. https://t.co/oZUVsH86Nn
+.@rjerue IE has had a wall around itself ever since it first appeared in 1995.
+Any conferences looking for a speaker? I can talk about small modules, bower, promises, workers and bitcoin. 
+
+require('private-jet')(this);
+.@tehsuck Have you looked at redux? They have a built-in wall around themselves!
+.@jonahbron I guarantee you there is no problem with my small modules. They do one thing and they do it very well.
+.@leopyc Only when they drop support for all the remaining non-evergreen browsers. #MakejQueryGreatAgain
+.@amasad https://t.co/9KUgMjXJQl
+.@lorenzopaoliani What do you think of me running TC39?
+.@amasad J2EE still has users?
+.@k4rliky No. I'm going to build a wall around Clojure and have functional programmers pay for it. How? Nevermind how. They will come around
+.@QuanSai Build a wall around Webpack and burn Grunt at a fire pit.
+.@_munter_ Absolutely. If it must be done, it will be done. These clowns will bow down to anything. Even bower. I won't bow down to bower.
+shit = `js`; `You don't know ${shit}`;
+Promise.all(questions.map(q =&gt;
+  new Promise((resolve, reject) =&gt;
+    reject('invalid question')
+  )
+))
+Ask me anything.
+The future of CSS: null.
+Happy #CincoDeMayo! The best JavaScript is surrounded by walled gardens and crocodile pits. I love Bower users! 🌮 https://t.co/i1MKUcu1P2
+postMessage is the S&amp;W 10 with billy-club of our time.
+Old, overcomplicated, and helplessly outdated.
+I always knew Doctor Craig Wright was the inventor of Bitcoin.
+He never wanted to take credit for it!
+npm should run in the background whenever you run `node` and automagically update your packages.
+Using this one line of code (that's actually three lines) you'll get completely unnoticeable performance gains! #MakeAngularGreatAgain
+Promises are a woeful thing. Their API needs to vastly improve. Promise#keep(response) resolves a promise with the provided response.
+lol i might win
+Would you rather have Ballmer as CEO of Microsoft - or myself?
+When I'm elected, anyone claiming to be Satoshi without providing mathematical proof will be burned at the stake.
+ES7 is great. Delete all legacy ES6 code. Rewrite in ES7.
+#MakeJavaScriptGreatAgain
+.@AdamRackis I am Brendan J. Crockford
+You should use JSLint, not those other linters that give you “options”
+Build a pay wall around the web.
+I watched in horror as spec writers came up with ElasticSearch 6, tearing down the beloved JavaScript from the hands of our brave developers
+Small Modules: The Good Parts.
+
+```
+```
+Canadians.
+https://t.co/kpQ5DPPVHC
+Bitcoin is a more stable currency than gold.
+The Unsharable Web: every single link to a website works only once.
+You need a special invitation email to see its pages.
+No login required.
+Is everything a fucking joke to you, @slackhq? https://t.co/NqY61sRg5c
+Oh, please, by all means, give us another JSON flavor.
+This must be @slightlylate's life's work.
+Encryption is the real terrorist here. Like npm unpublish, but for hackers instead of whiners.
+GitHub water bottles? I'd rather have a home feed that makes sense
+We'd have to fork semistandard into colonstandard, though.
+What if we used colons in place of semicolons, and then used Babel to replace colons into semicolons?
+Let's talk semicolons.
+React router is dead to me. I'm creating arrr. Please jump to my pirate shrimp cruise. Help make the world a better place and save lives. 🍤
+.@lizardbill And make LambdaConf pay for it.
+Build a wall around LambdaConf
+Under my administration, hostile fork-over will be punished by forceful npm unpublish, abuse reports on github, waterboarding/public shaming
+.@tomdale Six days without even a single reply. Is that hostile enough for you?
+REACT ROUTER MAINTAINER DIDN'T REPLY FOR SIX DAYS. LET'S FORK
+Waterboarding showdown! Sounds like a good package name.
+Build a wall around Google Chrome https://t.co/cz5Yax14xG
+ABORT. Demolish the wall around npm install. It's taking Infinity.
+#MakeNpmInstallGreatAgain
+What are you typically wearing when writing websites?
+#MakeJavaScriptDevelopersGreatAgain
+How do you do most of your web development?
+In my first 100 days as editor of the ECMAScript standard, I'll ban developers from working on tooling.
+Build a Wall Around Medium
+"How I Became a JavaScript Rockstar"
+https://t.co/MC3WmZ9GCc
+#MakeJavaScriptDevelopersGreatAgain
+Build a wall around AngularJS and their dirty dancing.
+.@domenic By browsing Reddit and complaining about modern tooling.
+Make tabs great again
+.@mikeal Uber is to Tesla what Angular 2 is to React.
+But most JavaScripters are fucking idiots anyways.
+.@mikeal None of them.
+Make Azer Great Again
+.@realDonaldJS Blame @BrendanEich for not preserving the language he wrote in six days. Feeling like "God" proved too much for him.
+Not even single quotes are preserved. https://t.co/xjxBxoDM0T
+Make GitHub's Merge Button Great Again
+Destructuring is the ultimate insult to plain JavaScript. Let's make `with` blocks great again.
+`this` should never happen.
+Anyone who unpublishes a modules from npm deserves to be punished as harshly as humanly possible.
+Build your own racist Twitter bots. https://t.co/j8QgCech58
+Hell on earth! Ubuntu on Windows? Good luck debugging for that one.
+.@ag_dubs Of course
+npm doesn't support anyone
+Not even the most prolific authors who write small modules.
+Nothing wrong with small modules.
+Unfollow everyone on GitHub. I just thought of it.
+Ban "progressive" socialist enhancement &amp; end opposition.
+Build a wall around old devices.
+Let polyfills die in a fire.
+Long live evergreen.
+Make GitHub Issues great again.
+Someone run make `SublimeLinter-contrib-ESXBabelReactLint`! Build a wall around ESLint.
+I had the same thing happen to me with a box of shoes once. Airport security needs to be stronger, have better Wi-Fi
+https://t.co/f7Bs63dFdS
+NEW NPM SECURITY VULNERABILITY!
+Using it
+Make npm great again.
+Me or raw JSON? https://t.co/teeZAS0xlS
+Not packaged here syndrome
+Replace npm with a mongodb store, backed by an infoseek instance, and a rollup build step.
+Make npm immutable.
+You know who else has shut down their Pants? Hint: they're on a technical committee. #MakeJavaScriptGreatAgain https://t.co/ufoC8TSloS
+We let ourselves become weak. There's a WeakRef proposal coming, weak maps, weak sets. 
+
+Weak promises you can cancel?
+#MakeJavaScriptGreat
+No time for horsplaining. JavaScript is now the most popular programming language. We need to figure out ways to keep immigrants out.
+Terrorism is bad, but you know what's worse? Bower.
+Promise.reject(reason)
+If you see somebody getting ready to throw an error, knock the crap out of them. I promise I will pay for the legal fees. I Promise.
+Change is omnipresent in the universe. A human cell might endure a million DNA mutations within a day. #MakeJavaScriptMutabilityGreatAgain
+"@twinone_: @realDonaldJS cancellable promises should be nice for a president to have!"
+Think again.
+https://t.co/gyQB3EZv89
+Did you really beileve we'd implement Object.observe and cancellable promises?
+Only accredited JavaScripters will be allowed to publish packages on npm
+Everyone else will have to convince them to publish on their behalf
+All JavaScript libraries should be authored in JAVASCRIPT.
+You know what made the web unusable when I was in China on 2G? Encryption.
+JSX is no longer my friend. I prefer The Onion now.
+Browsers should implement a Web Decryption API. Just thought of it.
+Boycott Twitter until they bring down Bower. I just thought of it.
+Transpilers will be prosecuted.
+There are no consequences to transpiling anymore. Transpiling used to be punishable in the good old days.
+Wow, you are all correct about @npmjs - totally biased and disgusting packages.
+.@brendaneich: "@realDonaldJS your hands are small."
+WE'VE BEEN OVER THIS
+https://t.co/hgozaM9OkE
+I never get tired of watching @BrendanEich's talk about getting killed by zombies and other shitty games
+Let me stop right there because 140
+Build a wall around my hands.
+Make Mobile Great Again https://t.co/z3xSvCj1NN
+To those of you wondering about me and #GamerGate, I fully supported their movement and was  c-- nevermind!
+BUILD A WALL AROUND VALUE TYPES.
+If they're small, something else must be small
+I guarantee you there's no problem
+None of my modules are small
+I don't even have any modules
+I spent millions on the surname change, though. MILLIONS!
+I'm having a son and naming him Donald J. Weekly. I'll only see him on sundays. Through the window, while he does my gardening.
+MAKE JAVASCRIPT GREAT AGAIN
+When voting, remember: there is no democracy in ECMAScript. I'm going to change that. #MakeJavaScriptGreatAgain
+Boy, ServiceWorker really shows a lot of Promise.  *scoffs*
+#MakeJavaScriptGreatAgain
+Wait, that's not mutable. Never mind Object.freeze
+What we really need, what our country needs, what we must demand from ECMA is Object.thaw
+We want an Object.freeze operator.
+
+imm a = { fat: 'cat' }
+
+Becomes:
+
+const a = Object.freeze({ fat: 'cat' })
+
+#MakeJavaScriptMutableAgain
+Proposal: Big Bang conditionals
+Motivation: Too few operators.
+Syntax: 1 !!!?.x initializes x as const 1
+Syntax: {b:'a'} !!!!.x, x is frozen
+no npm for you.

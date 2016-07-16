@@ -1,0 +1,767 @@
+Asking Good Questions
+
+I receive programming questions on Twitter, GitHub, email, and other channels. I try to answer them when I can. Lately I haven’t been able to do that very well because I’m a human and don’t scale.
+
+For personal questions, I maintain an AMA. If you want to know my favorite Pokémon, ask a question or read the answers!
+
+If you have a programming question, read on.
+“Hello, World” Questions
+
+If you can’t get React to render a “hello, world” example or if your Redux counter doesn’t update when you press “+” and you’re stuck, you can message me directly on Twitter with that question.
+
+I still encourage you to try asking on StackOverflow and Reactiflux Discord first. I often find that writing up the question makes it clear in my head, and the solution becomes obvious. But if you’re just making first steps and are really confused by something, I can definitely take a quick glance.
+
+Please make sure to share what you’ve tried on GitHub, Gist, or, better yet, a fiddle before asking. This way we can make this a quick interaction instead of a back-and-forth. Otherwise it can be time consuming for both of us, especially due to different timezones.
+
+Is your question more complex than a “hello, world”? Read on.
+More Complex Questions
+
+If your question is specific (e.g. something doesn’t work) and more complex than getting “Hello, world” running, please post it to StackOverflow first. I stopped answering such questions directly in messages because every time I get the same question I regret not having a link to my last answer.
+
+If you send me a StackOverflow question in a message or in mentions, I will try to take a look at it and tell you if I can answer it. Which brings me to the next point.
+How to Get Upvotes
+
+The tricky part about asking good questions is to strike a balance between sharing too few and too many details. You need to phrase your question in a way that both explains your problem and sounds generic enough that other people find it useful. Browsing popular questions for any given tag can give you a good idea of what this looks like. It is a challenge! But if it is hard to ask a question, imagine what it’s like to answer it.
+
+Nobody likes to invest 5 minutes into reading a question only to realize that it omits the part of the code that is crucial to understanding the problem. However, it is equally frustrating to read through 500 lines of code most of which are irrelevant to the issue.
+
+It takes experience and care to ask good questions. You’ll get better at it. For now, it is enough that you make an effort. Here’s how I do it.
+Isolating the Issue
+
+Take the code that you have issues with, switch to another branch, and start removing parts that you suspect are irrelevant. Are you seeing the issue with a particular component? Render this component on the page alone. Is the issue still reproducible? Good. If not, bring the removed parts back one by one until you see which one causes the issue. Then isolate that part.
+
+Next, remove all the irrelevant details from the buggy module itself. Keep removing the styling, markup, and business logic until the issue no longer reproduces. Eliminate as many dependencies as possible. Get to the absolute minimum code necessary to reproduce the issue.
+
+Don’t forget to commit regularly! Otherwise you might remove too much and the issue might no longer reproduce. Make sure you always have a breadcrumb trail of what you have been doing.
+
+Finally, try to recreate the issue in another environment. It’s handy to have a “base fiddle” using the same libraries as your project does. This way you can quickly create small independent snippets of code and paste the relevant parts of your project into them. There are some new services similar to jsfiddle but that provide access to npm modules. In particular, I heard good things about WebpackBin and ESNextbin. Check them out!
+
+Most importantly, don’t give up too easily. There is a reason behind every issue. It can be a bug, a typo, or just a misunderstanding. Take comfort in the thought that this reason exists, and keep eliminating possible causes.
+
+Experts often don’t know the problem any better than you. What they learned is not to trust themselves. They dig deeper and keep reducing the test case even if nothing obvious jumps at them for several hours. They know there is a problem somewhere, and finding it is a boring, mind-numbing but usually finite process.
+
+If you’re debugging a problem late in the evening, drop it and sleep on it. Sleep deprivation makes it far too easy to miss typos and other simple mistakes.
+
+You shouldn’t drive yourself to the point of despair either. If you’re stuck and you’ve exhausted your patience trying to isolate the problem, ask for help.
+Linking to GitHub Projects
+
+If you have no luck recreating the issue in a fiddle, it is fine to link to a GitHub project from a StackOverflow question. The chance that you will get a good reply is considerably slimmer but it’s worth trying as the last resort.
+
+Here’s a few tips to make your chance of getting a good reply higher:
+
+    Delete any unrelated files from the repository. Your project should build but if there is just one screen you’d like people to look at, delete all the others. You still need to trim down the reproducing case even if you share it on GutHub.
+    Make sure all dependencies are specified in package.json. Imagine somebody wants to help you so much they clone your project, wait 15 minutes for npm install to finish, and then realize the project won’t start due to unspecified dependencies. To mitigate this, delete node_modules, run npm install yourself, and make sure the project starts swimmingly. If you forgot a dependency, add it to package.json and try again until it works.
+    Make sure npm start will start your project. You can control what npm start does using the scripts field in package.json. It could be something as simple as “start”: “gulp”. The important part is that the person answering the question shouldn’t have to guess your bundler or task manager. All such tools should be dependencies in package.json.
+    Don’t assume other people have Grunt/Gulp/Webpack/Browserify installed globally. You might have run npm install -g grunt at some point but many people don’t do this, or have different versions. Use npm scripts so that you don’t need to ask people to install and run global commands.
+    Provide clear instructions to reproduce the issue in README. This is crucial. There is nothing like cloning a project, installing it, running it, opening it in the browser, and then having no idea how to reproduce the issue, or what the expected behavior is. Instead, you want to specify the exact sequence of steps (e.g. “npm start, open browser at this address, click on this button, I expected X to happen but Y happened instead”).
+
+It is also a good etiquette to never delete the repository if you used it in a StackOverflow question.
+Abstract Questions
+
+Finally, there are a few questions that I can’t really give a good answer to.
+
+“What is better, X or Y?”
+
+Unless I used both of these solutions (highly unlikely), I’m not qualified to answer. Even if I used them both, the most I can share is a personal anecdote, not a verdict. My experience will be very specific to the project that I worked on. It is most likely outdated and might not apply to your project because we had different constraints and requirements.
+
+Another problem is in the way this question is phrased. I always feel like the person asking it is trying to avoid a technical decision by delegating it to an “authority” (me in this case). I refuse to be an authority and I don’t want to be held responsible for other people’s choices. People also drastically overestimate how much I know. I’m clueless about a wide range of topics.
+
+Instead, you can ask: “Have you worked with X or Y? If so, did you like either?” If I reply “No, but X looks cool” it doesn’t mean the project is good for you. It just means I liked its README.
+
+Does this sound like useless advice? I think it is! The only way to find if something works for you is to create a small project with it, not to ask me about it.
+
+“What are your thoughts on X?”
+
+If I’ve never used X, I don’t have any thoughts on it besides “I kinda like it” or “I kinda dislike it”. Neither will be very useful to you, and knowing my opinion might even discourage you from going with a good choice. You have much more context about your problem than I do.
+
+If I used X, I have more impressions than I can fit in a tweet. I don’t quite understand how to respond to this question on Twitter. I could write an essay in response but this would quickly become a full-time job.
+
+If you’d like to engage me in a discussion about X, I’m happy to participate if I’ve used it. But let’s talk about something specific, not “my thoughts”. My thoughts are not interesting. Instead, I would like to hear about your experiences using it.
+
+Finally, perhaps you built X. This is awesome! Help me and others understand what it is and why you built it. Explain not just what the API looks like, but how and why you are using it.
+
+README is the best place to do this. Your tweets to me will get lost tomorrow. As much as I’d like to help, I probably don’t understand your use case well enough so my opinion won’t be very useful to you. Instead, seek out the people having the same problem, and ask their opinions.
+Wrapping Up
+
+Try to put yourself in the shoes of the person answering the question. You might discover that some questions are impossible to answer, or that you could have spent more effort crafting the question to get a better answer. Let’s value each others’ time and have more high quality conversations!
+
+Ima fix wolves
+
+Hi Sofia!
+I’m very sorry that you are having a hard time.
+
+I am working on a new course for Egghead that will show more patterns common in real world applications. I hope you will find it helpful. I plan to release it in June.
+
+    I’ve dug through almost every example in the GitHub repo to see how things are done and how I can apply those concepts in my own application. I still can’t figure out why I’m having such a hard time.
+
+The biggest problem with our examples right now is that some of them are oversimplified (like “todos”), and some are over-engineered to show a glimpse of real-world usage (“real-world” and “shopping-cart”). However there is no clear sense of progression between them, and it’s easy to miss the essential details.
+
+I hope that the new course will address these issues. In the meantime, the recently added FAQ should address at least some of these questions.
+
+    Sure there’s places like Stack Overflow and I’ve even found Twitter to be a helpful resource. There’s something to be said for having a back and forth conversation with someone to really get a good understanding of a concept.
+
+One other place I would suggest is Reactiflux Discord community. It has a #redux channel where people occasionally answer questions, and just reading through the log can also be helpful.
+
+    The connect function that ties everything together seems to still be a mystery to me. I know I should really go back and watch the videos where Dan deconstructs it for you but I still wish it was just cemented in my brain how and why it works.
+
+I hope that this clarifies it a little bit:
+
+    Am I having a hard time because I haven’t done much functional programming?
+
+I don’t think this is the issue here. Rather, we haven’t documented most of the real-world patterns, and so it’s understandably confusing as you venture out of the comfort zone of a simple todo app.
+
+Stay tuned for the new course. It will also be free.
+I hope you will find it helpful!
+
+Hot Reloading in React
+or, an Ode to Accidental Complexity
+
+Note: React Hot Loader 3, released a month after I published this article, solves most of the problems described in this post. Give it a try!
+
+React Transform is an experimental project I started after giving the Hot Reloading with Time Travel talk at React Europe.
+
+My goal was to bring a live editing environment that preserves component state and handles errors gracefully to as many React users as possible.
+
+By all reasonable metrics, React Transform has been a success. If anything, it proved the demand for a better development experience.
+
+I would even say it has been way too popular for such an experimental and unpolished piece of software. This caused some pain for the people who felt pressured to adopt it and experienced problems with configuration.
+
+I am sorry about this, as I had no time to focus on the experience of setting up the tool. There were, and still are, too many low level problems that need to be solved first before addressing the high level problems.
+
+In fact I’ve come to realize that it is not a viable solution in the long term, and I plan to sunset React Transform in a few months in favor of a different project. You might think I have a habit of killing off my projects after they become successful. I assure you that this is not the case.
+
+In this post, I will explain how I came to this conclusion, as well as describe my journey in understanding how hot reloading can be implemented, and the challenges I faced, in more detail than I did before. I hope this will be helpful to anyone who is curious where the magic comes from.
+
+The underlying problem is that I’m inexperienced and I experiment in the open. If I make a mistake, it takes me some time to see that mistake for what it is, and even more time to come up with a solution.
+
+React Transform is a mixed bag. It has some good ideas, but also has a bunch of fundamental problems. The good news is that I think these problems are soluble.
+
+But first, let’s turn to the past.
+It’s going to take quite a while so grab some snacks 😉
+
+Trigger warning: accidental complexity.In fact I’ve come to realize that it is not a viable solution in the long term, and I plan to sunset React Transform in a few months in favor of a different project. You might think I have a habit of killing off my projects after they become successful. I assure you that this is not the case.
+
+In this post, I will explain how I came to this conclusion, as well as describe my journey in understanding how hot reloading can be implemented, and the challenges I faced, in more detail than I did before. I hope this will be helpful to anyone who is curious where the magic comes from.
+
+The underlying problem is that I’m inexperienced and I experiment in the open. If I make a mistake, it takes me some time to see that mistake for what it is, and even more time to come up with a solution.
+
+React Transform is a mixed bag. It has some good ideas, but also has a bunch of fundamental problems. The good news is that I think these problems are soluble.
+
+But first, let’s turn to the past.
+It’s going to take quite a while so grab some snacks 😉
+
+Trigger warning: accidental complexity.
+
+Disclaimer
+
+Today I will not discuss any tools that integrate with the browser engine. Personally, I am only interested in “userland” hot reloading technology. If you see this as an artificial limitation, you might be interested in Amok. It can do some incredible things like replacing functions inside closures thanks to its integration with the browser engine.
+
+There are also some projects that use some of the hot reloading code I released under the hood but differ in their approaches to some questions. For example, LiveReactload is a separate project but it shares some parts of its implementation with React Transform. I’m not going to discuss such projects in this post as I only can tell you about my experience and the problems I have personally encountered.
+
+I am also not going to spend time discussing hot reloading tools for compile-to-JS languages such as Figwheel and Elm Reactor. Their existence and simplicity is a big inspiration to me but at the moment I am primarily interested in the JavaScript tools that I can use in the existing React projects today.
+
+JavaScript brings unique constraints that these tools don’t need to handle. Whether those constraints are enough to stop trying, or present an interesting challenge, can be described as a pure function of your convictions, determination, and time.
+React Hot Loader
+
+React Hot Loader was my first popular open source project and, to my knowledge, the first tool that allowed you to edit React component files without losing the state or unmounting the components.
+How It Started
+
+Like many other projects, React Hot Loader started with a question. I saw that Webpack Hot Module Replacement and React can be combined together in an interesting way, and I was excited.
+
+You might have seen the video I used to introduce React Hot Loader:
+
+The truth is it predates the real React Hot Loader. It was recorded at 6a.m. the day (or, rather, the night) I got the proof of concept working, and it relied on some horrible global variables I put inside the React source code just to record the video. Of course I didn’t tell that to anyone 😉.
+
+I did not expect a lot of feedback but after Christopher Chedeau retweeted it my Twitter notifications went through the roof. I went from 12 to a 100 Twitter followers in a day so I knew people were as excited about it as I was.
+
+I figured that I needed to turn this into a real project on a vacation, and that’s how React Hot Loader came to be a few weeks later.
+First Attempt: Using HMR Directly
+
+Before React Hot Loader, my first thought was that I could use Webpack HMR to replace the root component of my app and re-render it with React.
+
+Note that HMR is not specific to React at all. James Long explains HMR well in this article. Basically it’s just a way for modules to say “When a new version of some module I import is available, run a callback in my app so I can do something with it”. This happens every time you save a file when HMR is enabled.
+
+A vanilla HMR implementation of hot reloading a React app looks like this:
+
+As long as you configure Webpack to enable HMR, the code above works fine and redraws your application when a hot reload occurs without refreshing the browser.
+
+This implementation doesn’t use React Hot Loader, React Transform, or anything else—it’s just vanilla Webpack HMR API. It does not change the semantics of your React components. HMR is just a fancy way to poll the development server, inject <script> tags with the updated modules, and run a callback in your existing code.
+
+Updates to nested components work because of how Webpack HMR API is designed. If a module does not specify how to handle updates to itself, the modules that imported it also get included in the hot update bundle, and the updates “bubble up” until they are all accepted by all the modules importing them. If some of the modules don’t end up being accepted, the hot update fails and a warning is printed. To “accept” a dependency, you just call module.hot.accept(‘./name’, callback) which Webpack parses at compile time.
+
+Because we accept updates to App.js inside index.js, we also implicitly accept updates to anything imported from the App.js—such as other components.
+
+For example, let’s say that I edit a Button.js component which is imported by UserProfile.js and NavBar.js. Let’s also say that those modules, in turn, are both imported by App.js.
+
+Because index.js is the only module importing App.js and it includes a module.hot.accept(‘./App’, callback) handler, Webpack will generate an “update bundle” with all those files and then run the callback we supplied.
+
+When we get an updated App.js, we just want to re-render the React app:
+
+Problem solved?
+
+In a way, yes.
+But not really.
+
+I told you it’s a long story! 🙅
+Problem: DOM and Local State are Destroyed
+
+When I say “next version of a module” I just mean that the module code is evaluated again in another <script> tag.
+
+Because the App.js module gets re-evaluated, the class identity does not match the previous component class. So NextApp !== App even though technically they represent different “versions” of the same component.
+
+As far as React is concerned, you’re trying to render a completely different type of component, so React will unmount the previous one. This makes sense: React can’t magically “change” the type of existing instances to a new class even if it wanted to!
+
+This is why, with the approach described above, React destroys both the DOM and the local state of your components.
+Possible Solution: Externalize the State
+
+James Kyle recently pointed out that apps with a single state tree, such as Redux apps, don’t benefit as much from preserving the component local state. Often all you really need in such apps is to hold onto the external state tree.
+
+In Redux apps, the complexity of preserving the local React component state might not be worth it because most of the state we’d like to keep in such apps is outside the components anyway.
+
+Inspired by the conversation with him, I prepared this PR that removes React Transform from Redux examples in favor of vanilla HMR API.
+
+James also suggested that you can use isolated-core for such cases. I haven’t looked at it yet, but I suggest you to check out isolated-core-demo if you are interested in this approach.
+
+You can even have a decent development experience with full reloading when you have a single state tree. For example, you can save the Redux state to localStorage in development, read it before initializing the store so even Cmd+R doesn’t wipe it out, and call it a day.
+
+Many apps can’t afford or don’t want to hold state in a single atom, and I think this is fine. I happen to think that we should not give up on preserving React local state just because some people don’t need it. 😉
+
+However if you do use something like Redux, I strongly suggest you to consider using vanilla HMR API instead of React Hot Loader, React Transform, or other similar projects. It’s just so much simpler—at least, it is today.
+Preserving the DOM and Local State
+
+Now you see why naïvely replacing a React component with a re-evaluated version of it destroys the DOM and state of the existing instances.
+
+I see two different ways to fix this:
+
+    Devise a way to detach React instances from DOM nodes and state, create the new instances of the new component types, and somehow “attach” them to the existing DOM and state recursively.
+    Alternatively, proxy component types so that the types that React sees stay the same, but the actual implementations change to refer to the new underlying component type on every hot update.
+
+Please let me know if you are aware of any other solutions.
+Failed Attempt: Rehydrating the Tree
+
+The first approach is probably better in the long term but React currently provides no capabilities to (de)hydrate the state of React tree and replace the instances without destroying the DOM and running the lifecycle hooks. Even if we reached into the private React APIs to accomplish this, we would still face subtle problems with the first approach.
+
+For example, React components often subscribe to Flux stores and other sideways data sources in componentDidMount. Even if we had a way to silently replace old instances with the new instances without destroying their DOM or state, the old instances would still keep their existing subscriptions, and the new instances would not be subscribed at all.
+
+To subscribe the new instances, we would need to also fire lifecycle hooks on the them during the replacement operation. However then componentDidMount would run twice for the same DOM nodes which might break some assumptions that React components tend to make. In case of third-party components, you wouldn’t even be able to work around those assumptions because it is not your code!
+
+Ultimately, the first approach probably be more feasible if React state subscriptions were declarative and independent of the lifecycle hooks, or if React did not rely so hard on classes and instances. Both may be the case in the future versions of React, but we’re not there yet.
+Successful Attempt: Proxying Component Classes
+
+The second approach is the one I use in React Hot Loader and React Transform. It is fairly invasive and changes semantics of your code but it gets the job done with today’s React, both in greenfield and legacy React applications. In most cases, it works great.
+
+The idea is that every React component class gets wrapped into a “proxy”. In this case, I don’t mean an ES2015 Proxy although I’m definitely looking forward to using it instead of an ad-hoc approach I came up with.
+
+Those proxies are just classes that act just like your classes but provide you the hooks to inject the new implementation of the class, at which point the existing instances start to act like the new version of the class. This way both React local state and DOM are preserved.
+Problem in Retrospect: Lack of Tests
+
+There are many non-trivial parts to creating a correct proxy, and React Hot Loader didn’t do it well because it didn’t have any tests. New versions of React used to break it all the time, and not writing a comprehensive test suite is the mistake I regret the most about React Hot Loader.
+
+My latest work on proxying React components is available as a library called React Proxy. It is extensively tested, used inside React Transform but is low-level enough to be used separately. It only implements proxies for React components so it doesn’t depend on either Webpack or Babel. For example, I’m aware of people using it inside Electron apps as well as inside big projects with custom build systems.
+Problem: Where to Wrap Components in Proxies?
+
+Fun trivia: React Hot Loader is not a “loader” because it implements hot reloading. This is a common misconception. 😀
+
+It is a “loader” because that’s how Webpack refers to what other bundlers call “transforms”. For example, json-loader transforms JSON files to JavaScript modules, and style-loader transforms CSS files into JavaScript code that injects them as stylesheets.
+
+Similarly, React Hot Loader is also a compile time transform, and a rather dumb one. It wraps every React component that it finds in module.exports into a proxy, and exports the proxied components instead.
+
+With this approach, when <App> renders <NavBar>, it really renders <NavBarProxy> (you wouldn’t know it though!) that calls NavBar#render() from its render() method and changes the internal reference to the newest version of NarBar whenever an updated NavBar.js module executes.
+
+The proxies are stored globally by reasonably-unique IDs derived from the filename and displayName of the component classes. When an updated class is evaluated, the matching proxy is updated to “absorb” the new version of the class, and the components re-render without losing the local state or the DOM.
+
+Looking for components in module.exports sounds like a reasonable approach at first. Developers usually keep every component in its own file anyway so naturally all components are exported. However, as time went by, and especially as new approaches became adopted by React community, I discovered some problems inherent to this approach:
+
+    As higher order components became popular, people started to export the higher level component wrappers instead of the actual components they write. As a result, React Hot Loader didn’t “see” the inner components in module.exports and didn’t create proxies for them. Their DOM and local state would get destroyed on every change to the file. This is especially frustrating for higher order components that provide styling such as React JSS.
+    React 0.14 introduced functional components which encourage micro-componentization inside a single file. Even if React Hot Loader inspected toString() of exported functions, looked for createElement() calls and assumed that these functions are React components, it still wouldn’t “see” the local components that aren’t exported. Those components would not become wrapped in proxies, and thus would cause the entire subtrees below them to lose both DOM and state. This jeopardizes the whole idea of preserving the state because it makes it extremely fragile.
+
+Merely asking developers to export those “hidden” components isn’t enough because they are referenced inside the file! If we want to use the proxies, we have to somehow make sure that even references inside the file refer to those proxies instead of the actual components, which we obviously can’t do by overwriting module.exports.
+
+At this point many people were saying: forget about it. Just use a global state solution and don’t attempt to preserve the local state.
+
+Maybe I should have listened 😉.
+Problem: Webpack Dependency
+
+This was a big one. Webpack at the time was the only JavaScript bundler that implemented HMR. React Hot Loader proxy logic was not coupled to it but it wasn’t properly separated either. And of course React Hot Loader itself was a Webpack loader, first and foremost.
+
+I worried: what if other bundlers don’t implement HMR? What if Webpack dies and gets replaced by something else? What about React Native which has been notoriously difficult to make friends with Webpack?
+
+My intention was to at least make it possible for somebody else to use my work outside of Webpack—even if they had to also spend some time to hook that solution up to their bundler.
+React Transform
+
+About the time that I wrote The Death of React Hot Loader I was looking for ways to fix those problems.
+
+Babel took the JavaScript world by storm, and I needed some kind of static analysis to locate and wrap the React components even if they are not exported directly. Babel seemed like a good fit for that.
+
+Additionally, I was looking for a way to implement error handling. Hot reloading wasn’t very useful when every error thrown inside render() threw React into an invalid state, and I wanted to fix that.
+
+Both wrapping component in a proxy and wrapping component’s render() in a try / catch sounded like “function that takes a component class and does something with it” to me.
+
+So I thought: why not create a Babel plugin that locates React components in your codebase and wraps them in arbitrary customizable transforms?
+
+Wouldn’t it be cool if other people created other developer-time transforms, for example, to overlay components with performance heatmaps?
+
+This is how React Transform came to be.
+First Approach: Modularity Overkill
+
+I wasn’t sure which projects and ideas would still be relevant after a while so I decided to take an opposite approach to React Hot Loader. Instead of just one, I created five different projects under the “React Transform” umbrella:
+
+    React Proxy implements low-level proxies for React components.
+    React Transform HMR creates a proxy for a passed component and keeps a list of proxies on a global object so they are updated when the transform is called again for the same component.
+    React Transform Catch Errors wraps the render() method in a try / catch and displays a configurable component instead if there is an error.
+    Babel Plugin for React Transform does its best to find all React components in your codebase, extract information about them at compile time, and wrap them in the transforms that you chose (e.g. React Transform HMR).
+    React Transform Boilerplate showed how these technologies work together.
+
+Problem: Too Many Moving Parts
+
+This approach became both a blessing, as it allowed easier experimentation, and a curse, as end users were increasingly confused about how those projects relate to each other. There were too many moving parts exposed to the user: “proxies”, “HMR”, “hot middleware”, “error catcher”, etc.
+
+I made a mistake of hoping Babel 6 would come out soon with “presets” and I’d just be able to ship a preset with the preconfigured sane defaults.
+
+However Babel 6 release came much later than I expected. (I’m not complaining because it was a terrifically complex release and Sebastian was burned out from the project, and did his very best in shipping it, for which I am very grateful.)
+
+React Transform become popular way faster than I expected, and the complicated config I hoped would go away soon kept multiplying in the boilerplate projects, confusing new users. The fact that we included it in Redux examples made it even worse.
+
+When Babel 6 came out, it turns out that the plugin needed a rewrite because I didn’t really know how to write Babel plugins and did it very sloppily. Luckily, James Kyle graciously rewrote it completely for v2.0 before ultimately deciding that the project is a bad idea and resigning from participating in it. Good thing he realized this after writing a v2.0! 😁
+Solution: Sane Defaults
+
+After the Babel 6 update and publishing an official preset, the modularity no longer was such a problem, and actually became useful because different environments (e.g. React Native) were able to take the parts they cared about. The lesson I learned is that any time you modularize something, you have to provide a good “default” interface for it. Those who are interested in the internal dependencies and customization will find them anyway.
+Problem: Higher Order Components Strike Again
+
+When you solve an issue, try not to introduce the opposite issue.
+
+React Hot Loader could see anything you export from a file but couldn’t see the “local” components declared inside it. For example, React Hot Loader would find the exported component generated by useSheet() higher order component and update the styles on change, but it would not “see” the Counter itself, and for this reason its state would get reset when the file is saved:
+
+React Transform “fixed” this by finding component declarations with static analysis, looking for classes that inherit from React.Component or are declared using React.createClass().
+
+Guess what it’s missing? The exported components! In this example, React Transform would preserve the state of the Counter component and hot reload changes to its render() and handleClick() methods, but any changes to the styles would not get reflected because it doesn’t know that useSheet(styles)(Counter) happens to also return a React component that needs to be proxied.
+
+Most commonly people discover this problem when they notice that their selectors and action creators in Redux are no longer hot reloaded. This is because React Transform does not realize that connect() returns a component, and there is no easy way to tell it.
+Problem: Compile to JS Languages Don’t Babel
+
+Naturally, using a Babel plugin excludes users of the compile-to-JS languages. Even if we told them to use Babel as part of their toolchain, we would still not be able to reliably find their class abstractions because of what they compile to. Sure, technically anything is possible but supporting this would probably be a nightmare because we would be relying on implementation details of third-party compilers.
+Problem: Wrapping Components Statically Is Invasive
+
+Finding classes that inherit from React.Component or created using React.createClass() is not too hard by itself. However it is potentially error prone, and you really don’t want to introduce false positives here.
+
+With React 0.14, the task is even harder. Any function that returns a valid ReactElement is potentially a component. But you can’t be sure so you have to apply heuristics. For example, you can decide that any function in the top-level scope that is named in PascalCase, uses JSX and accepts no more than two arguments, is probably a React component. Are you going to get some false positives? Yea, probably.
+
+Bad. Even worse, now you have to teach every “transform” to deal both with classes and functions. What if React introduces yet another way to declare components in v16? Would we have to rewrite all the transforms?
+
+Finally, actually wrapping things statically is pretty complicated. You have to handle all the myriad ways of the way functions and classes can be exported in JavaScript, including default and named exports, function declarations, arrow functions, class declarations, class expressions, createClass() calls, and so on. In each case you need to find a way to bind a different value to the same variable or expression without screwing it up.
+
+Introducing support for functional components has been the most requested feature in React Transform but I just don’t see it happening at this point because of the complexity it would impose on the project and its maintainers, and the potential for breakage due to edge cases.
+
+Shall we give up at this point?
+The Road Ahead
+
+I still see both React Hot Loader and React Transform as successful projects despite their inherent flaws and limitations. I believe that great hot reloading experience can be achieved in React, and that we shouldn’t stop trying. In fact, it’s the first time in months that I felt optimistic about hot reloading React components.
+
+React Native ships a hot reloading implementation based on React Transform very soon. It’s stable enough for now, but I also believe that we need a better and simpler solution looking forward.
+
+Below I will describe this solution the way I see it.
+Solution: Use Vanilla HMR If You Can
+
+This is a straightforward one.
+
+As James Kyle suggested, if you keep all your state in a single store like Redux, and don’t care too much about preserving the DOM on reloads, consider dropping React Transform and using vanilla HMR or something like isolated-core.
+
+It will make your project simpler!
+Solution: Drop Configurable Transforms
+
+Configurable transforms were useful while React Native shipped with a fork of React and didn’t have an HMR implementation, but now it works with react package as is, and implements the necessary subset of HMR as well.
+
+Browserify also now has an HMR plugin which, admittedly, is not bug-free, but I feel much more comfortable about using HMR as the “default” in the project. I think at this point it’s fair to ask other environments to polyfill it like React Native did.
+
+React plans to ship an official instrumentation API that makes use cases like profiling or inspecting components much easier to implement in userland without resorting to wrapping them. In fact, doing this via DevTools API will be much more reliable, as the instrumentation code would be separated from the running application.
+
+This is why I think the idea of highly configurable third-party transforms was a fundamentally flawed one, and we need to drop it. Let’s focus on hot reloading instead.
+Solution: Use Error Boundaries
+
+React v15 ships with an initial implementation of error boundaries which let components up the tree catch and display errors that occurred while rendering the components below the tree.
+
+Effectively this means that wrapping components’ render() methods in try / catch blocks should no longer be necessary because you can implement your own <CatchErrors> component and put it at the top of your hierarchy and display errors like React Native does. We’ll probably ship such component together with the future hot reloading solution.
+Solution: Proxy at the Call Site
+
+I believe this to be the missing piece and the biggest mistake I made with React Transform. In fact Sebastian Markbåge told me in October that he wasn’t quite impressed with my Babel plugin but I didn’t understand his advice fully until I re-evaluated it a few days ago. The solution was right under my nose all this time.
+
+Finding and wrapping React components in the source is hard to do, and is potentially destructive. This really might break your code.
+
+On the other hand, tagging them is relatively safe. Imagine a Babel plugin that adds something like register(uniqueId, Component) at the end of the every module for anything that looks remotely like a component. For example, we can do this for every top-level function, class, and export:
+
+What would register() do, then? The implementation I have in mind will check whether the passed value at least a function, and if it is, will create a React Proxy around it. It will not, however, replace your class or function! This is the important bit. The proxy will just sit in a global map, patiently waiting until you use… React.createElement().
+
+If we got to React.createElement(), it’s the proof that whatever you pass there as a type really is a React component, no matter how it was declared.
+
+As long as React Proxy supports all types of components (and it already supports both classes and functions), we should be fine. This is why we monkeypatch React.createElement() to refer to our internal map and to use the proxy instead of the passed type. It might look roughly like this:
+
+With some changes to React Proxy necessary to get instanceof and similar checks right both inside and outside the component module, we should be able to get a reasonable approximation of the hot reloading behavior React Transform currently supports, and solve its many issues at the same time:
+
+    There won’t be any false positives for components because wrapping occurs only for what is actually used as a component.
+    We can “find” functions, classes, createClass() calls, and every export, and we don’t need to worry about writing complicated tree traversal logic to wrap different things correctly.
+    Changing functional components will not reset the DOM or the state of the children trees.
+    We can release React Hot Loader 2.0 that uses the same technique under the hood, but without the static analysis. It would only work for exported components, but this will be immediately useful to the compile-to-JS languages which are currently not supported by React Transform at all.
+    The generated code would be easier to work with because we can move the generated lines at the end of the file instead of polluting the code like React Transform currently does.
+
+I might be wrong here, and there still might be some problems that I missed, but overall this seems like a big step in the right direction to me, and all the groundwork like having a good proxy implementation or the code to find the createClass() calls is already done. We just need to remove the parts we don’t need, such as wrapping, and fix the edge cases.
+
+If you plan to work on something like this, please let me know so I can help. If you don’t, well, I work at Facebook now, so maybe I can spend some time on this as well 😀.
+
+Hopefully, with all the lessons learned, we’ll have better tooling for hot reloading in 2016. Once we get the low level implementation right, we can make the setup experience user-friendly. And someday we’ll clean up these hacks, and make React friendlier to hot reloading out of the box. But for now, being a step ahead of the accidental complexity is good enough to me.
+
+@pspeter3 It seems so
+I love Squash &amp; Merge on GitHub. Commit history in master explains intent, every commit links to a PR with its own history.
+@AdamKiing I heard Aphrodite was good but can't confirm myself
+@AdamKiing I mean, I like the idea of expressing them together with components, but I don't know pros and cons of implementations well
+@AdamKiing I was never a proponent of inline styles AFAIK 😐. I don't really care either way because I don't currently write apps
+@metapgmr I'm not talking about Redux at all, I'm talking about vanilla React
+@cmx66 @vicnicius Does it normalize browser events for you? It's a big part of React.
+@metapgmr @vicnicius Do you have specific suggestions on which features you are not benefitting from?
+@StewartUlm React mixin system is an example of making unmaintainable code very easy to write.
+Pit of Success is not enough. Mount of Failure is just as important. Unmaintainable code should be hard to write.
+@vicnicius Are there parts of React that you think could be more minimal?
+@PetrPeller UI libraries using declarative and functional composition-ish approach to UI
+What are interesting React-like implementations that you use in real projects? What do you like about them?
+Learned this the hard way! https://t.co/vwXDae7jmo
+@beardfury Doing this really helped me: https://t.co/EzaVw46HR3
+@beardfury ReactCompositeComponent, ReactReconciler and ReactMultiChild are where 95% of stuff happens
+@beardfury No but we intend to create one soon. Stay tuned :-)
+@charlesjavelona Use connect() and &lt;Provider&gt;?
+@FagnerBrack And I didn’t care for discussions like: https://t.co/Aj53h0fLKL, https://t.co/ITN5do7zEE. They were distracting from real work.
+@FagnerBrack If I claimed Redux is an implementation of Event Sourcing, pundits would come after me to say “no, it doesn’t do X, Y, Z”
+@FagnerBrack I know from second hand account that Flux is similar to Event Sourcing. But it didn’t make sense to me to include this in docs.
+@FagnerBrack Yeah, so my answer to this is: when I was developing Redux I was not thinking about Even Sourcing. I don’t know it well either.
+@FagnerBrack Which is my fault because people get easily “outraged” on Twitter and I shouldn’t have triggered them in the first place
+@FagnerBrack No, sorry, I should’ve been more clear. I meant that after I shared the question, some people started attacking you
+@FagnerBrack I deleted the tweet to stop drawing attention to it.
+@FagnerBrack That's not what I meant, sorry I came across as dismissive. I thought it was funny but some people got angry and it's my fault.
+@FagnerBrack I thought the question was funny and shared it, some people overreacted and I asked them to chill out. That's why I locked it.
+@FagnerBrack I didn't say you were attacking anyone, quite the contrary. I said not to attack you (author of the thread) as some people did.
+@kyktommy https://t.co/xk0bTTJtqH
+@batu0khan You can look at boilerplate and copy small parts to learn
+Steve Buscemi wrote this https://t.co/3hLUnYCuHI
+@fxck_hi I am not maintaining it anymore, sorry!
+@Morhaus Sounds like a plan
+@hussienkhayoon I'm not currently writing any apps. If I was I'd probably make my own
+@Mrberggg Not sure what you mean. Even with Babel and Webpack, "hello world" is simple: https://t.co/dl5dunfSQm. Why not grow from there?
+@steida Unlike howto, it doesn’t have a clear learning path. You have to learn 10 things at once (and make wrong assumptions)
+Your daily reminder that a boilerplate project is the worst way to get started with React. This is the best: https://t.co/RhzRGzEIe0
+@mxstbr @RichardWestenra @skattyadz No rush. I appreciate your work. It’s really our fault that we don’t provide any official boilerplate
+@mxstbr @RichardWestenra @skattyadz I’ve heard this at least three times from different people.
+@mxstbr @RichardWestenra @skattyadz I’m afraid react-boilerplate is the source of “you need to learn sagas for react!” meme.
+@mxstbr @RichardWestenra @skattyadz Seriously, this needs to be done.
+@__eastwood or maybe atom lol. I use both.
+@__eastwood operator mono, sublime
+@mxstbr @RichardWestenra @skattyadz Would be good to note this somewhere. It's called "React boilerplate" so that's why people assume it.
+@RichardWestenra Nope, you don't need any of this. It has nothing to do with React. Please read https://t.co/RhzRGzEIe0.
+@andrew_mclagan It's up already :-)
+@andyshora There is Apollo for Redux + GraphQL but it's much less optimized than Relay. But you can use Redux with Relay just fine.
+@tim__mcgeek Easier to have working code, then add Immutable for comparison and see if it gives any benefit.
+@tim__mcgeek I tried it in a couple of small examples but didn't see much benefit. I'd start without it and decide later.
+@alexindigo @mjackson From your example it's not at clear: which components you want to AB test, and what different variations look like.
+@alexindigo @mjackson Can you show two possible outputs instead, and not A/B test API you envision? e.g. show two different AB scenarios
+@alexindigo @mjackson This code isn’t helping a lot because it shows the API you wanted, but I think the premise itself is wrong.
+Nice tip while you’re waiting for component libraries to fix “unknown DOM property” warning: https://t.co/dolgyQRlZL https://t.co/24X1RT2zW2
+I think GitHub is careless edit shaming me 😂 https://t.co/h89PdY8ZZd
+In case you missed them, notes from two last React team meetings are up! Find them at https://t.co/4jAgJ81Yza
+@glenathan I guess if you still think it was a good path and it makes sense for a beginner
+What was your path to learning React? Share your tips: https://t.co/VtSPjJ3Kwv
+@ffxweb Looks nice!
+@ffxweb Yea, you’d need to highlight a piece and then there is a button in a popover
+@bitandbang Generally grammar and tone
+@bitandbang It’s already up! https://t.co/xk0bTTJtqH
+Medium’s automatic “thanks” based on review notes are fantastic. A well-designed, unobtrusive feature. https://t.co/TtCI80xqx1
+@ffxweb This sounds exactly like it should be :-). You update, see warnings, file issues against 3rd party libraries, wait for fixes
+@ffxweb What solution do you propose? We introduce warnings in minors so there’s a reasonable timeline for them to get fixed.
+@ffxweb It is just a warning, it shouldn't break any code. We introduce new warnings in minor versions so people can prepare for next major.
+@ffxweb I'm confused, how is this a breaking change?
+@ffxweb This should be it: https://t.co/M8rZI6o05q. You should see it in the warning.
+@leonderijke Alas, it’s not maintained so I can’t really dig into this. Try copying its code into your project and keep eliminating :-)
+@ffxweb The warning contains a link
+@ffxweb Does the linked gist help?
+I wrote a thing: Asking Good Questions https://t.co/xk0bTTJtqH
+@shiftyp Hard for me to say—I don’t use Rx much. Maybe you could ask @BenLesh.
+@acemarke Depends but I use stricter interpretation (slice) because it's easy to make a mess with loose interpretation
+@bookercodes Nope, very good, thanks!
+Found the reviewers, thanks!
+I have a post coming up, anybody wants to review it?
+@stockulus We want to get to a similar pattern eventually.
+@day_alone Если незнакома проблема, решения будут казаться странными. Просто забей и пиши приложения ) https://t.co/8Ytmvq7Hwr
+@stockulus ES classes work better with static typing, don’t encourage mixins, one less concept to learn about for newcomers
+@day_alone Пока не смотрел, но я бы не стал говорить, что к любой проблеме есть «единственный путь» :-)
+@dudnik It’s internet, doesn’t convey context very well
+Don’t attack the author. I found the question title amusing but confusion is real and very understandable. https://t.co/02ZW8Fu6AR
+@dudnik No need to insult people
+@alexindigo @mjackson Please either exclude me from discussion or show the code :-). I can't help without the code as I said twice before
+@nicoschneider answered
+@acemarke @ggrgur PR :-)
+@alexindigo @mjackson It’s very hard to say anything without code.
+@nicoschneider If you drop me a link I can try to answer there
+@nicoschneider Can you please ask on StackOverflow? This doesn’t scale :-)
+@ggrgur Ah okay. We never claimed functional components are faster, that’s an urban legend :-)
+@alexindigo @mjackson Hard to say more without the code.
+@ggrgur To be honest a bit hard to tell what’s being tested here. Real world benchmarks might look very different due to component structure
+@alexindigo @mjackson Might be better to encapsulate this into a component.
+Aaaand the meeting notes from the last week are up as well! https://t.co/eNXq1z6ixN https://t.co/Ksju6oCQ7V
+@grahammendick Can’t be working on everything at once
+@mjackson @alexindigo What is global render function?
+@grahammendick Yea, but that’s a pretty simple example. I don’t recall the challenges I had with bigger apps very well.
+@roman01la @reactjs So Fiber is a big rethinking of how React works and it will take quite a bit of time to get stable (if it works out).
+@roman01la @reactjs No, it’s not in RN. &lt;Incremental /&gt; in RN is similar idea but added on top of existing React algorithm.
+@grahammendick Maybe it’s best to ask someone who understands these problems better than me ;-)
+@grahammendick I don’t fully understand what problem you are trying to solve but I haven’t written apps with routing for ages
+@carlesba I replied—I don’t understand what is being asked :-(
+@grahammendick Anything in particular you want my feedback on?
+Just published @reactjs meeting notes for June, 23! Notes for June, 30 coming later today. https://t.co/qAu7QFw8rO https://t.co/9iDUwbrivv
+@hussienkhayoon Time travel, optimistic updates, undo/redo, granular subscriptions are simpler if state is immutable.
+@KvnDy @stephenkings10 replaceState is likely to be removed anyway.
+@BenLesh @thejameskyle There is a very generic intro here: https://t.co/8tfkOIolNC. Details are very React specific.
+@BenLesh @thejameskyle It understands the hierarchy, update priorities, memoization. Basically the essence of React.
+@BenLesh @thejameskyle Yes, there is a scheduler but it is specially fine tuned to React needs.
+@taddeiweb Or hoist it up to the parent. Doesn't have to be in the store, it's just React
+@__eastwood oceanic next
+@iamsapegin @reactjs Since we switched to major versions, we plan to only use the blog for big new features. See CHANGELOG.md instead.
+@JoelCodes But the idea is it avoids stalling frames by scheduling the work in chunks.
+@JoelCodes The new scheduler is far from feature parity, this is the first demo that does anything. 😉
+@JoelCodes Comparison of new experimental React scheduler with how the old scheduler worked.
+@nishb1 Experimental rewrite of core engine around smarter scheduling https://t.co/sOThQS1Rnv
+The alternative example is closer to how React works today. Notice how it stalls on every update. https://t.co/9eEUoQ1qvQ
+Demo demonstrating tradeoffs for “Fiber”. Some updates get skipped to keep animation smooth. https://t.co/9j4eDsqxuU https://t.co/JnTAgx74Oy
+@KvnDy Hmm, what do you mean by different state behavior?
+@adamkylebalan If you need to set state when props change, unless that state is cumulative, it’s easier to use only use props.
+@adamkylebalan But in any case we don’t encourage that—calling calculateWhatever() from render() is simpler and less error prone.
+@adamkylebalan Just saying that if you want to setState() as result of prop change, better to do it in componentWillReceiveProps().
+@adamkylebalan If it’s fast you probably don’t notice props are inconsistent for a tick. Not a big deal.
+@KvnDy Context is useful for more than Redux though so sometimes want to use it outside connect()/Provider
+@KvnDy Ah sorry, I thought you replied to other tweet about state, my bad :D
+@adamkylebalan So if you recalc in componentDidUpdate, you rendered at least once with old state but new props.
+@adamkylebalan The problem with componentDidUpdate is it’s too late to call setState() there. This means you had an inconsistent render.
+@KvnDy I’d say React state is still pretty useful for a lot of apps. Redux is a different paradigm.
+@adamkylebalan (And doing that is fairly equivalent and easier to mess up than just calling calculateWhatever(this.props) from render)
+@adamkylebalan What if props change? You’d have to redo the computation in componentWillReceiveProps.
+@adamkylebalan When would you calculate those values if they depend on props?
+@mrgenixus @_ericelliott Solving problems in real apps is much more important to us than whether something is conceptually “good” :-)
+@mrgenixus @_ericelliott It exists to solve real problems. If you have better suggestions for these problems, let us know!
+@ZackArgyle With shallow rendering, it might be easier to test the unwrapped component that only accepts props IMO.
+@ZackArgyle The downside is you’ll have to change quite a bit of code when context API changes.
+@adamkylebalan It’s easier to introduce out-of-sync issues if you attempt to precalculate. What is the benefit?
+@naman34 https://t.co/VvLpQcLvc1 :-)
+@metapgmr I’m referring to this.state API in React
+@satya164 Standard strategies: e.g. memoization, throttling if inconsistent UI is OK, etc.
+@adamkylebalan I meant render() and anything you call from it. The important part is: calculate things from props during rendering phase.
+@jrajav I don’t know, but in this case you should file an issue with that library.
+@mg0rn The updates are broken if there are any optimizations in the middle (https://t.co/Q1G3jMKzZD). And API will change.
+Should I use React unstable “context” feature? https://t.co/9kINWZOqQ4
+@jrajav You can use data- attribute instead.
+@megapctr See here: https://t.co/avwNqTEGzj
+@megapctr That said, yes, local state updates would be faster than Redux updates, although you can still optimize Redux updates a lot
+@megapctr What global state? This cheatsheet is not about Redux, it’s about vanilla React.
+@megapctr Faster than what?
+Should I keep something in React component state? I made a small cheatsheet. https://t.co/W4lebiOoMp
+@mattapperson If you put something in state, every time you setState you re-render. Doesn’t seem right to re-render if you’re not using it?
+@mattapperson Quite the opposite; it’s keeping something in state that you don’t render is bad.
+@mattapperson Another approach: https://t.co/1Y8v6ot667
+@mattapperson Otherwise any app with third party libraries would break :-)
+@mattapperson Depends on what you use but hot reloading reevaluates only modules in direct import chain. (Updates “bubble”)
+@mattapperson Maybe I misunderstood because your example implied Twilio.invite() takes just one argument :-).
+@mattapperson https://t.co/wTWGQq60ZJ
+@mattapperson My point is that it seems like you’d want to dedupe on API level. Component state should only be used for things you render.
+@mattapperson If two different components had inviting capabilities, wouldn’t you want to keep invited list shared to avoid duplicate calls?
+@mattapperson What happens on initial mount? Do you also run this function?
+@mattapperson Why is this.state.invited basically a copy of this.props.participants? Do they ever diverge?
+@mattapperson Hmm I’m confused now (your example did not mention props at all ;-). Up for a larger example?
+@mattapperson In componentDidUpdate, compare prevState.invited with this.state.invited and call imperative APIs.
+@mattapperson This code should live in componentDidUpdate instead, then there would be no issue.
+@hex13code This should be much better in 15.2.0!
+@mattapperson Can you show me the code?
+@zavelevsky Link?
+@mattapperson Can you show an example where this would matter?
+Good list of common React gotchas by @dceddia: https://t.co/34Yo89JOAP
+@bucky_roberts You’re also missing out on highlighting that reducers are composed. This is essential: reducers are a tree, not a flat list.
+@bucky_roberts Also &lt;Provider&gt; is not really part of the flow, it’s just an implementation detail. It doesn’t really matter that much.
+@bucky_roberts Store holds currents state and calls the root reducer. The diagram makes it look as if reducers somehow pass data to store.
+@bucky_roberts I think Store and Reducers is a bit wrong.
+@ev1stensberg What do you mean? Can you show an example?
+@ggrgur Can I see the test code?
+@ggrgur Weird, there shouldn’t be any difference between stateful and stateless. Stateless are not currently optimized in any way.
+@ev1stensberg Yes but why?
+@wawrencelu @keyanzhang Check out "good first bug" label
+@JoelCodes @keyanzhang Watch out for https://t.co/G1gPzDbVKi!
+Wow, @keyanzhang is on the roll! https://t.co/Iz2gJtboUk
+@ev1stensberg @Vjeux Why do you want to have “private” props? What problem are you solving?
+@ev1stensberg @Vjeux Why? What are you trying to do?
+
+React Components, Elements, and Instances
+
+Many people get confused by the difference between components, their instances, and elements in React. Why are there three different terms to refer to something that is painted on screen?
+
+If you’re new to React, you probably only worked with component classes and instances before. For example, you may declare a Button component by creating a class. When the program is running, you may have several instances of this component on screen, each with its own properties and local state. This is the traditional object oriented UI programming. Why introduce elements?
+
+In this traditional UI model, it is up to you take care of creating and destroying child component instances. If a Form component wants to render a Button component, it needs to create its instance, and manually keep it up to date with any new information.
+
+Mixins Are Dead. Long Live Composition
+
+When React 0.13 came out, everybody freaked out.
+The introductory post made it clear that mixins are on their way out:
+
+    Unfortunately, we will not launch any mixin support for ES6 classes in React. That would defeat the purpose of only using idiomatic JavaScript concepts.
+
+    There is no standard and universal way to define mixins in JavaScript. In fact, several features to support mixins were dropped from ES6 today. There are a lot of libraries with different semantics. We think that there should be one way of defining mixins that you can use for any JavaScript class. React just making another doesn’t help that effort.
+
+One can read this as “mixins will come later” but the truth is that Sebastian Markbåge, the great API terminator, does not favor them:
+
+    To be clear, mixins is an escape hatch to work around reusability limitations in the system. It’s not idiomatic React. Making composition easier is a higher priority than making arbitrary mixins work. I’ll focus on making composition easier so we can get rid of mixins.
+
+Why use mixins anyway? What problems do they solve? Can we solve these problems differently, without inheritance, and super woes?
+Utility Functions
+
+This case is a no-brainer. If you use mixins to share utility functions, extract them to modules and import and use them directly.
+Lifecycle Hooks and State Providers
+
+This is the main use case for mixins. If you’re not very familiar with React’s mixin system, it tries to be smart and “merges” lifecycle hooks. If both the component and the several mixins it uses define the componentDidMount lifecycle hook, React will intelligently merge them so that each method will be called. Similarly, several mixins can contribute to the getInitialState result.
+
+In practice, this behaviour is the single thing that makes mixins useful. They can subscribe the component’s state to a Flux Store or they can work with its DOM node after it is updated. It’s absolutely necessary that any component extension mechanism has the access to the component’s lifecycle.
+
+However mixins are fragile for a number of reasons:
+
+    The contract between a component and its mixins is implicit. The mixins often rely on certain methods being defined on the component, but there is no way to see that from the component’s definition.
+    As you use more mixins in a single component, they begin to clash. For example, if you use something like StoreMixin(SomeStore) and you add another StoreMixin(OtherStore), React will throw an exception because your component now has two versions of methods with the same names. Different mixins will also clash if they define the same state fields.
+    Mixins tend to add more state to your component whereas you should strive for less. You should read the excellent Why Flux Component is better than Flux Mixin essay by Andrew Clark on this topic.
+    Mixins complicate performance optimizations. If you define the shouldComponentUpdate method in your components (manually or via PureRenderMixin), you might have issues if some of the mixins need their own shouldComponentUpdate implementations to be taken into account. This can be solved by adding even more “merging” magic, but is it really the way forward?
+
+Enter Higher-Order Components
+
+I first learned about this pattern from a gist by Sebastian Markbåge. The gist is a little bit cryptic if you’re not yet fully comfortable with ES6 syntax, so I’m going to use the “Flux Store mixin” example to explain it.
+
+Note that this is just one possible way of replacing mixins with composition. See the notes at the end of the article for other approaches.
+
+Suppose that you have a mixin that subscribes to the specified Flux Stores and triggers changes in component’s state. It might look like this:
+
+function StoreMixin(...stores) {
+  var Mixin = {
+    getInitialState() {
+      return this.getStateFromStores(this.props);
+    },
+
+    componentDidMount() {
+      stores.forEach(store =>
+        store.addChangeListener(this.handleStoresChanged)
+      );
+
+      this.setState(this.getStateFromStores(this.props));
+    },
+
+    componentWillUnmount() {
+      stores.forEach(store =>
+        store.removeChangeListener(this.handleStoresChanged)
+      );
+    },
+
+    handleStoresChanged() {
+      if (this.isMounted()) {
+        this.setState(this.getStateFromStores(this.props));
+      }
+    }
+  };
+
+  return Mixin;
+}
+
+To use it, the component adds StoreMixin to the mixins list and defines the getStateFromStores(props) function:
+
+var UserProfilePage = React.createClass({
+  mixins: [StoreMixin(UserStore)],
+
+  propTypes: {
+    userId: PropTypes.number.isRequired
+  },
+
+  getStateFromStores(props) {
+    return {
+      user: UserStore.get(props.userId);
+    }
+  }
+
+  render() {
+    var { user } = this.state;
+    return <div>{user ? user.name : 'Loading'}</div>;
+  }
+
+How do we solve this without a mixin?
+
+A higher-order component is just a function that takes an existing component and returns another component that wraps it.
+
+Consider this implementation of connectToStores:
+
+function connectToStores(Component, stores, getStateFromStores) {
+  const StoreConnection = React.createClass({
+    getInitialState() {
+      return getStateFromStores(this.props);
+    },
+
+    componentDidMount() {
+      stores.forEach(store =>
+        store.addChangeListener(this.handleStoresChanged)
+      );
+    },
+
+    componentWillUnmount() {
+      stores.forEach(store =>
+        store.removeChangeListener(this.handleStoresChanged)
+      );
+    },
+
+    handleStoresChanged() {
+      if (this.isMounted()) {
+        this.setState(getStateFromStores(this.props));
+      }
+    },
+
+    render() {
+      return <Component {...this.props} {...this.state} />;
+    }
+  });
+
+  return StoreConnection;
+};
+
+It looks a lot like the mixin, but instead of managing the component’s internal state, it wraps the component and passes some additional props to it. This way wrapper’s lifecycle hooks work without any special merging behavior, by the virtue of simple component nesting!
+
+It is then used like this:
+
+var ProfilePage = React.createClass({
+  propTypes: {
+    userId: PropTypes.number.isRequired,
+    user: PropTypes.object // note that user is now a prop
+  },
+
+  render() {
+    var { user } = this.props; // get user from props
+    return <div>{user ? user.name : 'Loading'}</div>;
+  }
+});
+
+// Now wrap ProfilePage using a higher-order component:
+
+ProfilePage = connectToStores(ProfilePage, [UserStore], props => ({
+  user: UserStore.get(props.userId)
+});
+
+That’s it!
+
+The last missing piece is the handling of componentWillReceiveProps. You can find it in the connectToStores source code in the updated Flux React Router Example.
+What’s Next
+
+I plan to use higher-order components in the next version of React DnD.
+
+They don’t solve all the use cases for mixins, but come close. Don’t forget that the wrapper can pass arbitrary props to the wrapped component, even the callbacks. It’s possible that the higher-order components can be abused too, but unlike mixins they only rely on simple component composition instead of a bag of tricks and special cases.
+
+There are things you can’t implement with higher-order components. For example, PureRenderMixin would be impossible to implement because the wrapper has no way to look into the wrapper component’s state and define its shouldComponentUpdate. However this is precisely the case where, in React 0.13, you might want to use a different base class, for example PureComponent that descends from Component and implements shouldComponentUpdate. Now that’s a valid use case for inheritance!
+
+Operating on the DOM nodes may also be tricky because the wrapper component has no way to know when the child’s state updates. You can solve this by providing a callback ref (new in React 0.13) as one of the props to the composed component. It can then use ref={this.props.someRef} to notify the higher-order component about attaching and detaching a particular DOM node. The higher-order component can then use React.findDOMNode to work with that node.
+
+There are other perfectly valid patterns for composition, such as composition right inside render() as used in Flummox. It is also based on nesting, but is less verbose than the higher-order components. This will be even easier in React 0.14, as it switches to parent-based context.
+
+You can always make your own mixin system, if you prefer to. By all means, you’re not limited to the higher order components! I wrote this article to shed more light on this approach. We’ll see what works best over the next months. I’m sure that the winning approaches will rely on composition instead of multiple inheritance (which is what mixins really are).
+
+React is also tackling the problem of sideways data loading through a new API based on Observables. We’ll see what 0.14 brings!

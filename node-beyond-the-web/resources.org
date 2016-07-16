@@ -1,0 +1,72 @@
+* Computer Vision
+** https://github.com/eduardolundgren/tracking.js
+* Generative Art
+** https://github.com/mattdesl/color-wander
+   - uses node canvas
+   - uses seed
+   - https://mattdesl.svbtle.com/generative-art-with-nodejs-and-canvas
+
+** toxiclibsjs
+   - Computational design tasks
+   - color
+   - geom
+   - math
+   - physics2d
+   - utils
+** triangulate-image
+   - javascript module that converts images to triangular polygons
+   - steps:
+     - triangulate() with triangulation parameters
+     - fromImage with input image parameter
+     - toSVG() to output svg markup
+** Computer Vision
+*** jsfeat
+    - recognise faces
+    - image processing
+    - calculate median value of array
+    - get eigen values (useful for generating models...?)
+** color-namer
+   - calculates colour distance
+   - get distance from given colour
+** color-thief
+   - get dominant colour or a representative colour
+** node-canvas
+** generative art with node.js
+** generative
+* Adobe
+** basiljs https://github.com/basiljs/basil.js
+** psd.js
+   - https://davidwalsh.name/convert-psd-png
+** https://github.com/Jam3/ae-to-json-cli
+** https://github.com/Jam3/ae-to-json
+* Text
+** RiTaJS: Generative language toolkit
+   - used for
+     - natural language
+     - generative literature
+   - generate sentences
+   - aleph -
+   - used for twitter bots - conversational UI
+** nlp_compromise
+   - natural language processing
+   - use
+     - pluralise
+     - conjugate
+     - negate
+     - replace
+     - get people
+     - get article
+     - get pronoun
+     - get number values
+     - get topics
+     - normalize sentence
+     - date parsing, number parsing
+     - provide own lexicon
+** pronouncingjs
+A simple interface to the CMU Pronouncing Dictionary. 
+* Interacting with programs
+** ae-to-json-cli
+   - Export After Effects files as JSON
+** ae-to-json
+   - allows you to run functions in After Effects
+* 

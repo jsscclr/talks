@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sentiment Analysis</title>
+  </head>
+  <body>
+    <section style="min-height: 100vh;">
+      <h1>Sentiment Analysis</h1>
+      <form id="sentiment-analysis" enctype="multipart/form-data" method="post">
+        <label>
+          Twitter username
+          <input name="username" id="username" type="textarea" placeholder="jsscclr" />
+        </label>
+        <input type="submit" value="submit" />
+      </form>
+      <section id="tweet-results">
+      </section>
+    </section>
+    <section style="min-height: 100vh;">
+      <h1>Improved Sentiment Analysis</h1>
+      <form id="sentiment-analysis-2" enctype="multipart/form-data" method="post">
+        <label>
+          Twitter username
+          <input name="username" id="username" type="textarea" placeholder="jsscclr" />
+        </label>
+        <input type="submit" value="submit" />
+      </form>
+      <section id="tweet-results-2">
+      </section>
+    </section>
+    <section style="min-height: 100vh; display: none;">
+      <form id="natural-language" method="post" enctype="multipart/form-data">
+        <label>
+          Text
+          <input name="sentence" id="sentence" type="text" placeholder="The elephant took a bite!" />
+        </label>
+        <input type="submit" value="submit" />
+      </form>
+      <section id="rita-results">
+      </section>
+    </section>
+    <section style="min-height: 100vh;">
+      <h1>Thought Leaders</h1>
+      <form id="thought-leaders" method="post" enctype="multipart/form-data">
+        <label>
+          <select name="javascripter">
+            <option value="dan-abramov">Dan Abramov</option> 
+            <option value="brendan-eich">Brendan Eich</option>
+            <option value="donald-trump">Donald Trump</option>
+          </select>
+        </label>
+        <input type="submit" value="submit" />
+      </form>
+      <section id="thought-leader-results">
+      </section>
+    </section>
+  </body>
+  <script>
+   var tweets = document.getElementById('tweet-results');
+   var ritaResults = document.getElementById('rita-results');
+   var form = document.getElementById('sentiment-analysis');
+   var nlpForm = document.getElementById('natural-language');
+   var thoughtLeaders = document.getElementById('thought-leaders')
+   var thoughtLeaderResults = document.getElementById('thought-leader-results');
+   var form4 = document.getElementById('sentiment-analysis-2');
+   var tweets2 = document.getElementById('tweet-results-2');
+
+   form4.addEventListener('submit', function(event) {
+     tweets2.innerHTML = "";
+     var xhr1 = new XMLHttpRequest();
+     var formData1 = new FormData(document.getElementById('sentiment-analysis'));
+     
+     xhr1.open('POST', '/death-battle', true);
+     xhr1.addEventListener('load', function(event) {
+       var analysis = JSON.parse(event.target.responseText);
+       for (var i = 0; i < analysis.length; i++) {
+         tweets2.innerHTML += 
+           '<p>Tweet:' + analysis[i].tweet + '</p>' +
+           '<p>Score:' + analysis[i].score + '</p>' +
+           '<p>Positive words: ' + analysis[i].positiveWords + '</p>' +
+           '<p>Negative words:' + analysis[i].negativeWords + '</p>';
+       }
+     });
+     xhr1.send(formData1);
+     event.preventDefault();
+     
+   });
+   
+   form.addEventListener('submit', function(event) {
+     tweets.innerHTML = "";
+     var xhr1 = new XMLHttpRequest();
+     var formData1 = new FormData(document.getElementById('sentiment-analysis'));
+     
+     xhr1.open('POST', '/search', true);
+     xhr1.addEventListener('load', function(event) {
+       var analysis = JSON.parse(event.target.responseText);
+       for (var i = 0; i < analysis.length; i++) {
+         tweets.innerHTML += 
+           '<p>Tweet:' + analysis[i].tweet + '</p>' +
+           '<p>Score:' + analysis[i].score + '</p>' +
+           '<p>Positive words: ' + analysis[i].positiveWords + '</p>' +
+           '<p>Negative words:' + analysis[i].negativeWords + '</p>';
+       }
+     });
+     xhr1.send(formData1);
+     event.preventDefault();
+     
+   });
+
+   thoughtLeaders.addEventListener('submit', function(event) {
+     thoughtLeaderResults.innerHTML = '';
+     var xhr2 = new XMLHttpRequest();
+     var formData2 = new FormData(document.getElementById('thought-leaders'));
+     
+     xhr2.open('POST', '/thought-leaders', true);
+     xhr2.addEventListener('load', function(event) {
+       var analysis = JSON.parse(event.target.responseText);
+       for (var i = 0; i < analysis.length; i++) {
+         thoughtLeaderResults.innerHTML += 
+           '<quote style="display: block;">' + analysis[i] + '</quote>';
+       }
+     });
+     
+     xhr2.send(formData2);
+     event.preventDefault();
+   });
+   
+
+   nlpForm.addEventListener('submit', function(event) {
+     var xhr = new XMLHttpRequest();
+     var formData = new FormData(nlpForm);
+     
+     xhr.open('POST', '/rita', true);
+     xhr.addEventListener('load', function(event) {
+       var analysis = JSON.parse(event.target.responseText);
+       for (var i = 0; i < analysis.length; i++) {
+         thoughtLeaderResults.innerHTML +=
+           '<p>Text:' + analysis[i].text + '</p>' +
+           '<p>Text:' + analysis[i].tokens + '</p>' +
+           '<p>Text:' + analysis[i].syllables + '</p>';
+       }
+     });
+     
+     xhr.send(formData);
+     event.preventDefault();
+   });
+  </script>
+</html>

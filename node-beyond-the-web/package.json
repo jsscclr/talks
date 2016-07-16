@@ -1,0 +1,30 @@
+{
+  "name": "node-beyond-the-web",
+  "version": "0.1.0",
+  "description": "Node beyond the web talk.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jessica Claire Edwards",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "canvas": "^1.4.0",
+    "console-png": "^1.1.0",
+    "convnetjs": "^0.3.0",
+    "d3": "^4.1.0",
+    "js2image": "0.0.15",
+    "multiparty": "^4.1.2",
+    "node-cocoscii": "^1.0.1",
+    "png-js": "^0.1.1",
+    "pronouncing": "github:aparrish/pronouncingjs",
+    "psd-cli": "^0.2.0",
+    "rita": "^1.1.40",
+    "sentiment": "^1.0.6",
+    "tracking": "^1.1.2",
+    "triangulate-image": "^0.3.1"
+  },
+  "devDependencies": {
+    "image-to-ascii": "^3.0.3"
+  }
+}
