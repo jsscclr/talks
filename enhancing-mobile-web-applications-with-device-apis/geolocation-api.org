@@ -1,0 +1,1273 @@
+* Geolocation API
+** high level sensor type
+   - sensor named after their readings
+   - geolocation provides information about user's location,
+     but precise means by which this data is obtained is
+     purposefully opaque
+** sources
+   - GPS chip
+   - network cell triangulation
+   - wifi-networks
+   - satellites may be used to pinpoint location of a mobile phone in
+     remote areas
+   - no GPS chip is required
+     - API still works on desktop computers
+** Browsers
+*** Firefox
+   - 35 android Improve Mozilla's geolocation service by sharing your wi-fi
+     and cellular signals. Enable this feature by opening the Settings
+     menu and in the "Mozilla" section check the "Mozilla Location
+     Services" option under Data Choices.
+   - Firefox now has the Mozilla Location Service.
+   - Firefox includes support for locating you based on your WiFi
+     information using Google Location Services. In the transaction
+     between Firefox and Google, data is exchanged including WiFi
+     Access Point data, an access token (similar to a 2 week cookie),
+     and the user's IP address. For more information, please check out
+     Mozilla's Privacy Policy and Google's Privacy Policy covering how
+     this data can be used.
+   - As part of the insecure HTTP deprecation, the Geolocation API
+     will soon be available only to sites using a secure
+     connection. Chrome 50 has already introduced this limitation.
+   - Update: Updated this document as Mozilla developers have decided
+     to disable not only watchPosition but also the getCurrentPosition
+     method on non-secure sites.
+   - https://www.fxsitecompat.com/en-CA/docs/2016/use-of-geolocation-api-will-be-limited-to-secure-sites/
+   - Our telemetry shows that only ~0.1% of the usage of
+     watchPosition() is in non-secure contexts.
+   - http://mzl.la/1VEBbZq
+   - That's low enough that we should go ahead and turn it off.
+   - Curiously, getCurrentPosition() is called in non-secure contexts
+     77% of the time, compared to watchPosition()'s 0.12%.
+   - I would have assumed that getCurrentPosition() is used much more
+     often than watchPosition(), as most map sites only need a
+     one-shot location. However, telemetry shows getCurrentPosition()
+     has sample count 10M with metric count ~1M compared to
+     watchPosition() has sample count 39M and metric count 488K. Why
+     the disparity? Why does watchPosition() have 4x sample count but
+     only half the metric count? I wondered whether watchPosition()
+     was incorrectly recording telemetry on every watch callback, but
+     the code looks like it is doing the right thing.
+   - Additionally, the X icon, and the "Not now" secondary action will
+     be removed with https://bugzilla.mozilla.org/show_bug.cgi?id=1282768.
+   - https://groups.google.com/forum/#!forum/mozilla.dev.geolocation
+   - https://bugzilla.mozilla.org/show_bug.cgi?id=1216148#c6
+   - https://bugzilla.mozilla.org/show_bug.cgi?id=1254911
+   - I'm reminded of the continuing disaster that is Firefox's
+     Geolocation UI, which never calls the error callback if the end
+     user dismisses (rather than cancels) the permission prompt. The
+     amount of abuse we've received from devs for that terrible
+     decision over the years.... This sounds a lot like that.  
+**** linux
+     http://catb.org/gpsd/
+**** disable geolocation
+     https://bugzilla.mozilla.org/show_bug.cgi?id=1072859
+     https://bugzilla.mozilla.org/show_bug.cgi?id=784505
+*** Gecko
+    - when you close the prompt or select "not now", neither the error
+      nor the success callback is triggered. Subsequent attempts work
+      as expected- user is again prompted.
+    - Share location: subsequent attempts again prompt the user for
+      location. 
+    - Insecure origins are permitted.
+    - Chrome and Safari (OS X) use persistent permission prompts that,
+      unlike Firefox's door hanger, are not implicitly dismissed when
+      clicking the page or switching tabs. So neither Chrome nor
+      Safari have the indeterminate state of where the permission
+      prompt has been dismissed but the user did not expressly grant
+      or deny permission. 
+    - Firefox's design has the unfortunately side effect that clicking
+      the "Learn more ..." link on the "Would you like to share your
+      location?" door hanger opens a new tab (with a geolocation FAQ),
+      which dismisses the door hanger. When the user closes the FAQ
+      tab and switches back to the geolocating website, the door
+      hanger is gone.
+    - if you "accept", then manually "deny" or dismiss, Firefox then
+      denies the request. You can then re-enable it and it just
+      works. I think that is the right behavior.
+    - No. IIUC, getCurrentPosition() is a 1 shot call. Thus, manually
+      enabling geolocation after it has returned won't ever do
+      anything.
+    - 1) the current patch does not change the behaviour of the
+      permission notification recallable from its collapsed (anchored)
+      state.
+    - 2) after recalling the dialog and the user clicking to always
+      share location, it does not recall the
+      getCurrentPosition/watchPosition.
+    - The UX is hardly "advantage over the competitors" in it's
+      currently broken form: if you accidentally switch apps or switch
+      tabs, the user loses the ability to make a choice.
+    - 
+*** Chrome
+    - [[https://support.google.com/chrome/answer/3123708?p=settings_manage_exceptions&rd=1][Manage exceptions - Chrome Help]]
+      - You can control how your content settings should be handled for
+        specific sites or domains. Some content settings are allowed by
+        default, but adding an exception can change the behavior of the
+        settings on an individual site or domain. For example, Google
+        Chrome alerts you by default if a site wants to use your
+        location information. However, you can add an exception for
+        www.maps.google.com if you don’t want to be alerted every time
+        you visit that site. 
+    - when you close the prompt, you get
+      #+BEGIN_SRC js
+      [object PositionError] {
+        code: 1,
+        message: "User denied Geolocation",
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      }
+      #+END_SRC
+      same as denying request explicitly- subsequent attempts will
+      fail. can still interact with page but modal remains
+    - Settings are saved implicitly.
+    - permission request from insecure origin
+      #+BEGIN_SRC js
+      [object PositionError] {
+        code: 1,
+        message: "Only secure origins are allowed (see: https://goo.gl/Y0ZkNV).",
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      }
+      #+END_SRC
+    - subsequent attempts do not request permission again.
+    - When it comes to getCurrentPosition(), if you "accept", then
+      manually "deny", you get the door-hanger above BUT
+      getCurrentPosition() continues to work (this is bad on their
+      part, IMO - we should not do this! reloading the page might mean
+      loss of data, etc.).
+    - So, it doesn't resume a dead* watchPosition(), but if you call
+      it watchPosition() again, it starts working. This is good,
+      because it obviously makes getCurrentPosition() and
+      watchPosition() work the same.
+    - *dead: a watchPosition() that got denied at some point. 
+    - cancelling info requires refresh
+    - 
+    - Chrome allows users to press "esc" and it does not report that
+      choice back to the site. Not sure if that is a bug in Chrome or
+      not.
+    - Safari (desktop) maps "esc" to "deny" also.
+
+**** https://bugs.chromium.org/p/chromium/issues/detail?id=506435
+*** Webkit
+    - user denies request explicitly
+      #+BEGIN_SRC js
+      [object PositionError] {
+        code: 1,
+        message: "User denied Geolocation",
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      }
+      #+END_SRC
+    - permission request from insecure origin
+      #+BEGIN_SRC js
+      [object PositionError] {
+        code: 2,
+        message: "Origin does not have permission to use Geolocation service",
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      }
+      #+END_SRC
+    - Safari doesn't allow you to close the prompt.
+    - Remember my decision for one day
+    - No UI change
+    - subsequent attempts do not request permission again.
+    - https://trac.webkit.org/changeset/200686
+    - only worked on wireless connections... need to test!
+      #+BEGIN_SRC js
+        navigator.geolocation.getCurrentPosition(
+          function(){console.log("success")},
+          function(){console.log("error")}
+        );
+      #+END_SRC
+**** safari
+     https://techcrunch.com/2010/07/29/apple-location/
+     http://arstechnica.com/apple/2010/07/apple-responds-to-congress-swears-location-data-is-private/
+
+*** Edge
+**** Bug
+     - Reproduce Steps: 
+     - http://jsfiddle.net/2N8ww/
+
+     - Click on “Get Latitude and Longitude”
+     - Location permission popup appears - Clock on ‘NO’
+     - Failure callback is called. (Correct)
+     - Click on “Get Latitude and Longitude” for a second time.
+     - No failure callback is ever fired. The failure callback only
+       fires the first time. (Issue Here) 
+     - Expected Results:
+       - The failure callback should be fired every time that the geo
+         location is denied. Whether it is the first of the 20th call
+         to the geolocation service.
+
+     - Build 13.10586
+
+**** Bug
+     - Click on “Get Latitude and Longitude” button.
+     - location permission popup appears- click on the close icon(X)
+       at the end of the popup
+     - nothing happens because failure callback is not called.
+     - now instead of closing the popup using close icon(X) if we deny
+       the request failure callback is called and error alert is shown
+     - Ideally both 3rd and 4th steps should result in same behavior calling the failure callback
+     - Expected Results:
+       - getCurrentPosition api should call failure callback function
+         if the user closes the pop up using the X icon.
+
+**** Bug
+     - Microsoft has a much bigger issue here. They are clearly
+       exposed to geolocation hijacking due to their reliance on
+       html5. When I am in Mozilla’s Firefox browser, their reliance
+       on IP address properly finds me within a few meters of my
+       current location. MS Edge and IE11 throw me hundreds of kmss
+       off. This location is either their default (47.6448 longitude
+       -122.2985 ) or it is defined by a website I visit. Yet another
+       vulnerability uncovered. (April 2016)
+
+*** Opera
+    http://help.opera.com/geolocation/en/
+** Code
+      #+BEGIN_SRC js
+   navigator.geolocation.getCurrentPosition(function(position) {
+ do_something(position.coords.latitude, position.coords.longitude);
+});
+navigator.geolocation.watchCurrentPosition(function(position) {
+ do_something(position.coords.latitude, position.coords.longitude);
+})
+   #+END_SRC
+   #+BEGIN_SRC js
+   / Get the geolocation status (starts out as "prompt")
+// ... meaning the user will be shown an access request if we want it
+navigator.permissions.query({ name: 'geolocation' }).then(function(result) {
+    /* result.status = "prompt" */
+});
+
+// Request geolocation access if we really want it
+navigator.geolocation.getCurrentPosition(function(result) { /* ... */  })
+
+// Assuming the user requested access, the permission is now "granted"
+navigator.permissions.query({ name: 'geolocation' }).then(function(result) {
+    /* result.status = "granted" */
+});
+   #+END_SRC
+
+   - mrspeaker.net/dev/js-accel/
+     #+BEGIN_SRC js
+     (function(){
+
+     var sparklines = {
+         speed: 10,
+         lines: [],
+         running: true,
+         canvas: {},
+         init: function(el){
+             var _this = this;
+             var canvas = this.canvas;
+             canvas.canvas = document.getElementById(el);
+             canvas.ctx = canvas.canvas.getContext("2d");
+             canvas.width = canvas.canvas.width;
+             canvas.height = canvas.canvas.height;
+        
+             this.run();
+         },
+         addLine: function(line){
+             this.lines.push(line);
+         },
+         draw: function(){
+             var canvas = this.canvas,
+                 ctx = canvas.ctx,
+                 imgData = ctx.getImageData( 1, 0, canvas.width - 1, canvas.height );
+             ctx.putImageData(imgData, 0, 0);
+             ctx.clearRect( canvas.width - 1, 0, 1, canvas.height );
+        
+             $.each(this.lines, function(idx, item){
+                 ctx.fillStyle = item.color;
+                 ctx.fillRect( canvas.width - 1, item.value / 100 * canvas.height, 1, 1 );
+             });
+         },
+         run: function(){
+             var _this = this;
+             setTimeout(function(){
+                 if(_this.running){
+                     _this.draw();
+                 }
+                 _this.run();
+             }, this.speed);
+         },
+         line: function( name, color, value ){
+             this.name = name || "";
+             this.color = color || "#555";
+             this.value = value || 0;
+             this.lastVal = 0;
+         }
+     };
+
+     this.sparklines = sparklines;
+     })();
+
+     (function(){
+
+     var accel = {
+         handlers: [],
+         support: window.DeviceMotionEvent,
+         init: function() {
+             var _this = this;
+             window.addEventListener("devicemotion", function( e ) {
+                 var data = {
+                     accel: {
+                         x: e.accelerationIncludingGravity.x,
+                         y: e.accelerationIncludingGravity.y,
+                         z: e.accelerationIncludingGravity.z
+                     },
+                     rot: {
+                         rate: e.rotationRate
+                     },
+                     toString: function() {
+                         return this.format(this.accel.x)
+                             + " : " + this.format(this.accel.y )
+                             + " : " + this.format(this.accel.z );
+                     },
+                     format: function(num) {
+                         var res = ~~(num * 1000) / 1000;
+                         if(res >= 0){
+                             res = "+" + res;
+                         }
+                         res += "";
+                         while(res.length < 7){
+                             res += ".";
+                         }
+                         return res;
+                     }
+                 };
+                 for(var i = 0, j = _this.handlers.length; i < j; i++) {
+                     _this.handlers[i](data);
+                 }
+             }, false);
+         },
+         register: function(func) {
+             this.handlers.push(func);
+         }
+     };
+
+     this.accel = accel;
+     accel.init();
+
+     })();
+
+     var testacc = {
+       lines: [],
+       init: function() {
+         this.initAccel();
+         this.initSparklines();
+         document.getElementById("onoff").addEventListener("click", function(event) {
+           sparklines.running = !sparklines.running;
+         });
+       },
+       initAccel: function() {
+         accel.register(this.moved);
+       },
+       initSparklines: function() {
+         var linesData = [
+           { axis:"x", col:"red", xOff: 20 },
+           { axis:"y", col:"green", xOff: 40 },
+           { axis:"z", col:"yellow", xOff: 60 }
+         ],
+             _this = this;
+
+         sparklines.init("sparks");
+
+         for (let i = 0; i < linesData.length; i++) {
+           var line = new sparklines.line(this.axis, this.col, this.xOff);
+           sparklines.addLine(line);
+           _this.lines.push(line);
+         }
+       },
+       moved: function( e ){
+         var lines = testacc.lines;
+         for (let i = 0; i < lines.length; i++) {
+           this.lastVal = this.value;
+         }
+
+         lines[0].value = e.accel.x + 25;
+         lines[1].value = e.accel.y + 45;
+         lines[2].value = e.accel.z + 70;
+         document.getElementById("mm").innerHtml( e.toString() );
+       }
+     };
+
+     testacc.init();
+
+   #+END_SRC
+** Support
+   - Australia: 98.33%
+   - Global: 92.33%
+   - Whilst support is widespread, you should not depend on it, due
+      to privacy concerns.
+    - Chrome 50 has just recently come out.
+    - Desktop
+      - IE 9+
+      - Firefox 3.5+
+      - Chrome 4.0+
+      - Safari 5.0+
+      - Opera 10.6+
+    - Mobile
+      - Chrome 33
+      - Firefox 26
+      - IE 10
+      - Safari 3.2
+      - Opera 11
+** Fallback
+   - search location instead
+   - always check for errors!
+     
+   - http://fusion.net/story/287592/internet-mapping-glitch-kansas-farm/
+** permissions
+   - code
+     #+BEGIN_SRC js
+       navigator.permissions.query({name:'geolocation'}).then(function(p) {
+         updatePermission('geolocation', p.state);
+         p.onchange = function() {
+           updatePermission('geolocation', this.state);
+         };
+       });
+
+     #+END_SRC
+** Libraries
+   https://github.com/fiorix/freegeoip
+   https://github.com/melihmucuk/geocache
+   http://postgis.net/
+   https://github.com/Esri/html5-geolocation-tool-js
+   https://github.com/schollz/find
+   https://github.com/tidwall/tile38
+   https://mozilla.github.io/ichnaea/
+** Methods
+*** clearWatch
+    - Stops listening for updates to the current geographical location.
+    - removes a watchPosition event handler
+*** getCurrentPosition
+    - Obtains the geographic position, in terms of latitude and
+      longitude coordinates, of the device running Internet Explorer.
+    - determine device's current location
+    - asynchronous
+*** watchPosition
+    - Begins listening for updates to the current geographical
+      location of the device running the client.
+    - listen for changes in location
+    - invokes callback on movement
+    - asynchronous
+** Use Cases
+*** telemetry
+*** Customise Geolocation elements
+**** lower accuracy requested
+**** default is not to request inbuilt GPS
+**** present options: lower battery usage or higher accuracy
+** Resources
+*** [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+**** Customise Geolocation elements
+***** lower accuracy requested
+***** default is not to request inbuilt GPS
+***** present options: lower battery usage or higher accuracy
+*** [[https://w3c.github.io/sensors/][Generic Sensor API]]
+    #+NAME: example_1
+    #+BEGIN_SRC js
+        let sensor = new GeolocationSensor({ accuracy: "high" });
+
+        sensor.onchange = function(event) {
+          var coords = [ event.reading.latitude, event.reading.longitude ];
+          updateMap(null, coords, reading.data.accuracy);
+        };
+
+        sensor.onerror = function(error) {
+          updateMap(error);
+        };
+    #+END_SRC
+    #+NAME: example_2
+    #+BEGIN_SRC js
+      try { // No need to feature detect thanks to try..catch block.
+        let sensor = new GeolocationSensor({});
+        sensor.start();
+        sensor.onerror = error => gracefullyDegrade(error);
+        sensor.onchange = data => updatePosition(data.coords);
+      } catch(error) {
+        gracefullyDegrade(error);
+      }
+    #+END_SRC
+*** [[https://medium.com/@sciutoalex/how-geocoded-tweets-turned-into-a-junk-drawer-of-job-wanted-ads-and-bar-checkins-and-why-thats-e0a1bb8588d8#.w2sejonom][How Geocoded Tweets Turned Into A Junk Drawer Of Job-Wanted Ads and Bar Check...]]
+    - Twitter cannot be used to understand areas more granular than
+      cities.
+*** [[http://tutorialzine.com/2016/06/quick-tip-detecting-your-location-with-javascript/][Quick Tip: Detecting Your Location With JavaScript | Tutorialzine]]
+    - sources:
+      - GPS: mobile devices, accurate up to 10 meters
+      - Wifi: accurate
+      - IP geolocation: limited to a region, often unreliable-
+        worst-case scenario when other two fail
+      - Wifi generally used: quicker than GPS, more accurate than IP
+        geolocation
+    - code
+      #+BEGIN_SRC js
+      if (navigator.geolocation) {
+   // geolocation is available
+ } 
+ else {
+   // geolocation is not supported
+   }
+      #+END_SRC
+      #+BEGIN_SRC js
+      navigator.geolocation.getCurrentPosition(
+
+     // Success callback
+     function(position) {
+
+         /*
+         position is an object containing various information about
+         the acquired device location:
+
+         position = {
+             coords: {
+                 latitude - Geographical latitude in decimal degrees.
+                 longitude - Geographical longitude in decimal degrees. 
+                 altitude - Height in meters relative to sea level.
+                 accuracy - Possible error margin for the coordinates in meters. 
+                 altitudeAccuracy - Possible error margin for the altitude in meters. 
+                 heading - The direction of the device in degrees relative to north. 
+                 speed - The velocity of the device in meters per second.
+             }
+             timestamp - The time at which the location was retrieved.
+         }
+         */
+
+     },
+
+     // Optional error callback
+     function(error){
+
+         /* 
+         In the error object is stored the reason for the failed attempt:
+
+         error = {
+             code - Error code representing the type of error 
+                     1 - PERMISSION_DENIED
+                     2 - POSITION_UNAVAILABLE
+                     3 - TIMEOUT
+
+             message - Details about the error in human-readable format.
+         }
+         */
+
+     }
+ );
+      #+END_SRC
+      #+BEGIN_SRC js
+        var findMeButton = $('.find-me');
+
+        // Check if the browser has support for the Geolocation API
+        if (!navigator.geolocation) {
+
+          findMeButton.addClass("disabled");
+          $('.no-browser-support').addClass("visible");
+
+        } else {
+
+          findMeButton.on('click', function(e) {
+
+            e.preventDefault();
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+
+              // Get the coordinates of the current possition.
+              var lat = position.coords.latitude;
+              var lng = position.coords.longitude;
+
+              $('.latitude').text(lat.toFixed(3));
+              $('.longitude').text(lng.toFixed(3));
+              $('.coordinates').addClass('visible');
+
+              // Create a new map and place a marker at the device location.
+              var map = new GMaps({
+                el: '#map',
+                lat: lat,
+                lng: lng
+              });
+
+              map.addMarker({
+                lat: lat,
+                lng: lng
+              });
+
+            });
+
+          });
+
+        }
+
+      #+END_SRC
+
+**** permission
+     - dialog displayed by browser
+     - can request permission programmatically
+     - sometimes necessary, as browser-generated dialog won't show up
+       if requested a second time
+**** secure hosts
+     - Chrome no longer allows non-secure hosts to run the Geolocation
+       API
+     - serve over HTTPS
+*** [[http://geoloc.foremski.pl/][Passive TCP/IP Geo-Location]]
+    - TCP / IP stack leaks information on physical location
+    - measure TCP / IP round trip times of web requests made to servers
+      around the world
+    - approximate possible physical distances to the servers
+    -
+*** [[http://thenewcode.com/701/Introducing-HTML-GeoLocation-DeviceOrientation-and-Acceleration][the new code – Introducing HTML GeoLocation, DeviceOrientation and Acceleration]]
+    - provides latitude and longitude, not locale
+    - returns
+      - latitude, longitude
+      - altitude: meters above or below a projected ellipsoid of a the
+        earth's surface
+      - accuracy ratings for these values
+      - direction device is heading in (in degrees)
+      - speed (meters per second)
+    - to get street names etc, reverse engineer from the supplied
+      latitude and longitude, usually with a reverse geocoding service
+    - geocoding: convert address into geographic coordinates
+    - reverse geocoding: convert geographic coordinates into address
+    - if you intend to store location information, mention this in the
+      site privacy statement
+    - should encrypt this data!
+*** News
+**** https://www.techdirt.com/articles/20160216/08285633611/australian-tribunal-says-users-ip-address-urls-visited-are-not-personal-information.shtml
+*** transcript
+    Transcript of HTML5 Geolocation API: Location, Location, Location
+ Agenda
+ HTML5 Geolocation from A to Z
+ Use cases
+ Coding patterns
+ Tips and tricks
+
+ Goal: Save you 2 - 4 weeks of ramp up time!
+ Who am I?
+ Andy Gup
+ Developer Evangelist
+ Email:
+ agup@esri.com
+ Blog:
+ http://blog.andygup.net
+ Twitter:
+ @agup
+ Who are you?
+ What is HTML5 Geolocation?
+ W3C API
+ Built into the browser
+ Opt-in required!
+ Approximate location
+ Why do I care? Use Cases?
+ Find info around user
+ Direction assistance
+ Stats/analysis
+ Auto-select country/state/city
+ Auto-display language
+ Location targeted sales
+ Depends on multiple factors...
+
+ Type of browser
+ (Geolocation Service)
+ Type of device
+ Wi-fi enabled
+ Internet connectivity
+ GPS enabled
+ VPN
+ Work flow for HTML5 Geolocation
+ Get Location
+ Shut off
+ location
+ Not Supported
+ Process results
+ Verify HTML5 feature support
+ (cc) image by Microsoft Office Clip art
+ (cc) image by Microsoft Office Clipart
+ Feature Detection
+ HTML5 Geolocation Accuracy
+ (cc) image by Microsoft Office Clipart
+ What's a lat/lon Geocoder?
+ Converts lat/lon to address
+ Service-based or COTS
+
+ 44.49, 72.24
+ Berlin, DE
+ Score: 80%
+ What's a spatial database?
+ File or relational database - e.g. PostgreSQL
+ Spatial index system
+ Optimized for working with points, lines, polygons
+ Shift focus from data management to building functionality
+ Storing location data
+ (Server-side)
+ UID
+ location
+ timeStamp
+ accuracy
+ altitude*
+ altitudeAccuracy*
+ heading*
+ speed*
+ browserType
+ geometry!
+ Browser Support
+ Use feature detection pattern
+ Use your .js library
+ http://yepnopejs.com
+
+ http://caniuse.com
+ http://mobilehtml5.org/
+ Privacy
+ Get legal advice
+ Follow W3C geolocation guidelines (Section 4)
+ Allow for opt-out
+ Be clear about your privacy policy
+ Resources
+ @agup or agup@esri.com
+ http://blog.andygup.net
+ http://esriurl.com/javascript
+ http://caniuse.com
+ http://mobilehtml5.org/
+ http://dev.w3.org/geo/api/spec-source.html
+ Storing location data
+ (Client-side)
+ Consider mobile & desktop
+ Web SQL
+ [not recommended]
+ IndexedDB
+ [not recommended]
+ HTML5 Web Storage
+ [ =< 5MB ]
+
+
+
+ UID
+ [optional]
+ location
+ timeStamp
+ accuracy
+ browserType
+ [optional]
+ *Mobile only - not available
+ on most platforms
+ Let user know
+ Fallback to
+ IP Geolocation
+ What's a IP Geocoder?
+ Converts IP to location
+ Service-based or COTS
+
+ 74.125.224.160
+ Country: United States
+ State: CA
+ City: Mountain View
+ Latitude: 37.4192
+ Longitude: -122.0574
+ What to do with location data?
+ Continuous updates vs. one-time snapshot
+ Return value =
+ latitude
+ &
+ longitude
+ (e.g. 37, -104)
+ Analyze and normalize
+ continuous location updates
+ Define accuracy
+ Reject bad results
+ Too many updates
+ Time
+ Distance
+ Speed
+ Heading
+ Define rules
+ Mark as bad or delete
+ Define rules
+ Consider local storage limits
+ Remote database sync
+ Advantages of spatially-enabled data
+ View trends on a map
+ Analyze trends over specific time periods
+ Built-in functions including distance queries
+ Determine if point inside/outside polygon
+ HTML5 Geolocation API
+ Location, Location, Location
+ What's geospatial mean?
+ Tips for storing location data
+ What's a geocoder?
+ Demo
+ Location, Location, Location
+ What, why, how, huh??
+ Wrap-up!
+ Another demo
+ World (cc) image by Microsoft Office Clipart
+ You may need a
+ Geocoder
+ You may need a
+ spatially-enabled
+ database
+ Options:
+ Analyze and normalize
+ Place location on map
+ Write to database
+ Images by Microsoft Clipart
+ Copyright © 2013 Esri. All rights reserved. Esri and the Esri globe logo are trademarks, service marks, or registered marks of Esri in the United States, the European Community, or certain other jurisdictions. Other companies and products or services mentioned herein may be trademarks, service marks, or registered marks of their respective mark owners
+ What is a Geolocation Service?
+ Built into browser
+ Provided by Google, Microsoft and Apple
+ Automatic request made via HTTPS
+ Sends info to remote service, including:
+ wifi macid, ssid, signal strenth
+ Returns Geolocation Object
+ GET /maps/api/browserlocation/json?browser=firefox&sensor=true&wifi=mac:01-24-7c-bc-51-46%7Cssid:3x2x%7Css:-37&wifi=mac:09-86-3b-31-97-b2%7Cssid:belkin.7b2%7Css:-47 HTTP/1.
+ Geolocation Object
+ https://github.com/andygup/html5-geolocation-demo
+ Snapshot
+ maximumAge (ms)
+
+ max age of
+ cached
+ position in
+ milliseconds
+ throw error when value is reached
+ "0"
+ - do not use cache
+ "Infinity"
+ default - return any cached position
+ timeout (ms)
+
+ max
+ millis
+ to
+ any
+ return a position
+ throw error if no value when timeout reached
+ "Infinity"
+ (default) don't return until position available
+ enableHighAccuracy (boolean)
+
+ try to obtain
+ best possible
+ result
+ If GPS available use it
+ If network triangulation available use it
+ Continuous
+*** https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariWebContent/GettingGeographicalLocations/GettingGeographicalLocations.html
+*** Instant HTML5 Geolocation How-to
+**** Understanding
+         Latitude and longitude
+     Altitude
+     The accuracy of the latitude and longitude
+     The accuracy of the altitude information
+     Heading
+     Speed
+         Visit an application or website that requires location information.
+     The application attempts to determine your location with the Geolocation API.
+     The browser asks you whether you want to reveal the location to the application.
+     If you consent to sharing your location, your location is determined using available hardware and software, and sent to the application.
+     If you do not consent to sharing your location, no location information is sent to the application, and it is notified that no location information will be sent.
+
+ Your application needs the Geolocation API if:
+
+     You want to adjust the application's functionality based on the user's location
+     You want to adjust a site's content or redirect the user based on his/her location
+     You want to empower the user to track his/her location over time
+
+ Your application cannot use the Geolocation API if:
+
+     You want to track the user without his/her explicit consent
+     You need real-time, extremely accurate location information
+
+     We will discuss why in the next section.
+     ou might be surprised to see that my altitude, heading, and speed
+     information is still not present, despite having been determined
+     on a cellphone that has hardware GPS support. In fact, this is
+     because (if you use the default Geolocation API configuration)
+     Chrome on Android attempts to use WiFi location first, where it's
+     available, before resorting to the relatively battery-intensive
+     (but more accurate) GPS location.  
+     Trilateration looks at environmental factors such as available
+     wireless networks and their relative signal strengths, proximity
+     to cellphone towers, and current network IP address, and matches
+     them against a remote database of environmental factors against
+     known locations. For most browsers, this database turns out to be
+     run by Google, but some providers use a solution from Skyhook
+     Wireless, and there are others too. Apple maintains its own
+     database for its products, for example, which have probably been
+     crowdsourced from consumer iPhone and iPad usage. Database
+     information could also have been gathered from special cars, such
+     as those used to take photographs for Google StreetView, and other
+     crowdsourcing techniques. It's important to note that the user's
+     location is being sent to a third party in these instances, and
+     that the returned location will only be as good as the service's
+     database. How this location is determined is not part of the
+     Geolocation API specification; all that is required for you to
+     know is that some location information is returned. 
+     The lack of Opera Mini support also means that many mobile phone
+     users, particularly in developing nations or users with feature
+     phones, are not able to use the Geolocation API. This situation is
+     likely to change soon, as open source mobile operating systems
+     such as Android and Firefox OS are gaining traction in those
+     markets.
+*** Creating Mobile Apps with jQuery Mobile
+    #+BEGIN_SRC js
+    function getDistance(lat1, lon1, lat2, lon2){ 
+   //great-circle distances between the two points
+   //because the earth isn't flat
+   var R = 6371; // km
+   var dLat = (lat2-lat1).toRad();
+   var dLon = (lon2-lon1).toRad();
+   var lat1 = lat1.toRad();
+   var lat2 = lat2.toRad();
+   var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+     Math.sin(dLon/2) * Math.cos(lat1) * 
+     Math.cos(lat2);
+   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+   var d = R * c; //distance in km
+   var m = d * 0.621371;  //distance in miles
+   return m;
+ }
+ if (typeof(Number.prototype.toRad) === "undefined") {
+   /* The prototype property is mainly used for inheritance; here we add a new function to the Number class to make it available to all instances of that class */
+   Number.prototype.toRad = function() { 
+     return this * Math.PI / 180;
+   }
+ }
+
+ function compareDistances(a,b) { 
+   if (a.distance<b.distance) return -1;
+   if (a.distance>b.distance) return 1;
+   return 0;
+ }
+    #+END_SRC
+*** HTML5: 20 Lessons to Successful Web Development
+**** GPS Service
+     - The GPS (Global Positioning System) service consists of multiple
+       satellites orbiting the earth whose positions are very precisely
+       known. When a GPS-enabled device tunes in to these satellites,
+       the different times at which signals from these various
+       satellites arrive enable the device to know where it is to
+       within just a few feet.
+     - This is achieved by the fact that the speed of light (and radio
+       waves) is a known constant, and the time it takes a signal to
+       get from a satellite to a GPS device precisely indicates the
+       satellite’s distance. By making a note of all the different
+       times at which signals arrive from different satellites, a
+       simple calculation lets the device derive each of the
+       satellite’s positions relative to each other, and therefore very
+       closely triangulate the position of the device relative to
+       them.
+     - Many mobile devices such as phones and tablets have GPS chips
+       and can provide this information. But some don’t, others have
+       them turned off, and others may be used indoors where they are
+       shielded from the GPS satellites, and therefore cannot receive
+       any signals. In these cases, additional techniques may be used
+       to attempt to determine your location.
+**** Other Location Methods
+     - First, if your device has mobile phone hardware, it may attempt
+       to triangulate its location by checking the timings of signals
+       received from the various communications towers with which it
+       can communicate (and whose positions are very precisely
+       known). If there are a few towers, this can get almost as close
+       to your location as GPS. But where there’s a single tower, the
+       signal strength is used to determine a radius around the tower,
+       and the circle it creates represents the area in which you are
+       likely to be located. This could place you anywhere within a
+       mile or two of your actual location, down to within a few tens
+       of feet.
+     - Failing that, there may be known Wi-Fi access points within
+       range of your device whose positions are known, and since all
+       access points have a unique identifying address called a MAC
+       (Media Access Control) address, a reasonably good approximation
+       of location can be obtained, perhaps to within a street or two.
+     - And if that fails, the IP (Internet Protocol) address used by
+       your device can be queried and used as a rough indicator of your
+       location. Often though, this provides only the location of a
+       major switch belonging to your Internet provider, which could be
+       dozens or even hundreds of miles away. But at the very least,
+       your IP address can narrow down the country, and sometimes the
+       region you are in.
+     - Your IP address is commonly used by media companies that
+       restrict playback of their content by territory. However, some
+       people are able to set up proxy servers that use a forwarding IP
+       address in the country that is blocking them to fetch and pass
+       content through the blockade back to their browser. Therefore,
+       you should be aware that if you locate someone by IP address,
+       the country identification may not necessarily be reliable.
+     - Using geolocation will enable you to improve the features you
+       offer to your mobile device web visitors, but not so much for
+       desktop users, whose locations will remain difficult to
+       ascertain.
+     -
+*** HTML5: The Missing Manual 2nd Edition
+**** How Geolocation Works
+     - Geolocation raises quite a lot of questions in people who
+     ordinarily aren’t paranoid. Like, how does a piece of software
+     know I’m hanging out at the local coffee shop? Is there some
+     hidden code that’s tracking my every move? And who’s in that white
+     van parked outside? 
+     - Fortunately, geolocation is a lot less Big Brotherish than it
+       seems. That’s because even if a browser can figure out your
+       position, it won’t tell a website unless you give it explicit
+       permission (see Figure 13-1).
+     - To figure out a person’s location, the browser enlists the help
+       of a location provider—for example, on Firefox that’s Google
+       Location Services. This location provider has the tough job of
+       finding the location, and it can use several different
+       strategies to do it.
+     - For a desktop computer with a fixed (not wireless) Internet
+       connection, the science is simple but imprecise. When someone
+       goes online, her traffic is funneled from her computer or local
+       network through a cable, telephone wire, or (horrors) dial-up
+       connection, until it reaches a high-powered piece of network
+       hardware that brings it onto the Internet. That piece of
+       hardware has a unique IP address, a numeric code that
+       establishes its public identity to other computers. It also has
+       a postal address in the real world.
+     - If you’re using a laptop or a mobile device with a wireless connection, a location provider can look for nearby wireless access points. Ideally, the location provider consults a giant database to figure out the exact location of these access points and then uses that information to triangulate your location.
+
+ If you’re using a web-enabled phone, the location provider provides a similar triangulation process, but it uses the signals from different cellphone towers. This quick, relatively effective procedure usually gets your position down to less than a kilometer. (More industrialized areas—like downtown city cores—have more cellphone towers, which results in more precise geolocation.)
+
+ Finally, many mobile devices also have dedicated GPS hardware, which uses satellite signals to pin your location down to just a few meters. The drawback is that GPS is a bit slower and draws more battery power. It also doesn’t work as well in built-up cities, where tall buildings can obscure the signals. As you’ll see, it’s up to you whether you want to request a high-precision location using GPS, if it’s available (Showing a Map).
+
+ And of course, other techniques are possible. Nothing stops a location
+ provider from relying on different information, like an RFID chip,
+ nearby Bluetooth devices, a cookie set by a mapping website like
+ Google Maps, and so on. 
+ The IP address technique is the roughest form of geolocation. If
+ there’s a better source of location data, the location provider will
+ use that instead.
+*** 100 Ideas that Changed the Web
+*** HTML5 Unleashed
+**** The Geolocation API uses latitude and longitude to express locations. These two terms allow any point on Earth to be described by two angles, and in case you’re unfamiliar with geographic coordinates, we detail them here. If you’re confident in your understanding of latitude and longitude, feel free to skip this section.
+
+ The equator is an imaginary line that stretches from east to west
+ through the “middle” of the Earth’s sphere, halfway between the North
+ and South Poles. Latitude is the angle north or south from the
+ equator, so the equator acts as a reference line and is said to exist
+ at zero degrees latitude. The North Pole and South Pole exist at 90
+ and –90 degrees latitude, respectively. 
+
+ For longitude, we need a similar line that runs north to south (such
+ lines are called meridians), but because there is no such thing as an
+ east or west pole, we have no good reference point to use for a
+ line. Because there is no natural reference, in the mid-1800s most
+ countries settled on the common reference point of the Royal
+ Observatory at Greenwich, in London. The line that runs north to south
+ through this observatory is commonly called the prime meridian, and so
+ the Royal Observatory in London rests at 0 degrees longitude. 
+
+ Similarly to latitude, longitude is described with a positive angle
+ when to the east of the prime meridian and a negative angle when to
+ the west. In many places, instead of positive and negative, north and
+ south or east and west are used to describe latitude and longitude,
+ respectively. Because we intend to use these values computationally,
+ the Geolocation API opts to use the positive and negative numbers. 
+
+ Latitude only describes a degree on the top or bottom half of the
+ Earth, so the largest values are 90 and –90 degrees, while longitude
+ must go all the way around the Earth, making the largest values 180
+ and –180 degrees. This difference in total degrees is also apparent in
+ maps, which are typically twice as wide (longitude) as they are tall
+ (latitude). 
+
+ Figure 9.1 shows the equator and prime meridian lines, giving an
+ approximation of latitude and longitude values. 
+
+ The location where the equator and prime meridian meet gives us a
+ latitude and longitude of zero. Figure 9.2 shows us where the two
+ lines intersect on a map, somewhere off the coast of Africa. Because
+ the prime meridian is arbitrary, the location at zero degrees latitude
+ and longitude is just as arbitrary, and has no significance of its
+ own. 
+
+ One degree of latitude or longitude is roughly 69 miles or 111
+ kilometers, so we can expect Geolocation results as well as services
+ and APIs that use them to be in floating-point numbers. For instance,
+ the front of New York’s Empire State Building can be accurately
+ described as located at 40.748076 degrees latitude and –73.984799
+ degrees longitude.
+**** Types of Geolocation Data
+     Websites have sought user location data since the early days of the Web. Before the Geolocation API, we had only two realistic means of determining user location: IP addresses and asking the users themselves.
+ The Old Ways
+
+ Prior to Geolocation, there were two basic options for websites that wanted to obtain user location data.
+
+ iP Addresses
+
+ IP addresses are the original means of obtaining user location. Just as you cannot receive letters without giving out your (home) address, you cannot be served web pages without giving out an IP address, and so IP location has the advantage of always being available, even when the user has JavaScript disabled or is using a stone-age browser. Users can always browse through a proxy service in an attempt to spoof a location, which in Geolocation terms functions as a sort of virtual P.O. Box, but this is uncommon in typical Internet usage.
+
+ Unfortunately for website creators, just how well IP address location works varies intensely, and most common IP location is only accurate to the city level. In the smartphone age, IP addresses have become even less accurate, as mobile-phone IPs can be “located” in very different places than the actual users, sometimes several states away.
+
+ Further complicating matters, IP address location is typically
+ processed server-side and almost always through a lookup service, most
+ of which are not free. Nonetheless, it is still very popular where
+ there is warranted utility or money to be made. Location-based
+ advertising has been making heavy use of IP address Geolocation for
+ years, and almost all large online advertising companies allow their
+ clients the option of targeting ads locally, which usually means
+ targeting through IP location. 
+
+
+ User Entry
+
+ We have all come across websites that request our city or ZIP Code. Restaurant review sites, real-estate search engines, photo-sharing, or any site that intends to ship you a product will ask for some level of address detail.
+
+ Although this is considered an old way of locating users, manual entry is often a good option regardless of your use of Geolocation. Even if your app can take advantage of Geolocation, you should be careful to consider that your users might legitimately want to use the site at locations other than their own. An app that finds restaurants nearby, for instance, would be less useful if a user cannot also enter in a location that they might be traveling to soon, in order to look it up ahead of time.
+
+ On the other hand, manual entry can be considered bothersome by the
+ user, and is no good if your user doesn’t actually know where he or
+ she is! 
+
+
+ The HTML5 Way—New Methods for Geolocation
+
+ Geolocation offers us three new methods, presented next, from least accurate to most accurate. Although all three are used in Geolocation, the details of the methodology are hidden from both the user and the programmer. The Geolocation API simply always uses whatever methods are available. An exception is made for GPS because it drains battery life disproportionately to the others and, therefore, must be enabled via setting an optional attribute.
+
+ The relative accuracy differences between these three methods are discussed further and expressed visually in the API examples.
+ Cellular Networks
+
+ Cell phone networks are the broadest locator in the new Geolocation API. This method works by triangulating a user’s position based on whatever towers might be nearby. Although this works rather quickly, the accuracy of the location provided can vary by several thousand meters, and not all devices (tablets, laptops, and desktops) have cellular capability.
+ Wi-Fi
+
+ Wi-Fi Geolocation is one of the most novel and astonishing location technologies, made possible only by the lengthy hustle of a few large companies.
+
+ Every Wi-Fi providing device has a unique identifier, called a MAC address, which is assigned to the hardware by its manufacturer. When a computer searches for Wi-Fi signals, it receives this address along with signal strength and the name (sometimes called SSID, service set identifier) of the access point.
+
+ Because this information is public and broadcasted by all Wi-Fi access points (both public and private), companies such as Google have sought to collect their locations. While Google’s Street View cars were out taking pictures of vast numbers of roads, they were simultaneously mapping all the MAC addresses they could find to their coordinates in the world.
+
+ Google and Skyhook Wireless have both mapped MAC addresses like this and sell their location services to browsers such as Firefox and Safari, respectively. When using a browser that determines Geolocation with Wi-Fi, all nearby network MAC addresses and their associated signal strengths are sent to the browser (Chrome, Firefox, Safari, etc.), which then uses the Google Location Services or Skyhook database to determine where you might be relative to all the last known locations of Wi-Fi MAC addresses and their signal strengths.
+
+ In populated areas, this can be vastly more accurate than cellular triangulation, with meter accuracy measured between around 20 and 200.
+ GPS Coordinates
+
+ GPS is the flagship of Geolocation. It is extremely accurate and more informational than the other methods: Speed, heading, and altitude are available through the Geolocation API if you are connected with GPS.
+
+ On the other hand, GPS can take a long time to connect and drains the
+ battery of mobile devices at a much faster rate. Because of this,
+ requesting GPS is an optional attribute in the Geolocation API,
+ defaulting to false. Some thought should be given to enabling it, as
+ apps that merely need the vicinity of the user do not need the power
+ or the potentially long wait time of a GPS signal.
+
+
+ HTML5 Geolocation API
+
+ The Geolocation API enables you to query the user for location data. If the user accepts the request, you can gather the user’s location, either once or continuously as the user moves.
+ Geolocation Support
+
+ The Geolocation API enjoys wide support in all modern desktop and mobile browsers, though the browsers may go about Geolocation in different ways. For instance, some may be unable to locate via Wi-Fi.
+
+ Older browsers such as Internet Explorer 8 can enjoy some support by using a polyfill/fallback library such as the popular Webshims Library (http://github.com/aFarkas/webshim). Most polyfills make use of more antiquated IP-address only techniques of determining location, and their accuracy is generally incomparable to the Geolocation API.
+ Using Geolocation
+
+ Before we get into the details, let’s take a peek at the minimum JavaScript needed to discover a user’s location:
+
+ #+BEGIN_SRC js
+ // A nonfunctioning example showing the location
+
+ // of every attribute in the API
+
+
+
+ // The function called if getCurrentPosition is successful
+
+ function successCallback(position) {
+
+   // millisecond timestamp
+
+   position.timestamp;
+
+
+
+   // every attribute of position.coords is a number
+
+
+
+   // The three reliable coords attributes
+
+   position.coords.latitude;
+
+   position.coords.longitude;
+
+   position.coords.accuracy;
+
+
+
+   // The four optional coords attributes
+
+   position.coords.altitude;
+
+   position.coords.altitudeAccuracy;
+
+   position.coords.speed;
+
+   position.coords.heading;
+
+ }
+
+
+
+ // A function that fires if something goes wrong
+
+ // The single argument is a JavaScript Object containing
+
+ // an error code (code) and a reason (message)
+
+ function errorCallback(positionError) {
+
+   positionError.code;     // 1 to 3, inclusive
+
+   positionError.message;  // error message string
+
+ }
+
+
+
+ // identical in syntax to navigator.geolocation.getCurrentPosition
+
+ // except watchPosition returns an id, and getCurrentPosition returns nothing
+
+ var myID = navigator.geolocation.watchPosition(
+
+   // required first argument, a success function with one arg
+
+   successCallback,
+
+   // optional second argument, an error function with one arg
+
+   errorCallback,
+
+   // optional third argument, an Object of optional attributes
+
+   // each attribute itself is also optional,
+
+   // here are sample nondefault values:
+
+   { enableHighAccuracy: true,   // true might enable GPS, default false
+
+     timeout:    6000,           // 6 seconds, default Infinity
+
+     maximumAge: 90000           // 90 seconds, default 0
+
+   });
+
+
+
+ // stops watchPosition from continuously checking for location changes
+
+ // and firing the successCallback
+
+ navigator.geolocation.clearWatch(myID);
+ #+END_SRC
+** misc
+*** insecure contexts
+    - The concern is that if the site is insecure you might send
+      Geolocation which might be sensible information through unsecure
+      channels allowing someone to snoop on the connection and read
+      that data.
+    - In other words they are trying to hide the geolocation data from
+      proxies, Carriers, ISPs and someone possibly MitM attacks
