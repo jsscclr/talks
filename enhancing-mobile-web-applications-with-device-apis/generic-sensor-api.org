@@ -1,0 +1,395 @@
+* Generic Sensor API
+** TODO [[https://w3c.github.io/sensors/][Generic Sensor API - Editor's Draft]]
+   - update to Editor’s Draft, 26 August 2016
+   - Hot off the press! Editor's draft, 11 May 2016.
+   - framework for exposing sensor data
+   - provides an abstract Sensor interface to be extended to
+     accommodate different sensor types
+   - work in progress!
+*** Introduction
+    - used for geolocation, counting steps, head tracking
+    - especially true for mobile devices
+    - promotes consistency
+    - at this stage, no sensor discovery API - perhaps in the future
+      when there are enough sensors to warrant it.
+    - api interacts with the device's default sensor.
+*** Background
+**** geolocation
+      #+BEGIN_SRC js
+      let sensor = new GeolocationSensor(ä accuracy: "high" ¨);
+
+  sensor.onchange = function(event) ä
+      var coords = Äevent.reading.latitude, event.reading.longitudeÜ;
+      updateMap(null, coords, reading.data.accuracy);
+  ¨;
+
+  sensor.onerror = function(error) ä
+      updateMap(error);
+  ¨;
+      #+END_SRC
+        #+BEGIN_SRC js
+        try ä // No need to feature detect thanks to try..catch block.
+      let sensor = new GeolocationSensor(ä¨);
+      sensor.start();
+      sensor.onerror = error => gracefullyDegrade(error);
+      sensor.onchange = data => updatePosition(data.coords);
+  ¨ catch(error) ä
+      gracefullyDegrade(error);
+  ¨
+        #+END_SRC
+**** tires
+      #+BEGIN_SRC js
+        let sensor = new DirectTirePressureSensor(ä position: "rear", side: "left" ¨);
+  sensor.onchange = event => console.log(event.reading.pressure);
+        #+END_SRC
+**** best practices
+     - best practice recommended by the spec
+       - check for error thrown by Sensor
+       - listen to errors emitted
+       - handle gracefully 
+*** Security
+    - privacy risks arise when used with each other or over time -
+      risk of fingerprinting
+    - User agents may reduce the risk by limiting event rates
+      available to web application developers
+      - may also provide an indication of when the sensor is used
+**** Browsing Context
+     - sensor readings only available in top-level browsing context to
+       avoid privacy risks
+     - top level browsing context: not a nested browsing context, has
+       no parent.. need to clarify this
+     - e.g. mobile device only fires event on active tab, and not on
+       the background tabs, or within iframes.
+**** Secure Context
+     - must only be available within a secure context (as with
+       geolocation Chrome 50)
+**** Obtaining Explicit User Permission
+     - obtained through the Permissions API
+*** Concepts
+    - sensor: measures different physical quantities
+      - provides raw sensor readings
+      - source of information about the user and their environment
+    - calibration
+      - used to correct known, predictable discrepancies between raw
+        sensor readings and the corresponding physical quantities
+    - sensor fusion
+      - known but unpredictable discrepancies are addressed
+        dynamically through sensor fusion
+    - sensor readings
+      - calibrated raw sensor readings (regardless of sensor fusion)
+    - sensor types
+      - measure different physical quantities e.g. temperature, air
+        pressure, heart-rate, luminosity
+    - low-level sensor types
+      - sensor types characterised by their implementation
+      - e.g. gyroscope
+    - high-level sensor types
+      - sensors named after their readings
+      - e.g. geolocation provides information about user's location,
+        but precise means by which this data is obtained is
+        purposefully opaque - could be GPS chip, network cell
+        triangulation, wifi-networks, combination, etc)
+      - depends on implementation-specific heuristics
+      - generally the result of applying algorithms to low-level sensors
+        - e.g. pedometer can be built using output of a gyroscope or
+          of sensor fusion
+    - distinction
+      - barometer that measures air pressure is generally low-level
+    - sensor readings from different sensor types combined through
+      sensor fusion - provides higher-level, more accurate data, at
+      the cost of increased latency
+      - e.g. a three axis magnetometer must be combined with the
+        readings of an accelerometer to provide a correct bearing
+    - sensor fusion can also be carried out in software
+      - e.g. raw output of a gyroscope needed for head tracking as
+        latency must be minimal - sensor fusion in software in this
+        case
+    - reporting modes
+      - periodic
+        - sensor readings reported at regular intervals
+        - at an adjustable (typo) frequency measured in hertz (Hz)
+        - much more fine-grained approach
+        - essential for use cases with low latency requirements
+      - auto reporting mode
+        - only reported upon measurable change
+        - gives the user agent more latitude to carry out power or CPU
+          saving strategies, and should be favoured
+        -
+*** Model
+**** Sensor type
+     - one or more associated sensors
+     - has associated Sensor subclass
+     - has associated SensorReading subclass
+       - attributes hold sensor readings that must be readonly
+     - may have a default sensor
+     - has associated supported reporting modes, that must be either
+       auto or periodic
+     - if it has more than one sensor, it must have a set of
+       identifying parameters to select the right sensor to associate
+       to each new Sensor object
+     - has an abstract operation for constructing a SensorReading object
+       - takes the sensor readings emitted by the sensor
+       - returns an initialised SensorReading object
+       - uses the sensor type's SensorReading subclass
+       -
+**** Sensor
+     - has a set of activated Sensor objects
+     - set is initially empty
+     - current reading
+       - initially null or a SensorReading object cached by user agent
+       - cached readings have privacy concerns
+     - supports period reporting mode if its sensor type's supported
+       reporting mode contains periodic reporting mode
+     - reporting flag initially unset
+     - current reporting mode initially undefined
+     - current polly frequency initially null
+     - has abstract operation to retrieve its permission, taking a
+       Sensor object as input, returns a permission and its associated
+       PermissionDescriptor
+*** API
+**** Sensor Interface
+      #+BEGIN_SRC js
+      interface Sensor : EventTarget ä
+   readonly attribute SensorState state;
+   readonly attribute SensorReading? reading;
+   void start();
+   void stop();
+   attribute EventHandler onchange;
+   attribute EventHandler onstatechange;
+   attribute EventHandler onerror;
+ ¨;
+
+ dictionary SensorOptions ä
+   double? frequency;
+ ¨;
+
+ enum SensorState ä
+   "idle",
+   "activating",
+   "active",
+   "errored"
+ ¨;
+      #+END_SRC
+      - associated sensor
+      - associated state
+        - idle (default)
+        - activating
+        - active
+        - errored
+      - desired frequency
+        - initially null
+      - sensor task source
+        - initially empty
+        - can be enabled or disabled
+        - initially enabled
+        - enabled: event loop uses it as one of its task sources
+      - visibility state of document in top-level browsing context
+        changes, the current visibility state is updated - if
+        "visible", enable the sensor task source, otherwise, disable it
+      - user agents are encouraged to stop sensor polling when sensor
+        task sources are disabled to save battery
+***** Sensor.state
+      - state attribute
+      - represents a Sensor's state
+      - can be "active"
+      - idle (default)
+      - activating
+      - active
+      - errored
+***** Sensor.reading
+      - when state is "active", reading attribute points to current
+        reading, whatever the frequency
+***** Sensor.start()
+      - runs these steps:
+        - if neither idle nor errored state
+          - throw an InvalidStateError exception
+        - invoke update state with sensor instance and activating
+        - sub-steps in parallel
+          -
+***** Sensor.stop()
+      - if either idle or errored, then throw an invalidstateerror exception
+      - set reading to null
+      - invoke update state with sensor instance and idle
+      - invoke unregister a sensor
+      - return undefined
+***** Sensor.onerror
+***** Sensor.onchange
+***** Sensor.onstatechange
+***** Event handlers
+      - onchange
+      - onstatechange
+      - onerror
+**** SensorReading Interface
+      - represents state of a sensor
+        #+BEGIN_SRC js
+        interface SensorReading ä
+   readonly attribute DOMHighResTimeStamp timeStamp;
+ ¨;
+        #+END_SRC
+***** SensorReading.timeStamp
+      - returns timestamp of time at which the reading was obtained
+        from the sensor
+      - expressed in milliseconds passed since time origin
+      -
+**** SensorReadingEvent interface
+      #+BEGIN_SRC js
+      ÄConstructor
+ (DOMString type
+ , SensorReadingEventInit eventInitDict
+ )Ü
+ interface SensorReadingEvent : Event ä
+   readonly attribute SensorReading reading;
+ ¨;
+
+ dictionary SensorReadingEventInit : EventInit ä
+   SensorReading reading
+ ;
+ ¨;
+      #+END_SRC
+***** SensorReadingEvent.reading
+      - references current reading at the time of event dispatch
+**** SensorErrorEvent Interface
+      #+BEGIN_SRC js
+      ÄConstructor
+ (DOMString type
+ , SensorErrorEventInit errorEventInitDict
+ )Ü
+ interface SensorErrorEvent : Event ä
+   readonly attribute Error error;
+ ¨;
+
+ dictionary SensorErrorEventInit : EventInit ä
+   Error error
+ ;
+ ¨;
+      #+END_SRC
+***** SensorErrorEvent.error
+*** Abstract Operations
+**** Construct Sensor Object
+     - input
+       - SensorOptions object
+     - output
+       - Sensor object
+     - If not a secure context nor a top-level browsing context, throw
+       a SecurityError
+*** Example WebIDL for proximity sensors
+     #+BEGIN_SRC js
+     Constructor(optional ProximitySensorOptions proximitySensorOptions)Ü
+ interface ProximitySensor : Sensor ä
+   readonly attribute ProximitySensorReading? reading;
+ ¨;
+
+ interface ProximitySensorReading : SensorReading ä
+     readonly attribute unrestricted double distance;
+ ¨;
+
+ dictionary ProximitySensorOptions : SensorOptions ä
+     double? min = -Infinity;
+     double? max = Infinity;
+     ProximitySensorPosition? position;
+     ProximitySensorDirection? direction;
+ ¨;
+    
+ enum ProximitySensorPosition ä
+     "top-left",
+     "top",
+     "top-right",
+     "middle-left",
+     "middle",
+     "middle-right",
+     "bottom-left",
+     "bottom",
+     "bottom-right"
+ ¨;
+
+ enum ProximitySensorDirection ä
+     "front",
+     "rear",
+     "left",
+     "right",
+     "top",
+     "bottom"
+ ¨;
+     #+END_SRC
+** Generic Sensor API
+*** Issues
+**** [[https://github.com/w3c/sensors/issues/98][Javascript 120Hz devicemotion events for high end inertial applications · Iss...]]
+    - Browsers only sample sensor data at a varying 67Hz
+    - Makes readings unusable for high end use cases
+    - Require 120Hz steady samply rate
+    - iOS / Android have this natively
+    - Current browsers do not have same quality
+** Misc
+   - https://groups.google.com/a/chromium.org/forum/#!msg/blink-dev/TkfdVqYAYiE/4J7Z088MBAAJ
+   - Summary
+
+ The Generic Sensor API defines a framework for exposing MEMS sensors to the Open Web Platform in a consistent way. It does so by defining a blueprint for writing specifications of concrete sensors along with an abstract Sensor interface that can be extended to accommodate different sensor types (such as a gyroscope, magnetometer, or an altimeter). The AmbientLightSensor is the first concrete implementation of a sensor in terms of the Generic Sensor API. More will follow.
+
+ Motivation
+
+ Currently, not all MEMS sensors available on a device are exposed to web applications while those are readily available to native apps. This incentivizes developers to pick native solutions where web applications would have been a better choice.
+
+ In the cases where such sensors are exposed to the web (for example through the DeviceOrientation or DeviceLightEvent APIs), the APIs are inconsistent, don’t meet key use-cases, and are generally too high-level (and thus in opposition to the spirit of the Extensible Web Manifesto).
+
+ This new API addresses these concerns, those brought up by W3C TAG in the Sensor section of the Extensible Web Report Card and issues specific to the DeviceLightEvent such as not providing a value until a change causes the devicelight event to fire.
+
+ Overall, this API lowers developers’ cognitive load by offering a consistent API across sensors, makes it simpler and faster to specify and implement new sensors (such as barometers/altimeters which are now appearing on high-end devices) and opens up a number of uses cases by providing lower-level access to the sensors. 
+
+ Interoperability and Compatibility Risk
+
+ Firefox: shipped DeviceLightEvent. Positive public signals for moving to Ambient Light Sensor.
+
+ Edge: has implemented DeviceLightEvent. Positive public signals for moving to Ambient Light Sensor.
+
+ Safari: No negative signals.
+
+ Ongoing technical constraints
+
+ None.
+
+ Will this feature be supported on all six Blink platforms (Windows, Mac, Linux, Chrome OS, Android, and Android WebView)?
+
+ Yes.
+
+ OWP launch tracking bug
+
+ crbug.com/606766
+
+ Link to entry on the feature dashboard
+
+ https://www.chromestatus.com/features/5298357018820608
+
+ Requesting approval to ship?
+
+ No.
+
+ Hi,
+
+ Just in case someone is wondering what do MEMS (Micro Electro Mechanical Systems) sensors mean:
+
+ Basically, in this context, MEMS is just a catch-all term for various small sensors that are embedded in all modern mobile devices, phones, tablets, laptops etc. This includes accelerometers, gyroscopes, digital compasses, ambient light sensors, etc.
+
+ The Generic Sensor API defines a framework (think an abstract base class) that is extended by such concrete sensors, e.g. AmbientLightSensor to begin with. This means the API surface across various sensors will be more consistent.
+
+ The feedback from TAG review seem to signal the feature is good for implementation.
+
+ Based on feedback we’ve received from initial review for the patches that Riju sent and constraints that were identified by Alex Russel and Tim Volodine (e.g., subclassing, addition of new sensor types, managing different sensor configurations, etc), we’ve created design for Generic Sensor API and implemented prototype that is based on it.
+
+ The proposed design provides:
+
+     Sharing code between the concrete sensor implementations (for example: adding a new sensor on Android requires ß30 loc on platform side and ß150 loc on blink side). This reduces the code duplication and also simplifies maintenance of the newly added code.
+
+     Support for multiple JS Sensor instances that can have different configurations and life-time.
+
+     Support for both “slow” sensors that provide periodic updates (e.g. AmbientLight, Proximity), and “fast” streaming sensors that have low-latency requirements for sensor reading updates (Gyroscope, LinearAcceleration).
+     Shared memory based IPC mechanism for sensor reading update. It is beneficial for performance-sensitive streaming sensors (Gyroscope, LinearAcceleration). 
+
+
+ Please find class and sequence diagrams for the intended design in the attachment.
+
+     It isn't clear how to subclass this interface yet. I think this is important and I'm excited and optimistic that once it's sorted out, making new sensor types (both from the user and system perspective) will be a powerful way to add new capabilities.
+     There's an open question about delivering sensor readings to workers. Avoiding main thread jank, in general, means doing less work there. Making it possible to ask for permission to use a sensor from the document context but handle sensor readings in workers seems like a good way to start.
+     Are there explainer documents for the Ambient Light (or Generic Sensors) APIs? Seeing example code might make it easier for everyone to evaluate the proposals.
+     It isn't clear how to subclass this interface yet. I think this is important and I'm excited and optimistic that once it's sorted out, making new sensor types (both from the user and system perspective) will be a powerful way to add new capabilities.
+     There's an open question about delivering sensor readings to workers. Avoiding main thread jank, in general, means doing less work there. Making it possible to ask for permission to use a sensor from the document context but handle sensor readings in workers seems like a good way to start.
+     Are there explainer documents for the Ambient Light (or Generic Sensors) APIs? Seeing example code might make it easier for everyone to evaluate the proposals.
