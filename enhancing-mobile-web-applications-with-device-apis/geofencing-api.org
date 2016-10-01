@@ -1,0 +1,5 @@
+* Geofencing API
+  - Currently abandoned.
+  - Allows web apps to setup geographic boundaries around specific
+    locations, then receive notifications when the hosting device
+    enters or leaves those areas.
