@@ -1,0 +1,679 @@
+* Device Orientation API
+** Main
+*** Support
+    - Support
+      - IE11
+      - Supported in Edge fully!
+      - Partial support - lack of compassneedscalibration event support.
+      - Not supported in Safari.
+      - Supported in iOS Safari.
+      - Global: 85.44%
+      - Australia: 88.73%
+    - DeviceOrientationEvent.beta
+      - -90 and 90 values on mobile Safari
+      - 180 and -180 on Firefox
+    - DeviceOrientationAlpha
+      - Safari does not implement the spec correctly. Alpha is
+        arbitrary, instead of relative to true north.
+      - Safari offers webkitCompassing, which has the opposite sign to
+        alpha, and is relative to magnetic north instead of true
+        north.
+    - IE Mobile has no support
+** EdX
+*** Introduction
+    - use dev tools to fake the orientation values, using mobile
+      device emulation mode.
+*** The coordinate system and Euler angles
+    - Transformation from the Earth coordinate frame to the device
+      coordinate frame uses the following rotations.
+    - Rotations use the right-hand convention. Positive rotation
+      around an axis is clockwise when viewed along the positive
+      direction of the axis.
+**** alpha
+     - Alpha in 0 - 360
+     - Rotation around the Z axis
+     - Device in the initial position
+     - Device rotated through angle alpha about z axis
+**** beta
+     - Beta in -180 - 180
+     - Rotation around the x axis
+**** gamma
+     - Gamma in -90 - 90
+     - Rotation around the y axis
+*** Get different angles using the JavaScript HTML5 orientation API
+**** Typical Use
+     - Use:
+       - Test if your browser supports the orientation
+       - Define a listener for the deviceorientation event
+       - Get the angles from the event
+     -
+**** Interesting Uses
+     - Mix orientation API and websockets
+     - Control the movement of the logo shown!
+     - Cool use case :D
+*** Introduction
+    - Deals with accelerations
+    - Uses
+      - Controlling a game
+        - Monitor device orientation and interpret tilting in a
+          certain direction as a means to control and on-screen sprite
+      - Gesture recognition
+        - Monitor device acceleration and apply signal processing to
+          recognise specific gestures - e.g. a shaking gesture to
+          clear a web form
+      - Mapping
+        - Use orientation to correctly align the map with reality
+    -
+*** Basic Usage
+    - Returns more than just rotation information.
+    - Returns acceleration information about device current motion.
+    - Acceleration along the X axis, Y axis, and Z axis.
+    - Measured in meters per second squared.
+    - Accleration returned as an acceleration event.
+    - Two properties:
+      - accelerationIncludingGravity
+      - acceleration
+        - excludes the effects of gravity.
+    - There are two properties, as some devices are able to exclude
+      the effect of gravity if equipped with a gyroscope.
+    - There is acceleration due implicitly to gravity.
+    - If the device does not have a gyroscope, the acceleration
+      property will be null.
+    - All iOS devices have a gyroscope.
+*** About Acceleration
+    - Device motion is a superset of the device orientation event.
+    - It returns data about the rotation information.
+    - Includes acceleration information about the device.
+    - The acceleration data is returned in three axes: x, y, z.
+    - Measured in m/s^2.
+    - Some devices do not have the hardware to exclude the effect of
+      gravity.
+*** Common Steps
+    - Principles
+      - Test if API is supported
+      - Add listener for devicemotion events
+      - Get acceleration values from the DOM event
+*** Common processing with acceleration values
+    - Test value of the acceleration.z property:
+      - If > 0, device is facing up
+      - Otherwise, facing down
+        #+BEGIN_SRC js
+          // For example, if acceleration.z is > 0 then the phone is facing up
+          var facingUp = -1;
+          if (acceleration.z > 0) {
+              facingUp = +1;
+          }
+        #+END_SRC
+    - Compute the angle corresponding to the Left / Right and Front
+      / Back tilts.
+      #+BEGIN_SRC js
+       
+        function deviceMotionHandler(eventData) {
+            // Grab the acceleration including gravity from the results
+            var acceleration = eventData.accelerationIncludingGravity;
+            // Convert the value from acceleration to degrees
+            // acceleration.x|y is the acceleration according
+            //  to gravity, we'll assume we're on  Earth and divide
+            // by 9.81 (earth gravity) to get a percentage value, 
+            // and then multiply that by 90 to convert to degrees.
+            var tiltLR = Math.round(((acceleration.x) / 9.81) * -90);
+            var tiltFB = Math.round(((acceleration.y + 9.81) / 9.81) * 90 * facingUp);
+            // ... do something
+        }
+
+      #+END_SRC
+    - Compute the vertical (direction of the sky)
+      #+BEGIN_SRC js
+        var angle = Math.atan2(accel.y,accel.x);
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+ 
+        ctx.moveTo(50,50);
+        // Draw sky direction in the canvas
+        ctx.lineTo(50-50*Math.cos(angle),50+50*Math.sin(angle));
+        ctx.stroke();
+      #+END_SRC
+    - Use acceleration values to move on screen
+      #+BEGIN_SRC js
+        ball.x += acceleration.x;
+        ball.y += acceleration.y;
+      #+END_SRC
+    -
+*** Example
+    - X and Y acceleration values can be used for indicating the
+      sky's direction (vertical)
+    - Z acceleration is an indicator for the face up / face down
+      orientation of the device
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   #+BEGIN_SRC js
+     // Check to make sure the browser supprots DeviceOrientationEvents
+     if (window.DeviceOrientationEvent) {
+         // Create an event listener
+         window.addEventListener('deviceorientation', function(event) {
+             // Get the left-to-right tilt (in degrees).
+             var tiltLR = event.gamma;
+
+             // Get the front-to-back tilt (in degrees).
+             var titleFB = event.beta;
+
+             // Get the direction of the device (in degrees).
+             var direction = event.alpha;
+         });
+     }
+   #+END_SRC
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - get rotation angles in three dimensions
+   - IE for Windows Phone supported from Version 11
+   #+BEGIN_SRC js
+     if (window.DeviceOrientationEvent) {
+         window.addEventListener('deviceorientation', function(eventData) {
+             // gamma is the left-to-right tilt in degrees
+             console.log(eventData.gamma);
+
+             // beta is the front-to-back tilt in degrees
+             console.log(eventData.beta);
+
+             // alpha is the compass direction the device is facing in degrees
+             console.log(eventData.alpha);
+         }, false);
+     }
+   
+   #+END_SRC
+   - uses accelerometer for device movement
+   - detects acceleration, not speed
+   - support iOS, Android
+   - IE for Windows Phone supported from Version 11
+*** code
+    #+BEGIN_SRC js
+      if (window.DeviceMotionEvent) {
+          window.addEventListener('devicemotion', function(eventData) {   
+              // Acceleration
+              console.log(eventData.acceleration.x);
+              console.log(eventData.acceleration.y);
+              console.log(eventData.acceleration.z);
+    
+              // Acceleration including gravity
+              console.log(eventData.accelerationIncludingGravity.x);
+              console.log(eventData.accelerationIncludingGravity.y);
+              console.log(eventData.accelerationIncludingGravity.z);
+
+              // Rotation rate
+              console.log(eventData.rotationRate.alpha);
+              console.log(eventData.rotationRate.beta);
+              console.log(eventData.rotationRate.gamma);
+          }, false);
+      }
+    #+END_SRC
+** [[http://www.girliemac.com/presentation-slides/html5-mobile-2014/device.html#6][HTML5 Device APIs]]
+   - The device orientation event is fired when new data is available
+     from a magnetometer sensor. Device orientation supplies the
+     physical orientation of the device.
+   - code
+     #+BEGIN_SRC js
+     if (window.DeviceOrientationEvent) {
+         window.addEventListener('deviceorientation', function(e) {
+           compass   = e.alpha; // degree
+               frontBack = e.beta;
+               leftRight = e.gamma;
+               // ...
+         }, false);
+       }
+     #+END_SRC
+   - Device motion supplies the acceleration of the
+     device. Compassneedscalibration iOS5 has webkitCompassingHeading
+     property, but is not a standard
+** HTML5 Mobile Hardware
+   - gyroscope
+   - accelerometer
+   - compass
+   - events
+     - deviceorientation
+     - devicemotion
+     - compassneedscalibration
+   - code
+     #+BEGIN_SRC js
+     if (window.DeviceOrientationEvent) {
+         window.addEventListener('deviceorientation', function(e) {
+           a = Math.floor(e.alpha);
+               b = Math.floor(e.beta);
+               g = Math.floor(e.gamma);
+               el.style.transform = 'rotateZ('+a+'deg) 
+                                  rotateX('+b+'deg) rotateY('+g+'deg)';
+         }, true);
+       } 
+                
+     #+END_SRC
+   - not raw sensor data
+   - high level data agnostic to the source of information - common
+     sources are gyroscope, accelerometer, compass
+   - deviceorientation fired when new information is fired from the
+     magnometer sensor, supplies physical orientation of the device
+   - devicemotion supplies acceleration of device
+   -
+** HTML5 Mobile Approach
+   - deviceorientation: expressed as a series of rotations from a
+     local coordinate frame
+   - devicemotion: expressed in Cartesian coordinates in a coordinate
+     frame defined in the device
+   - compassneedscalibration
+     - inform websites that a compass being used to provide data for
+       one of these events needs calibration
+     - webkitCompassHeading property in iOS5
+** [[http://w3c.github.io/deviceorientation/spec-source-orientation.html][DeviceOrientation Event Specification]] W3C Working Draft 1 December 2011
+*** Introduction
+    - Obtain information about physical orientation and movement
+    - Not raw sensor data- provides high level data.
+    - Common sources
+      - Gyroscope
+      - Compass
+      - Accelerometer
+    - deviceorientation
+      - physical orientation of the device
+      - expressed as rotations from a local coordinate frame
+      - code
+        #+BEGIN_SRC js
+              window.addEventListener("deviceorientation", function(event) {
+          // process event.alpha, event.beta and event.gamma
+      }, true);
+        #+END_SRC
+      - device lying flat on a horizontal surface with the top of the
+        screen pointing west:
+        #+BEGIN_SRC js
+        {alpha: 90,
+       beta: 0,
+       gamma: 0};
+        #+END_SRC
+      - to get the compass heading
+        - subtract alpha from 360
+        - 
+      
+    - devicemotion
+      - acceleration of the device
+      - expressed in Cartesian coordinates in a coordinate frame
+        defined in the device
+      - supplies rotation rate of the device about a local coordinate
+        frame
+      - should provide acceleration of the device's center of mass
+        where practical
+      - code
+        #+BEGIN_SRC js
+        window.addEventListener("devicemotion", function(event) {
+          // Process event.acceleration, event.accelerationIncludingGravity,
+          // event.rotationRate and event.interval
+      }, true);
+        #+END_SRC
+        - device has an acceleration of zero and
+          accelerationIncludingGravity of
+          #+BEGIN_SRC js
+                {x: 0,
+       y: 0,
+       z: -9.81};
+          #+END_SRC
+        - device in free fall
+          #+BEGIN_SRC js
+          {x: 0,
+       y: 0,
+       z: -9.81};
+          #+END_SRC
+        - device in vehicle
+          #+BEGIN_SRC js
+          {acceleration: {x: v^2/r, y: 0, z: 0},
+       accelerationIncludingGravity: {x: v^2/r, y: 0, z: 9.81},
+       rotationRate: {alpha: 0, beta: 0, gamma: -v/r*180/pi} };
+          #+END_SRC
+    - compassneedscalibration
+      - inform web sites that the compass used needs calibration
+      - code
+        #+BEGIN_SRC js
+              window.addEventListener("compassneedscalibration", function(event) {
+          alert('Your compass needs calibrating! Wave your device in a figure-eight motion');
+          event.preventDefault();
+      }, true);
+        #+END_SRC
+*** Description
+**** deviceorientation
+     - fires on window object
+     - fires whenever a significant change in orientation occurs, this
+       is left up to the implementation
+     - properties
+       - specify orientation of device in terms of the transformation
+         from a coordinate frame fixed on Earth to a coordinate frame
+         fixed in the device
+     - Earth coordinate frame
+       - East, North, Up frame at the user's location
+       - 3 axes: the ground plane is tangent to the spheriod of the
+         World Geodetic System 1984 at the user's location
+       - East (X): in the ground plane, perpendicular to the North
+         axis and positive towards the East
+       - North (Y): in the ground plane and positive towards True
+         North (towards the North Pole)
+       - Up (Z): perpendicular to the ground plane and positive upwards
+     - Mobile device:
+       - device coordinate frame relative to the screen in its
+         standard orientation - typically portrait
+     - Laptop:
+       - device coordinate frame defined relative to the integrated keyboard
+     - x: plane of screen / keyboard is positive towards the right
+       hand side of the screen or keyboard
+     - y: plane of the screen or keyboard is positive towards the top
+       of the screen or keyboard
+     - z: perpendicular to the screen or keyboard, positive out of the
+       screen or keyboard
+     - transformation from the Earth coordinate frame to the device
+       coordinate frame
+     - Rotations must use the right hand convention: positive rotation
+       around an axis is clockwise when viewed along the positive
+       direction of the axis
+     - With two frames aligned, the rotations are applied:
+       - rotate the device frame around its axis by alpha degrees [0, 360]
+       - rotate the device frame around its x axis by beta degrees,
+         with beta in [-180, 180]
+       - rotate the device frame around its y axis by gamma degrees,
+         with gamma in [-90, 90]
+     - Angles alpha, beta and gamma form intrinsic Tait-Bryan angles
+       of type Z-X'-Y"
+       - choice of angles follows mathematical convention
+       - alpha is in the opposite sense to a compass heading
+     - implementations unable to provide absolute values for the three
+       angles may provide values relative to some arbitrary
+       orientation (see iphones)
+       - absolute property must be set to true in this case
+     - if implementations cannot provide all three angles, must set
+       values to null. if it can never provide orientation
+       information, event must be fired with all properties set to null
+**** compassneedscalibration
+     - user agent determines if compass needs calibration
+     - only fire event if calibrating the compass will increase
+       accuracy of the data provided by the deviceorientation
+     - user agent should present calibration details - or websites can
+       provide alternative calibration ui
+**** devicemotion
+     - acceleration provides acceleration relative to the Earth frame,
+       expressed in the body frame
+       - expressed in m/s^2
+     - implementations unable to provide acceleration data without the
+       effect of gravity (e.g. due to lack of gyroscope) can supply
+       acceleration including the effect of gravity
+       - less useful
+       - accelerationIncludingGravity
+     - rotationRate
+       - provides rate of rotation of hosting device in space
+       - expressed as rate of change of the angles
+       - expressed in degrees per second
+     - interval
+       - provide interval at which data is obtained from underlying hardware
+       - expressed in milliseconds
+     - if it cannot provide all properties, those are set to null
+*** Use Cases
+    - controlling a game
+      - interpret tilting via device orientation
+    - gesture recognition
+      - monitor device acceleration
+      - apply signal processing to recognise certain gestures
+      - e.g. shake to clear a web form
+    - mapping
+      - align map with reality
+      -
+**** Requirement
+     - provide data that describes the physical orientation
+     - provide data describing motion in space of the device
+     - allow web applications to register changes
+     - aganostic to the underlying sources of orientation and motion
+       data
+     - uses DOM event framework
+*** Worked example
+    - shows how to determine compass heading that the user is facing
+      when holding the device with the screen vertical
+    - e.g. augmented reality system
+** [[http://w3c.github.io/deviceorientation/spec-source-orientation.html][DeviceOrientation Event Specification]] Editor's Draft 26 February 2016
+   - Introduces deviceorientationabsolute
+     - additional sensors such as the magnetometer can be used to
+       provide an absolute orientation
+     - absolute is set to true
+** [[http://www.html5rocks.com/en/tutorials/device/orientation/][This End Up: Using Device Orientation and Device Motion As An Input Method - ...]]
+*** Device Orientation Data
+    - align device with local earth frame
+      - lay device flat
+      - device pointing north
+      - laptop screen 90 deg + keyboard inline with the surface
+*** Device Motion Data
+    - acceleration data returned as a coordinate frame with three axes
+      x y and z
+      - x: side to side across mobile screen
+      - y: front to back across mobile screen
+      - z: straight up out
+    - rotation uses Euler angles to represent difference between the
+      device and its normal position and its current position
+      - returns the number of degrees different from normal
+    - beta: number of degrees the device is tilted front to back
+    - gamma: number of degrees the device is tilted side-to-side
+    - alpha: number of degrees the device is rotated around z-axis
+    - most people use phone rotated around the x axis so screen is
+      facing them
+*** Differences in Browsers
+    - most browsers return compass heading for alpha - when the device
+      is pointing north, it is zero
+    - iOS Safari alpha is based on the direction the device was
+      pointing when device orientation was first requested
+    - the compass heading is available in the webkitCompassHeading
+      parameter
+*** Events
+    - Device orientation
+      - returns rotation data
+      - beta: how much device is leaning front to back
+      - gamma: side to side
+      - alpha: direction device is facing (if it has a compass)
+    - Device motion
+      - superset of the device orientation event
+      - returns rotation data
+      - also returns acceleration information
+      - acceleration excludes the effects of gravity
+      - normal position
+        - not accelerating
+          - acceleration: {0, 0, 0}
+          - accelerationIncludingGravity: {0, 0, 9.81}
+        - accelerating up
+          - acceleration: {0, 0, 5}
+          - accelerationIncludingGravity: {0, 0, 14.81}
+        - accelerating forward
+          - acceleration: {0, 2, 0}
+          - accelerationIncludingGravity: {0, 2, 9.81}
+        - accelerating right
+          - acceleration: {3, 0, 0}
+          - accelerationIncludingGravity: {3, 0, 9.81}
+        - accelerating up and to the right
+          - acceleration: {5, 0, 5}
+          - accelerationIncludingGravity: {5, 0, 14.81}
+      - mobile phone rotated along the x-axis so screen is
+        perpendicular to its normal position
+        - not accelerating
+          - acceleration: {0, 0, 0}
+          - accelerationIncludingGravity: {0, 9.81, 0}
+        - accelerating up
+          - acceleration: {0, 5, 0}
+          - accelerationIncludingGravity: {0, 14.81, 0}
+        - accelerating forward
+          - acceleration: {0, 0, 2}
+          - accelerationIncludingGravity: {0, 9.81, 2}
+        - accelerating right
+          - acceleration: {3, 0, 0}
+          - accelerationIncludingGravity: {3, 9.81, 0}
+        - accelerating up and to the right
+          - acceleration: {5, 5, 0}
+          - accelerationIncludingGravity: {5, 14.81, 0}
+*** Use
+    - Check for compatability
+    - code
+      #+BEGIN_SRC js
+      if (window.DeviceOrientationEvent) {
+ console.log("DeviceOrientation is supported");
+}
+      #+END_SRC
+    - add event listener
+      #+BEGIN_SRC js
+      if (window.DeviceOrientationEvent) {
+  // Listen for the event and handle DeviceOrientationEvent object
+  window.addEventListener('deviceorientation', devOrientHandler, false);
+}
+      #+END_SRC
+    - handle event
+      #+BEGIN_SRC js
+      if (window.DeviceOrientationEvent) {
+  document.getElementById("doEvent").innerHTML = "DeviceOrientation";
+  // Listen for the deviceorientation event and handle the raw data
+  window.addEventListener('deviceorientation', function(eventData) {
+    // gamma is the left-to-right tilt in degrees, where right is positive
+    var tiltLR = eventData.gamma;
+
+    // beta is the front-to-back tilt in degrees, where front is positive
+    var tiltFB = eventData.beta;
+
+    // alpha is the compass direction the device is facing in degrees
+    var dir = eventData.alpha
+
+    // call our orientation event handler
+    deviceOrientationHandler(tiltLR, tiltFB, dir);
+  }, false);
+} else {
+  document.getElementById("doEvent").innerHTML = "Not supported."
+}
+      #+END_SRC
+*** Use
+    - Check for compatability
+    - Add event listener
+    - code
+      #+BEGIN_SRC js
+      if (window.DeviceMotionEvent) {
+  console.log("DeviceMotionEvent supported");
+} 
+
+if ((window.DeviceMotionEvent) {
+  window.addEventListener('devicemotion', deviceMotionHandler, false);
+} else {
+  document.getElementById("dmEvent").innerHTML = "Not supported."
+}
+
+      #+END_SRC
+    - event handler
+      #+BEGIN_SRC js
+function deviceMotionHandler(eventData) {
+  var info, xyz = "[X, Y, Z]";
+
+  // Grab the acceleration from the results
+  var acceleration = eventData.acceleration;
+  info = xyz.replace("X", acceleration.x);
+  info = info.replace("Y", acceleration.y);
+  info = info.replace("Z", acceleration.z);
+  document.getElementById("moAccel").innerHTML = info;
+
+  // Grab the acceleration including gravity from the results
+  acceleration = eventData.accelerationIncludingGravity;
+  info = xyz.replace("X", acceleration.x);
+  info = info.replace("Y", acceleration.y);
+  info = info.replace("Z", acceleration.z);
+  document.getElementById("moAccelGrav").innerHTML = info;
+
+  // Grab the rotation rate from the results
+  var rotation = eventData.rotationRate;
+  info = xyz.replace("X", rotation.alpha);
+  info = info.replace("Y", rotation.beta);
+  info = info.replace("Z", rotation.gamma);
+  document.getElementById("moRotation").innerHTML = info;
+
+  // // Grab the refresh interval from the results
+  info = eventData.interval;
+  document.getElementById("moInterval").innerHTML = info;       
+}
+      
+      #+END_SRC
+** [[https://hacks.mozilla.org/2015/04/mobile-game-development-with-the-device-orientation-and-vibration-apis/][Mobile game development with the Device Orientation and Vibration APIs &#x260...]]
+   - All implementations missing the compassneedscalibration event.
+   - 
+** Misc
+   - The high-level Device Orientation API decomposes into these three
+     low-level sensors: Accelerometer, Gyroscope,
+     Magnetometer. Following the Extensible Web Manifesto principles,
+     we now expose these primitives to web developers to enable more
+     advanced use cases.
+   - To ensure these specs reflect reality, we're working on Chromium
+     implementation of these sensors in parallel and will use the
+     implementation feedback to improve the specifications, see:
+     https://crrev.com/2051083002
+   - I took a look at the mechanism used for device orientation, which
+     is simply reading from the shared memory buffer at 60Hz.
+   - Our way of shared memory usage for streaming sensors is basically
+     the same as the one used for device orientation: clients simply
+     read from shared buffer at frequency each of them is given (and
+     for discrete sensors client read from shared buffer on the update
+     signal).
+   - The data source is a single instance within browser process
+     (listening to a platform sensor) it just writes sensor data to
+     the shared buffer immediately after it gets it, and it is not
+     affected by increasing number of clients.
+   - We measured latency between the moment a single sensor data
+     update is received from the platform and the moment this data
+     becomes available on blink
+   - This includes both mojo data handling and IPC data transmission
+     itself. The average latency is equal to ~0.3ms for shared memory
+     mechanism, and ~1ms for IPC messages (Chromium build on Nexus 7).  
+** project ideas
+   - learn about motion curves
+   - input mechanism
+* Resources
+** Mobile First - Luke Wroblewski
+*** Device orientation / accelerometer
+    - Because of the size of desktop monitors and laptops, we’re not
+      prone to moving them around a whole lot. Mobile devices are di
+      erent. They  t in the palm of our hand so they can easily be
+      pivoted, rotated, and moved. Accelerometers let us know when
+      that happens so our websites and applications can re- spond
+      accordingly.
+    - The simplest use of an accelerometer is to detect when a mobile
+      device has been turned to be viewed horizontally or vertically
+      (http://bkaprt.com/mf/36). This little bit of knowl- edge can be
+      used to make small or dramatic changes to an application.
+    - fig 3.9: tilt scrolling in Instapaper allows you to read
+      articles at your own pace without having to touch the screen.
+    - Accelerometers can also tell us the rate at which a device is
+      moving in someone’s hand. This one capability can take a common
+      task on the web and make it easier and fun. Consider the act of
+      reading an article online: every day, millions of people skim
+      the top paragraph and perhaps scroll down using their mouse, or
+      click on a scrollbar in their browser. Not re- ally much to
+      innovate right?
+    - Just shake your iPhone to make it snow in this robot’s globe
+     (http://bkaprt.com/mf/37).
+    - the reading service Instapaper allows you to save articles to
+      read later on your mobile device (and many other devices as
+      well). Instapaper’s iPhone application uses accelerometer data
+      to gradually scroll text in an article for you as you tilt the
+      phone—no scrolling needed (fig 3.9). You can even tilt the
+      device more or less to read at your own pace. So even the most
+      common tasks online can be rethought given mobile capabilities.
+    - fig 3.11: Move your mobile device in any direction to pan these
+      images 360 degrees (http://bkaprt.com/mf/38)
+    - The  rst one recreates the venerable snow globe—digitally. Just
+      shake your phone to make the  akes come down in the web browser
+      (fig 3.10). The second example goes a bit further and uses an
+      iPhone 4’s gyroscope (which detects 360 degrees of motion) to
+      make it easy to pan large photos simply by moving the phone in
+      your hand (fig 3.11).
+** misc
+       - deviceorientation
+      - alpha (0 - 360) around z axis
+      - beta (-180 to 180) front to back
+      - gamma (-90 to 90) left to right
+      - webkitCompassHeading (360deg)
+    - devicemotion.acceleration
+      - x east/west
+      - y north/south
+      - z up/down
+    - devicemotion.rotatationRate
+      - alpha
+      - beta
+      - gamma
+       - • Direction: from a digital compass
+       - • Gyroscope: 360 degrees of motion
+** [[https://hacks.mozilla.org/2015/04/mobile-game-development-with-the-device-orientation-and-vibration-apis/][Mobile game development with the Device Orientation and Vibration APIs &#x260...]]
+* Motion
+  - data entry via motion,

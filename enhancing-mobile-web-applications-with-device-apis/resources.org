@@ -1,0 +1,1138 @@
+* (NOT OLD) Resources
+** Common
+   - introduce the window.navigator object
+   - don't try and be an app!
+     - https://adactio.com/journal/11130
+     - "For me, that always results in an interface that sits in a kind
+       of uncanny valley of being almost—but not quite—like the thing
+       it’s imitating."
+     - "There seems to be an inherent assumption that native is
+       intrinsically “better” than the web, and that the only way that
+       the web can “win” is to match native apps note for note."
+     - "Will people expect an experience that maps to native
+       conventions? Or will they be more accepting of deviation because
+       they came to the app via the web and have already seen it before
+       installing it?"
+     - "My gut says that we can build great experiences without having
+       to make it feel exactly like an iOS or Android app because
+       people will have already experienced the Progressive Web App
+       multiple times in the browser before they are asked to install
+       it." 
+      
+   - Device APIs Working Group:
+     - specifications that provide access to user device information
+   - Karen McGrane
+     - If they can do it on their phone, they will do it on their
+       phone. 
+   - nngroup.com/articles/mobile-native-apps
+     - Discoverability. Web apps win the prize on
+       discoverability. Content is a lot more discoverable on the web
+       than in an app: When people have a question or an information
+       need, they go to a search engine, type in their query, and
+       choose a page from the search results. They do not go to the app
+       store, search for an app, download it, and then try to find
+       their answer within the app. Although there are app aficionados
+       who may fish for apps in app stores, most users don’t like
+       installing and maintaining apps (and also wasting space on their
+       device), and will install an app only if they expect to use it
+       often.
+     - Installation. Installing a native or hybrid app is a hassle for
+       users: They need to be really motivated to justify the
+       interaction cost. “Installing” a web app involves creating a
+       bookmark on the home screen; this process, while arguably
+       simpler than downloading a new app from an app store, is less
+       familiar to users, as people don’t use bookmarks that much on
+       mobile.
+     - Maintenance. Maintaining a native app can be complicated not
+       only for users, but also for developers (especially if they have
+       to deal with multiple versions of the same information on
+       different platforms): Changes have to be packaged in a new
+       version and placed in the app store. On the other hand,
+       maintaining a web app or a hybrid app is as simple as
+       maintaining a web page, and it can be done as often or as
+       frequently as needed. 
+     - Platform independence. While different browsers may support
+       different versions of HTML5, if platform independence is
+       important, you definitely have a better chance of achieving it
+       with web apps and hybrid apps than with native apps. As
+       discussed before, at least parts of the code can be reused when
+       creating hybrid or web apps.
+     - Development cost. It’s arguably cheaper to develop hybrid and
+       web apps, as these require skills that build up on previous
+       experience with the web. NN/g clients often find that going
+       fully native is a lot more expensive, as it requires more
+       specialized talent. But, on the other hand, HTML5 is fairly new,
+       and good knowledge of it, as well as a good understanding of
+       developing for the mobile web and hybrid apps are also fairly
+       advanced skills.
+   - environmental design? !!!!
+   - 
+*** Introduction
+    - What do I mean by device APIs?
+    - Device APIs could be high level, meaning they take into account a
+      number of different sources. We want information, rather than
+      pure data.
+    - Low level APIs return rudimentary levels, without processing and
+      generally from a single source. We use this data and do something
+      with it- it's probably not very useful by itself.
+** getUserMedia
+*** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
+**** getUserMedia API
+     - access to multimedia stream from local devices
+     - real time communication, tutorials, lesson recording
+     - accepts parameters as an object of constraints, a success
+       callback, and a failure callback
+     - can control the requested stream - high resolution or low
+     - desktop browser support is Chrome 21+, Firefox 17+, Opera
+       18+. Mobile support Chrome 32+, Firefox 26+, Opera 12+.
+** Media Capture and Streams
+*** Main
+**** Support
+     - Desktop
+       - Firefox 17+
+       - Chrome 21+
+       - Opera 12.0 - 12.1 / 18.0+ 
+     - Mobile
+       - Chrome 33+
+       - Firefox 26+
+       - Opera Mobile 12+
+*** [[https://www.w3.org/TR/mediacapture-streams/][Media Capture and Streams]]
+    - Is a W3C Candidate Recommendation as of 19 May!
+    - Allows local media to be requested from a platform via JavaScript
+      APIs.
+*** [[https://www.sitepoint.com/whats-media-capture-streams-use/][What are Media Capture and Streams and How Do I Use Them?]]
+    - access to device's media capture mechanism
+    - HTML Media Capture
+      - extends the HTMLInputELement with a capture attribute
+      - code
+        #+BEGIN_SRC html
+         <input type="file" capture>
+         <input type="file" accept="image/*" capture>
+        #+END_SRC
+      - using accept provides hint on the preferred MIME type
+    - Media Capture and Streams is a set of JavaScript APIs
+    - Allow local media to be requested from a platform
+    - MediaStream API: control where stream data is consumed, provides
+      control over the devices that produce the media.
+      - exposes information about devices able to capture and render
+        media
+    - getUserMedia()
+      - provides access to user's local camera/microphone stream
+      - syntax
+        #+BEGIN_SRC js
+        var stream = navigator.getUserMedia(constraints, successCallback, errorCallback);
+        #+END_SRC
+      - constraints
+        - MediaStreamConstraints object
+        - video boolean
+        - audio boolean
+        - either or both must be specified to validate the constraint
+          argument
+      - returns LocalMediaStream object
+    - LocalMediaStream
+    - error
+      - permission_denied
+      - not_supported_error
+      - mandatory_unsatisfied_error
+    - code
+      #+BEGIN_SRC js
+     
+		 if (navigator.getUserMedia) {
+             navigator.getUserMedia(
+			 // constraints
+             {
+                 video: true,
+                 audio: true
+             },
+			 // successCallback
+			 function (localMediaStream) {
+				 var video = document.querySelector('video');
+                 video.src = window.URL.createObjectURL(localMediaStream);
+				 // do whatever you want with the video
+                 video.play();
+             },
+			 // errorCallback
+			 function (err) {
+                 console.log("The following error occured: " + err);
+             });
+         } else {
+             alert("getUserMedia not supported by your web browser or Operating system version");
+         }
+	
+      #+END_SRC
+    - you are prompted
+    - supported on Edge, Chrome 21+, Opera 18+, Firefox 17+
+    - vendor prefixes
+    - code
+      #+BEGIN_SRC js
+      navigator.getUserMedia = (navigator.getUserMedia ||
+	 navigator.webkitGetUserMedia ||
+	 navigator.mozGetUserMedia
+ );
+
+      #+END_SRC
+
+*** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+    - get access to the camera
+      #+BEGIN_SRC js
+        // Request the camera.
+        navigator.getUserMedia(
+            // Constraints
+            {
+                video: true
+            },
+            // Success Callback
+            function(localMediaStream) {
+                // Get a reference to the video element on the page.
+                var vid = document.getElementById('camera-stream');
+
+                // Create an object URL for the video stream and use this 
+                // to set the video source.
+                vid.src = window.URL.createObjectURL(localMediaStream);
+            },
+            // Error Callback
+            function(err) {
+                // Log the error to the console.
+                console.log('The following error occurred when trying to use getUserMedia: ' + err);
+            }
+        );
+      #+END_SRC
+** firefox
+*** getUserMedia
+    - firefox 42
+      - Improved ability for applications to monitor and control which
+        devices are used in getUserMedia
+    - firefox 20
+      - getUserMedia implemented for web access to the user's camera
+        and microphone (with user permission) 
+*** navigator.onLine
+    - Navigator.onLine now varies with actual internet connectivity
+      (Windows and Mac OS X only) 41
+*** flyweb
+    - One powerful but simple application is using this for slideshow
+      presentations. 
+    - It could be used in schools, colleges, conferences, business
+      environments, etc – with or without a primary display for the
+      presentation. Just show up, connect to the presenter’s server and
+      go. 
+    - Potential features could include:
+      - – audience feedback, such as polls
+      - – allow someone to go *back* for something they missed on an
+        earlier slide (on their device)
+      - – easily save the whole presentation or take screenshots of
+        just one slide
+    - Especially useful in environments where not everyone can have a
+      good view of the a main screen or if there is none. Additionally,
+      the large screen could be a Flyweb enabled TV or projector. 
+** Webkit
+   - Navigator.hardwareConcurrency provides the total number of logical
+     processors available to the user agent. 
+
+** Phone Calls / Text Messages
+*** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+    #+BEGIN_SRC html
+      <a href="tel:+44703567387625">
+        Call number!
+      </a>
+
+      <a href="sms:+44703567387625?body=Hello%20there!">
+        Compose SMS!
+      </a>
+    #+END_SRC
+
+** TODO [[http://www.sitepoint.com/10-html5-apis-worth-looking/][10 HTML5 APIs Worth Looking Into]]
+** TODO [[https://webkit.org/blog/6784/new-video-policies-for-ios/][New <video> Policies for iOS]]
+   - State "TODO"       from              [2016-09-17 Sat 15:39]
+   - GIFs up to twelve times as expensive in bandwidth
+   - twice as expensive in energy use
+   - starting in iOS 10, WebKit relaxes inline and autoplay policies
+   - keeps in mind bandwidth and users' batteries
+   - default policies
+     - video autoplay
+       - source media contains no audio tracks
+     - video muted
+       - also allowed autoplay without a user gesture
+     - if it gain s an audio track or becomes un-muted without a user
+       gesture, playback pauses
+     - video autoplay only begin playing when visible on-screen
+       - scroll into the viewport
+       - made visible through CSS
+       - inserted into the DOM
+     - pause if become non-visible
+   - video.play() returns a Promise (wow this is super cool)
+   - rejected if conditions aren't met
+* Books
+** The Mobile Book - Addendum
+*** Pattern: Parallel Search Architecture
+    - “Simplicity is the opposite of simple-mindedness,” said Edward
+      Tufte. On mobile, users often need a simple, basic search option
+      that shows only local or new results, without requiring a lot of
+      additional user input, while also making full-featured keyword
+      search and refinement available. This need is elegantly addressed
+      by the parallel search architecture pattern, which allows
+      seamless and graceful access to both searching modes.
+    - Contrast this task with that of finding a romantic restaurant to
+      meet a significant other. The searcher might carefully select the
+      location, cuisine, price range, parking options and so on, and
+      take the time to look at the ratings and read at least a few
+      reviews. However, regardless of the task, there is little reason
+      to display both sets of results any differently. A single
+      well-designed set of search results and refinement options should
+      work well in both cases. The difference is only in how the
+      searcher gets to those results: through full-featured search or
+      through a simpler browsing process. This “dual-access” mode of
+      search is a common challenge on mobile devices, and the parallel
+      search architecture pattern offers an excellent solution for it.
+    - One of the best implementations of it is ThirstyPocket’s iPhone
+      app. The app’s search functionality consists of basic search and
+      advanced search (labeled “More search options” in the picture
+      below). You can see how easy it is to provide multiple levels of
+      engagement.
+    - From the basic search (the home screen), the searcher has several
+      virtually effortless engagement options:
+      - Browse an item for sale in their neighborhood by clicking the
+        “Nearest” button (sorted by nearest first); 
+      - •Browse newest items within a radius of 20 miles using the
+        “Newest” button (sorted by newest first);
+      - •Browse items by category (sorted by nearest first or newest
+        first, depending on which search button is pushed after
+        selecting a category);
+      - •Combine category and keyword search (sorted by nearest first
+        or newest first, depending on which button is pushed).
+      - By contrast, using the “More search options” button, the user
+        can navigate to the advanced search screen, where they can
+        engage with a dedicated page that has a variety of powerful
+        filters, such as price, distance and searching in another
+        geographic location based on ZIP code.
+    - When designing your own implementation, be sure first of all to
+      clearly understand the two ways that you want people to access
+      your content—local and global, for example. Then, make sure to
+      provide the same exact layout of search results for the two
+      search options. Lastly, make sure that switching between the two
+      search options (such as local and global) is simple and
+      obvious. Parallel search architecture is a powerful design
+      pattern, but clarity and simplicity are essential to getting it
+      right on a tiny mobile screen.
+    - Parallel architecture can be seen as a mobile microcosm of Jakob
+      Nielsen’s flexibility and efficiency of use heuristic,4 whereby
+      expert users are provided with powerful tools and options to
+      perform advanced searches. These advanced tools would go
+      unnoticed by the casual user who is looking for local
+      results. Whenever a need comes up to accommodate both use cases
+      gracefully, parallel architecture is the obvious and logical
+      choice.
+    - We have discussed two patterns to help your users navigate and
+      winnow the massive amount of data they find. But what happens
+      when they don’t find anything, perhaps due to mistyping? That’s
+      where the zero results recovery pattern comes in.
+    -
+*** Pattern: Zero Results Recovery
+    - When humans attempt to operate tiny mobile screens with their
+      thumbs, one-handed, while being jostled in the metro and eating a
+      sandwich at the same time, mistakes are bound to happen. It is
+      important to realize that such mistakes are not errors; they are
+      the natural outcome of the conditions of the mobile
+      environment—taking part in a fast-paced, multitasking
+      world. Whether your mobile application provides geographic data,
+      search results for help screens, or even target areas for
+      interactions with game characters, have a fallback solution for
+      when the results aren’t helpful. After all, the extent to which
+      your app assists users in figuring out how to resolve their
+      problem will determine in large part their sense of satisfaction
+      with the app, their brand loyalty and whether they will recommend
+      it to their friends.
+    - Recovery boils down to three essential elements:
+      - Telling the searcher that the system did not understand them,
+      - Providing a way out,
+      - Leveraging to the fullest extent the sensor and history
+        information available in the mobile context of use.
+    - This seems to be a fairly straightforward
+      strategy. Unfortunately, as the next example shows, many apps
+      still struggle with relatively simple problems. The following are
+      a few otherwise great apps that don’t manage to get the zero
+      results recovery experience quite right.
+    - Ignoring Visibility of the System’s Status
+      - The first strategy of the zero results recovery pattern is to
+        tell the user that the system did not understand him. Ignoring
+        this fundamental principle makes the entire system less
+        trustworthy in the eyes of the user. If the person is unaware
+        that the machine did not understand him, then they might think
+        that the machinery is malfunctioning—or, worse, that it is
+        violating the basic rules of logic and reason. Not stating that
+        a misunderstanding occurred violates the mental models that
+        people construct in order to be able to operate complex
+        machines, so they get stuck. Users then get frustrated or just
+        move to an alternate website or app and never come back.
+      - Below is an example from Yelp, where the system takes unusual
+        liberties in trying to guess what people are typing. A person
+        is looking for sushi restaurants in Cupertino, a city in the
+        heart of California’s Silicon Valley. Unfortunately, the
+        searcher mistypes the word “Cupertino” as “Coppertine.”
+      - The results are sushi restaurants located in West Jordan!
+        Needless to say, such results would be confusing in the
+        extreme. The person might not even pay attention to the city
+        marker, but instead try to call a restaurant to book a
+        reservation or even try to navigate to it. Imagine the
+        surprise! All of this grief could have been easily avoided if
+        the system had clearly stated that it did not understand the
+        query, while offering its best guess.
+    - Inadvertently Taking Away User Control
+      - The iPhone’s own autocomplete feature can also offer this kind
+        of blind guessing that apps sometimes do. Although turning off
+        the autocomplete feature for the search box is easy, most app
+        designers do not currently do it.
+    - Lack of Interface Efficiency and Useless Controls
+      - 
+      - With all of these anti-patterns, what does a good
+        implementation of the zero results recovery design pattern look
+        like? Well, a successful implementation starts with the basics:
+        it clearly states that the system did not understand the query,
+        and it provides no extraneous controls that would mislead the
+        searcher deeper into the zero results condition. *However, a*
+        *truly excellent implementation of the recovery pattern goes the*
+        *extra mile, beyond the “do no harm” stage, by leveraging to the*
+        *fullest extent the device’s sensor and history data, if it is*
+        *available. Although this is not technically challenging*,
+        *strictly speaking, very few apps take the time to do this*
+        *right*.
+      - One excellent example is Booking.com’s app, shown
+        above. Booking.com puts an interesting twist on the pattern by
+        simply treating every set of mobile search parameters as
+        inherently approximate. Thus, the searcher can clearly see
+        their original query and note that a zero results condition has
+        occurred by seeing a list of autocorrected city names in the
+        search results instead of suggested hotels. Booking.com also
+        disables the autosuggest function, which prevents unwelcome
+        autocorrection keyword “hitchhikers,” while at the same time
+        allowing its own autocorrect mechanism to really shine.
+      - Zero results is a key pattern in the mobile space. Every search
+        implementation should use it, because searching on mobile is
+        error-prone in the extreme. In fact, starting your search
+        design from the zero results use case will often yield a much
+        better design. The more time your team spends designing for
+        zero results, the closer it will get to creating a truly
+        successful finding experience.
+*** Input
+    - The mobile experience relies on a set of inputs that come from a
+      combination of straightforward typing, 
+      multitouch and on-board sensors such as the microphone and
+      camera.
+    - Mobile inputs can be automatically collected from the
+      environment by the device.
+    - The best input methods take full advantage of the unique
+      capabilities of mobile devices, while at the same time being
+      mindful of the many limitations of the mobile platform:
+      - difficulty of typing,
+      - low bandwidth,
+      - small screens and big fingers, which make precise pointing
+        operations available on the desktop difficult to perform on
+        mobile.
+    - In this section we will describe three key data input patterns:
+      - designs that dissolve in behavior,
+      - tap-ahead and
+      - virtual assistant.
+    - Each of these patterns handles a different aspect of mobile
+      input: ambient sensors, typing and complex multistep entry of
+      massive amounts of data.
+**** Pattern: Designs that dissolve in behaviour
+     - The best mobile designs make you feel as though you’ve somehow
+       become Iron Man and donned the magical suit of red and gold
+       cybernetic armor. It’s like an intelligent exoskeleton that
+       surrounds you, comforting you with essential information at every
+       step, somehow understanding your every wish, and performing
+       miraculous feats to pull your butt out of the fire no matter how
+       dire the situation—all by requiring you to do no more than you
+       would normally do. This is the digital magic of designs that
+       dissolve in behavior.
+     - As Stephanie Rieger reminded us, mobile phones come equipped with
+       a variety of sensors: camera, accelerometer, light sensor,
+       microphone, multitouch screen, near field communication (NFC),
+       global positioning system (GPS) and more. At the same time,
+       accomplishing typical desktop computer tasks—such as typing,
+       entering data, pointing precisely and operating multiple
+       windows—are difficult on a tiny touch screen. Rather than blindly
+       copying existing desktop computer functionality, the best mobile
+       designs strive to replace heavy data entry and precise pointing
+       with creative, delightful workarounds that use the sensors and
+       capabilities that are available only on mobile devices. The best
+       workarounds take advantage of people’s natural behavior in
+       performing a task. For example, as Peter Morville explains in his
+       book "Search Patterns", when you stick your soapy hands under the
+       faucet to make the water flow, all you’re doing is telling the
+       machine that you are ready for the water by doing what you would
+       naturally do if the water was already flowing—then, the machine
+       will turn on the water to match your expectations. This is a
+       design that dissolves in behavior.
+     - When you first open the Google app, you get a cute introductory
+       cartoon that says: no need to push any buttons—just swing your
+       phone up to your ear as you would naturally do to speak, say your
+       search query—the Google app will interpret the voice command as a
+       keyword query and execute the search.
+     - The desktop equivalent of this interaction is typing a query in a
+       text box, pressing the search button and then looking at the
+       results. On a mobile phone, using the designs that dissolve in
+       behavior pattern, the entire sequence of steps necessary to
+       execute a query dissolves into the most natural sequence of
+       movements imaginable, akin to calling a good friend who then
+       sends you exactly what you’ve asked for. Using this pattern,
+       transforming even the most mundane and trivial of tasks into a
+       pleasurable personal experience becomes possible.
+     - 
+     -
+**** Unlocking the Phone via Facial Recognition: Android 4.0
+     - One of the first principles of creating magical moments is to
+       transform the trivial. Let’s start at the beginning: what is the
+       most mundane activity one can do on a phone? For many us, it is
+       unlocking the home screen.
+     - Although no study has been done on how frequently people unlock
+       their home screen, we can make some educated guesses. According
+       to the Pew Research Center, one in three teens sends more than
+       100 text messages a day. We can imagine that they’d have to
+       unlock the phone at least once every 5 to 10 messages, which
+       means that teens unlock their home screen about 10 to 20 times a
+       day, a conservative estimate. To do this on the iPhone, you have
+       to enter four numbers using the numeric keypad.
+     - When it comes to inputting data, the experience is extremely
+       left-brained. This is definitely a user-driven interaction, one
+       in which the user has to do all of the work, having to memorize
+       and then enter four digits.
+     - The entire interaction is performed using the numeric keypad.
+     - •This experience is very personal (rather than social) and tied
+       strongly to your personal identity: only you know the code to
+       unlock your phone (or so you hope, as you use your phone in the
+       metro and other public places).
+     - This experience delays the task you intend to do—you certainly
+       did not pick up the phone only to unlock it! But you do have to
+       unlock it before you can proceed with your goal of sending a
+       text.
+     - Today’s mobile devices come with more sensors than we know what
+       to do with. So, whenever data entry is required, consider
+       replacing the tried and true mouse and keyboard controls with
+       their more effective and better-performing mobile counterparts,
+       which use accelerometer gestures, multitouch controls and voice
+       recognition to facilitate data entry. Don’t forget: an on-board
+       camera can also be used to read barcodes, including QR codes, and
+       the emerging NFC (near field communication) capabilities will
+       soon enable mobile devices to read and interact with RFID (radio
+       frequency ID tags) to process anything from check-ins to
+       payments. The best implementations of the designs that dissolve
+       in behavior pattern combine two or more on-board sensors and
+       mobile capabilities in ways that mimic our existing
+       behavior. Whenever data entry is required, consider it an
+       opportunity to redesign the entire process as a mobile-first
+       experience.
+     -
+**** Tap-ahead pattern: Autosuggest on steroids
+*** Engagement
+    - The limited real estate on a mobile screen poses a unique
+      challenge to users when navigating, browsing and reading. The
+      immersive experience pattern balances the need to make navigation
+      usable with the desire to allow content to shine. The tabbed
+      views pattern addresses the frequent need to see the same
+      information in various views, such as maps, lists and
+      virtual-reality overlays. Last but not least is the need to
+      support reading: a key activity on mobile devices. The reading
+      and pagination pattern addresses how both the gestures we use to
+      paginate and the pagination transitions depend on the size of the
+      touch device.
+    - A typical iPhone app is quite different from a mobile game. The
+      reason is simple: navigation. An e-commerce or social networking
+      app can devote 30% or more of the screen’s real estate to
+      navigation. As shown below, Amazon’s iPhone app is typical,
+      showing the phone’s system bar, the tab bar and the menu bar. All
+      of these controls come at a cost: in fact, these controls and
+      indicators take up over 25% of the already tiny screen.
+    - This unbalanced use of space is mainly due to the fact that
+      people operating the app need to have sufficient real estate to
+      be able to tap a control reliably. Thus, more space is devoted to
+      controls and less to content. Amazon’s app is actually very
+      decent compared to some others. Greg recently worked with a
+      leading supermarket chain in the US to redesign its mobile
+      website, which used over 55% of the screen’s real estate for
+      navigation.
+    - Angry Birds devotedly sets aside 100% of the screen to the
+      exciting and challenging venture of crushing egg-thieving pigs,
+      while providing only a single pause button, which does not take
+      up space because it is semi-transparent, allowing the game play
+      to be viewed right through it. Tapping the pause button brings up
+      the custom menu overlay, styled as a window shade (also known as
+      “Roman shade” in the US) that takes up only a portion of the
+      screen (darkening the rest), thus keeping the player in the
+      context of the game. This menu overlay is a separate function
+      that enables the rest of the game to be a highly immersive,
+      addictive experience.
+    - With the navigation removed and the focus entirely on the
+      multi-touch gaming experience, the player remains fully immersed
+      in the story. Would this immersive effect have been greatly
+      reduced had 25% of the screen been devoted to navigation? You
+      bet.
+    - Another powerful reason to move navigation to a separate overlay
+      while creating a more immersive content view is that navigation
+      is growing. That’s right: many mobile apps are offering more and
+      more features, to the extent that the four-buttons-or-more model
+      offered by the iOS tab bar or the five-buttons-or-more model
+      offered by Android are bursting at the seams. Today, as people
+      learn to rely more and more on their mobile device for virtually
+      all of their computing and communication needs, apps often grow
+      in features, exacerbating the ongoing problems of
+      navigation-heavy interfaces. Some app designers are bucking the
+      trend by using the immersive experiences pattern, making their
+      apps more immersive and returning content to its rightful place
+      as sovereign ruler of the mobile screen. As if this was not
+      enough, another huge benefit of the immersive experience pattern
+      is that menus can be made richer with custom graphics, easier to
+      tap and more full-featured. Designers are pulling this off by
+      moving heavy navigation to window shade menu overlays or rollaway
+      dashboard menus and to popovers.
+    - Immersive designs should be used whenever navigation and menu
+      controls threaten to overwhelm the content. If you find yourself
+      adding yet another navigation bar above or below the content,
+      then consider moving the navigation off screen. The pattern is an
+      opportunity to make navigation controls a beautiful and integral
+      part of the whole experience; rather than slapping buttons onto
+      the design at the end of the process, you are redesigning the
+      entire experience around custom navigation. As the delightful
+      example of Flipboard’s app demonstrates, immersive experiences
+      take mobile sophistication to the next level, beyond the standard
+      controls of iPhone’s tab bar:
+    - Mobile devices are highly suited to being read one page at a
+      time, with the text fixed in place. The need to resume reading
+      comfortably at the precise place one left off before being
+      interrupted is another important factor that has been made easier
+      historically with the addition of pages and page numbers. Thus,
+      it is only to be expected that the pagination metaphor has
+      entered the mobile context so strongly.
+    - Should we continue to use the page flip animation and the book
+      “skin” metaphor to make mobile devices resemble their physical
+      book and magazine counterparts? The answer depends strongly on
+      the size of the device, which is why the reading and pagination
+      pattern is so important in our discussion. The bottom line is
+      balance: the reading and pagination pattern should be applied
+      according to the size of the screen and the nature of the
+      hardware.
+    - There is a similar option in Instapaper’s iPhone app, but it goes
+      beyond page-turning animations. With “tilt scrolling” turned on,
+      an article will scroll slower or faster based on the angle of the
+      phone. If tilt scrolling is turned off, a regular tap advances to
+      the next page.
+    - Reading and pagination patterns are needed for all kinds of
+      information consumption on touch devices: magazines, books,
+      newspapers, etc. Implementing the reading and pagination pattern
+      calls for balance: on large devices such as the iPad, it’s best
+      implemented with a certain amount of “physicality”—background
+      graphics, page-flip animations, etc.—visual design elements that
+      mimic the attributes and behavior of a physical artifact. Small
+      mobile devices, on the other hand, call for minimalist
+      implementations, including a full-screen display, simple sliding
+      transitions and overlay menus. And we mentioned typography,
+      right?
+    -
+**** Hardware Features
+     - To me, the most exciting thing about iOS devices is the hardware
+       features—all waiting for you, the designer, to piece them
+       together in a new way. With the multitouch display, camera, GPS,
+       accelerometer, microphone, speaker, camera flash and many more
+       features, the iPhone becomes a blank slate just waiting for your
+       new idea. This new world of smartphones enables us to create
+       entirely new things.
+     - So, what could you do? Let’s look at a couple examples:
+       - The Level app by Stanley, a hardware tool company, lets you
+         use the iPhone’s accelerometer as a level to hang pictures.
+       - State Farm, an insurance company, uses the GPS and
+         accelerometer to grade driving habits. It monitors how quickly
+         you accelerate, the speed at which you drive around turns, and
+         whether you follow the speed limit, and then it gives you a
+         score.
+       - •Word Lens, one of my favorites, is an app that translates
+         real-world text seen through the camera, right in place. (It
+         began with translation from Spanish to English but now
+         supports many languages.) So, point it at a road sign, and the
+         newly translated words follow the basic look and placement of
+         the text they are replacing.
+       - Shazam listens to the music playing in a room and tells you
+         the song and artist. Then you can easily purchase the song or
+         mark it as a favorite. The app uses the microphone and an
+         Internet connection together to help you discover new music.
+       - Flipboard turns the iPad into a personal magazine, curated by
+         all of your friends on Twitter and Facebook. The reading
+         experience is excellent, made possible by the large display
+         and form factor of the tablet.
+** Designing Mobile Apps
+*** Understand Mobile Interactions
+    - People interact with mobile apps differently from websites or
+      desktop software. Mobile apps rarely have the undivided attention
+      of a user and most interactions use touch input, which is not as
+      precise as we might like.
+** Mobile First - Luke Wroblewski
+*** Time and place
+    - In its simplest form, context is the circumstances under which
+      something happens. For example, desktop computers are most often
+      used at a desk (in an o ce or home); with a persis- tent
+      connection to power and the network; in relative privacy; from a
+      seated position; and so on. While someone can certainly use a
+      mobile device for a long period of time while seated at a desk,
+      there is a much wider set of circumstances possible be- cause
+      mobile devices are naturally portable.
+**** Location
+     - When many people first imagine designing for mobile, they picture
+       a hurried businessman on the street. While that can be a real
+       use case to consider, the places where mobile devices are
+       frequently used are much more diverse. A recent survey
+       (http://bkaprt.com/mf/32) looked at where people used their
+       smartphones and found:
+       - • 84% use them at home,
+       - • 80% use them during miscellaneous downtime throughout the
+         day,
+       - • 74% use them while waiting in lines or waiting for
+         appointments,
+       - • 69% use them while shopping,
+       - • 64% use them at work,
+       - • 62% use them while watching TV (a di erent study claims
+         84%), and
+       - • 47% use them during their commute.
+**** Embrace Constraints
+     - Now let’s contrast this experience of  nding nearby Tube
+       stations on the desktop by doing the same thing using a native
+       mobile application called Nearest Tube. Nearest Tube uses a few
+       mobile device capabilities to deliver a very di erent expe-
+       rience. In particular, it relies on access to a mobile’s
+       location detection services, digital compass (or magnetometer),
+       video camera, and accelerometer.
+     - Location detection  nds your position on a map, a digital
+       compass determines the direction you are facing, and the video
+       camera allows you to display digital information over your
+       current  eld of view. So the experience of  nding the nearest
+       Tube station using Nearest Tube consists of opening the appli-
+       cation and just looking at the screen (fig 3.4).
+     - The application also uses an accelerometer (a sensor that
+       measures how the device is moving) to change the information you
+       see depend- ing on where you point the camera. Position it in
+       front of you and you see more detailed information about nearby
+       stations; lift it up higher and get the same information about
+       stations further away (fig 3.5).
+     - Now I’m not suggesting this mobile “augmented experi- ence” is
+       better than the desktop web one we just walked through—because,
+       frankly, both have usability issues. But, wow is this di
+       erent. The desktop website and this mobile application solve the
+       same user need in dramatically di erent ways.
+     - Nearest Tube uses mobile device capabilities (camera, loca- tion
+       detection, magnetometer, and accelerometer) to really innovate
+       in what seems to be a simple use case. And this is what mobile
+       capabilities allow you to do: reinvent ways to meet people’s
+       needs using exciting new tools that are now at your disposal.
+       - • Audio: input from a microphone; output to speaker
+       - • Video and image: capture and input from a camera
+       - • Dual cameras: front and back
+       - • Proximity: device closeness to physical objects
+       - • Ambient light: light/dark environment awareness
+       - • NFC: Near Field Communications through RFID readers
+     - Starting with mobile puts these capabilities in your hands now
+       so you can rethink how people can interact with your website and
+       the world around them. As mobile web browsers continue to gain
+       access to capabilities currently reserved only for native mobile
+       applications, these opportunities will only increase.
+**** Starting mobile first
+     - At this point we’ve talked about reasons for designing and
+       developing web experiences for mobile  rst. A mobile  rst
+       approach:
+       - • Prepares you for the explosive growth and new opportuni-
+         ties emerging on mobile today.
+       - • Forces you to focus and prioritize your products by em-
+         bracing the constraints inherent in mobile design.
+       - • Allows you to deliver innovative experiences by building on
+         new capabilities native to mobile devices.
+*** Inputs
+    - • Look for opportunities to go beyond the input  eld using mobile
+      device capabilities.
+    - Designers don’t always agree. So it’s somewhat surprising to look
+      back at mobile design guidelines from the past few years and see
+      a lot of consensus around input. At the time, pretty much
+      everyone concurred that most kinds of mobile input should be
+      avoided. In Mobile Web Design and Development (O’Reilly, 2009),
+      Brian Fling wrote: “The rule of thumb is to limit the use of
+      forms in the mobile context.”
+**** Mobile Asks
+     -
+**** Beyond Forms and Input Fields
+     - On the other side of the spectrum, Google Goggles uses the video
+       camera on a mobile device to identify products, wines, works of
+       art, and landmarks; to scan in business cards; or to translate
+       foreign languages (fig 6.19). Imagine all the typing you’d have
+       to do in a form to accomplish what Google Goggles does when you
+       simply point your camera at something.
+     - And near  eld communications (NFC) can take this even
+       further. Mobile devices that can communicate with radio
+       frequency ID tags (RFID) just need to be near something that
+       broadcasts its identity using one of these tiny “digital bar-
+       codes” in order to interact with it. Want to learn more about a
+       product? Just get close enough for it to catch a signal and your
+       mobile can bring up all the information you need. How’s that for
+       going beyond input  elds and forms?
+     - Once again though, I need to ground us in the current realities
+       of the web. Native mobile applications have access to device
+       APIs that let them access audio, video, NFC (where possible) and
+       more. While there are many standards being written and debated
+       for camera and NFC access in the web browser, widely available
+       support is not here yet. But if the past is any indicator, new
+       capabilities are probably making their way into mobile web
+       browsers as this book is being printed. So don’t fret; soon
+       device APIs will be yours to use as well.
+     -
+*** Device experiences
+    -
+*** Conclusion
+    - • Take advantage of the enormous growth in mobile internet usage
+      and  nd new ways for people to use our websites and
+      applications.
+    - • Embrace mobile constraints to focus and prioritize the ser-
+      vices we’re designing and building.
+    - • Use mobile capabilities to innovate the complete customer
+      experience.
+    - • Take what we know about designing for the web and start
+      thinking di erently about mobile organization, actions, inputs,
+      and layout.
+** The Mobile Web Handbook
+*** The Mobile World
+    - In order to understand mobile web development we have to
+      understand the mobile world. Where the desktop situation is
+      pretty well understood, mobile is so different that it pays to
+      examine it in detail and carefully note how it’s different. Not
+      only will that explain why certain browsers are more important
+      than others, it will also make you sensitive to several issues
+      that don’t play a role on desktop at all but are vital on
+      mobile. In particular, the role of the mobile network operators
+      is quite different from the desktop ISPs
+    -
+**** Mobile Value Chain
+     - The mobile value chain extends from the network operators, via
+       device vendors, software makers, and service providers to the
+       consumer. This chapter will study the first three links in the
+       chain.
+     - The takeaway for us web developers is that by deciding which
+       phones will be offered to unsuspecting consumers, operators
+       influence the mobile browser market, because those devices’
+       default browsers will get more market share. Thus, keeping track
+       of operators’ current preferences is important.
+**** The Global Device Market
+     - That brings us to the complex question of mobile market
+       shares. What kinds of devices are being sold, and how much of
+       each type? How does that affect mobile web development? I’ll
+       provide some numbers, and caveats, later on, but it turns out
+       that these questions are surprisingly hard to answer. It helps
+       if we first discuss the global device market qualitatively.
+     - General rules don’t help us much further. The fundamental lesson
+       is that the so-called global device market doesn’t
+       exist. Instead, there are dozens of regional markets, and
+       although you can aggregate the data to create global statistics,
+       they don’t tell you anything useful about particular
+       markets. There are too many differences in demographics,
+       culture, brand awareness, and disposable income to define
+       general worldwide rules for the mobile phone market.
+     - But even installed base isn’t the real piece of data we want. As
+       we’ll see in a moment, Android’s sales share in 2013 was 78%,
+       while its installed base was about 65%. Still, its browsing
+       market share was only about 35%. The reasons for this
+       discrepancy are hotly debated. Do Android users genuinely browse
+       less than iOS users? Are the sales numbers wrong? Is there an
+       error in the detection scripts?
+     - "It’ll probably take until 2015 before we see whether Firefox OS
+       is going to be a major challenger."
+     -
+*** Browsers
+    -
+**** Browser Types
+     - There are four browser types on mobile: default browsers,
+       downloadable browsers, proxy browsers, and WebViews.
+     - It appears that there is a difference between the Western
+       developed nations and the developed nations of east Asia. In the
+       West, few consumers bother to install a different browser — or
+       even know it’s possible. In Asia, consumers do download
+       alternative browsers, such as UC or QQ in China, and Puffin in
+       Korea. A common reason is that these browsers offer better
+       integration with local social networks. Asian browser statistics
+       often show downloadable browsers that rarely occur in the west.
+**** WebViews
+     - A WebView is an OS’s browsing interface for native apps. For
+       instance, a Twitter client may call on the platform’s WebView to
+       show a webpage when the user clicks on a link in their feed. A
+       game’s help pages may be webpages, in which case the game app
+       uses the platform’s WebView to display them.
+     - Apple doesn’t allow the installation of other rendering engines
+       on iOS devices. Therefore, other browsers wanting to move to iOS
+       are forced to use Apple’s WebView.
+**** Proxy Browsers
+     - There’s a disadvantage to proxy browsing, too: no client-side
+       interactivity. Proxy browsers support JavaScript, but every time
+       the user causes a JavaScript event (by clicking on an Ajax link
+       or something similar), the client sends a request back to the
+       server for instructions. The server executes the script, fetches
+       new assets if necessary and sends back the updated page, which,
+       as far as the client is concerned, is a completely new page.
+     - It’s important to realize that this lack of client-side
+       interactivity is a feature, and not a bug. By giving up
+       client-side interactivity, users save themselves a lot of
+       money. Executing JavaScript costs users money, and some prefer
+       not to pay the price.
+**** Rendering Engines
+     - IE uses Trident
+     -
+**** Android
+     - Is Samsung Chrome the same as Google Chrome? By now you won’t be
+       surprised to hear that the answer is no. First, Samsung Chrome
+       is frozen at version 28, and it is updated only together with a
+       system update — it’s a typical default browser in that
+       respect. In contrast, at the time of writing Google Chrome is at
+       version 36 and can be updated independently of the OS.
+*** Touch and Pointer Events
+    - There’s no reason why we couldn’t have many more interaction
+      modes in the future. Take the Xbox Kinect, which translates body
+      movements to screen actions, so that you can use your hand to
+      steer a cursor on the screen. Technically, steering a cursor
+      means using mouse events, but from a user’s perspective it might
+      count as a new interaction mode. It feels different, after all.
+    - Many thanks to Jason Grigsby for clarifying these concepts in my
+      mind. I borrowed the term progressive input enhancement from him,
+      as well as several key thoughts in this section.
+*** Device APIs
+    - The elephant in the room is device APIs. In order to do something
+      meaningful with devices you should be able to access the address
+      book, sensors, location, SMS capabilities, battery charge
+      indicator and so on. This is what device APIs do: they offer a
+      simple JavaScript API to access these features, and sometimes
+      change their contents, as in the case of the address book.
+    - Besides, there are serious security issues. Nobody wants every
+      random website they visit to be able to read their address book
+      and send it off to a malicious server. The user has to somehow
+      grant permission for this sort of device access. Although that’s
+      technically possible, presenting this choice in a good user
+      interface is problematic.
+*** Future
+    - A second way that the web is more flexible than native is
+      just-in-time interactions. Scott Jenson wrote a seminal article
+      on this (http://smashed.by/mwhb26). Essentially, if every shop in
+      a shopping mall offered you a native app for browsing its current
+      discounts, store locations, and other features, few people would
+      bother to download them, since they’ll be used only once for one
+      just-in-time interaction. Conversely, if these shops offered a
+      simple mobile website with the same data, people would use them
+      more, since the browser makes it easy to visit a site once and
+      then forget about it. Quite apart from technical features, native
+      apps aren’t suited to all situations.
+*** 
+** Best of Nine Smashing Years
+   - Beyond The Boring: The Hunt For The Web’s Lost Soul
+   - Taken in individual doses, the average professional website today
+     looks great. Compare even a lowly designer’s portfolio site today
+     to the best design agency sites ten years ago, and you’ll have to
+     concede that we’ve gotten a lot better at this web design
+     thing. However, as you look around, it’s easy to come to the
+     conclusion that everything is starting to look the same.
+   - Have designers lost that pioneer spirit? Has creativity been
+     sacrificed on the altar of convenience? Before answering these
+     questions, let’s take a look at what’s causing the lack of
+     variation in web design today.
+   - GET WEIRD WITH LAYOUT
+   - One basic expectation that users have is that everyone who lands
+     on the same site will receive the same experience; a fun way to do
+     something different is to toss that out the window. Vasilis van
+     Gemert’s site36 not only uses a unique, overlapping box layout, it
+     also changes its entire color scheme for every visit.
+** Designing for Touch
+*** Discovery
+    - Gestures are useful only if people can find them. Otherwise,
+      they’re Easter eggs, hidden treats for the lucky or
+      determined—and most users are neither. The challenge, of course,
+      is that gestures are invisible, unlike buttons with their labeled
+      invitations to action. If the interface doesn’t clearly suggest a
+      gesture, you must help people discover it. This chapter explores
+      the subtle craft of making gestures seem intuitive, even when
+      they aren’t intrinsically obvious. We’ll look for the essentials
+      of self-explanatory UI in sources as varied as magazines, ancient
+      manuscripts, and video games. All demonstrate the gold standard
+      for a discoverable interface: just-in-time education that reveals
+      itself in context, no manual required. 
+    - UP-FRONT INSTRUCTIONS ARE NOT THE ANSWER
+    - It isn’t only the volume of the instruction that puts people off,
+      it’s also that it exists at all. Newcomers to your site or app
+      are there to get something done, and instructions feel like a
+      diversion. The rub is that reading them would almost always help
+      us do that thing faster, but we’re too impatient to bother.
+    - As we saw in the last chapter, if an interface element looks or
+      behaves like a physical object, people will try to interact with
+      it like one. And the less a gesture resembles a physical action,
+      the harder it is to find. Those guidelines explain the
+      effectiveness of skeuomorphic design, an approach that plays
+      dress-up with digital interfaces, making them look (and hopefully
+      act) like physical objects. If an interface looks like a book, it
+      instantly suggests that we should use it like one by swiping
+      through pages to advance through the content. The metaphor
+      teaches simply by matching the visual design to the underlying
+      interaction. “Hey, that’s a knob [or a book or a microphone or a
+      bird-hurling slingshot]. I already know how to use that thing.”
+    - Skeuomorphic design runs into trouble as a teaching device,
+      however, when the designer doesn’t embrace the metaphor. For the
+      iPad’s first eighteen months, the Calendar app’s leather-bound
+      datebook didn’t behave like a datebook. It looked like the real
+      deal, but when you tried to swipe at its pages, nothing
+      happened. The same was true of the original Contacts app, only
+      worse: swiping the screen to try to turn the address book’s pages
+      actually deleted content (FIG 5.3).
+    - Touchscreen interfaces that look like physical objects will
+      confuse and misdirect if they don’t also act like those objects.
+    - Nothing from either physical or digital maps suggests to even try
+      it. When gestures don’t match up with past experience, they
+      become abstract and require explicit help to find.
+    - Video game designers are pros at teaching unfamiliar
+      interfaces. In many games, you don’t even know the goal, let
+      alone your capabilities or the obstacles you might encounter. How
+      do you learn this stuff as a player? Not by reading a manual or
+      watching a screencast. You learn by playing the game. The game
+      itself teaches you how to play, drawing you in and showing you
+      expert moves once you’ve mastered the basics. Among other
+      techniques, games lean on three tools to get this done: coaching,
+      leveling up, and power-ups.
+    - Tutorials ask you to commit gestures to visual memory. By making
+      you do an action, Dead Space helps you commit the gesture to far
+      more effective muscle memory. Again, the basis of learning
+      physical actions is repetition: a loop of demonstration and
+      practice. When teaching gestures, get people repeating moves
+      early and often. The tutorials for Mailbox (FIG 5.10) and Dots
+      (FIG 5.11) do just that, forcing you to perform each gesture to
+      continue.
+    - It might seem silly, but it’s true: there’s delight in learning a
+      new skill like this, of being told a secret. The fun of video
+      games is in the rush of getting better, of advancing the
+      storyline. With more mundane apps, that storyline is the user’s
+      work or career, and the reward in these advanced gestures and
+      shortcuts is nothing less than becoming more awesome at what they
+      do. Think like a game designer, and you’ll deliver the same
+      endorphin boost to your “players.” A great discoverability
+      strategy feels like a prize, not an instruction.
+    - Implicit in this imperative to slash forms is that typing on
+      touchscreens is just…so…slow. Don’t get me wrong, we’ll do it
+      with proper motivation. A popular myth holds we aren’t willing to
+      type on touchscreens, but we send and receive an average of
+      thirty-five text messages per day
+      (http://bkaprt.com/dft/03-10/)—and over one hundred for teens
+      (http://bkaprt.com/dft/03-11/). That doesn’t mean we’re great at
+      it. Touchscreen typing is still error-prone. Whenever you’re
+      tempted to bring up the keyboard, first consider the
+      alternatives.
+    - Hands free
+      - Aside from gesture jujitsu, most of the improvements we’ve
+        looked at pare interactions down, creating touch interfaces
+        that equire, well, less touch. For all of touchscreens’
+        promise, they’re clumsy, slow, or imprecise for some tasks, and
+        no amount of UI optimization will fix that completely. Better
+        in those cases to opt for a non-touch alternative, a lesson the
+        Ford Motor Company learned when they replaced their
+        knobs-and-buttons dashboard with a touchscreen
+        version. Customers rightfully complained it became too
+        difficult—and dangerous!—to switch radio stations or change the
+        volume while behind the wheel.
+      - Driving is one of many contexts where touch is a poor
+        interactive solution—because your eyes aren’t available to look
+        at the screen. Unlike with mechanical controls, you can’t feel
+        your way through a glass-slab interface. Give a driver a
+        touchscreen, and you give them an accident waiting to
+        happen. Ford should’ve known better, and in the end, they did:
+        they brought back traditional knobs and buttons
+        (http://bkaprt.com/dft/03-14/).
+      - But now sensors can do something even more powerful: figure
+        out what’s right in front of you.
+      - That idea propels the homely bar code and its younger (and less
+        popular) cousin, the QR code. When you encode data like a URL
+        into those lines and dots, and then let the camera read it for
+        you, you eliminate work for your fingers and thumbs. But camera
+        vision has become far more sophisticated than that, enabling
+        potent shortcuts:
+        - When you create an account with eBay’s app, you can skip
+          entering your name and address by scanning your driver’s
+          license with your camera; the app reads your info and
+          completes the form for you.
+        - Mobile Safari on iOS fills out payment info when you take a
+          photo of your credit card.
+        - Use the Google Translate app to point your camera at text in
+          one language, and it automatically converts the text to
+          another (FIG 3.23). The app displays the translation in real
+          time, in the same typeface and color, right on your screen,
+          as if you were peering through a magically multilingual
+          window.
+        - Layar is a web service and mobile app that enables editors to
+          embed digital multimedia in printed pages. Snap a photo of a
+          magazine layout, and the page springs to life with video and
+          related links.
+        - People with no or low vision can use the LookTel Money Reader
+          app to identify the denomination of currency. In the US, it’s
+          impossible to differentiate between bills without sight;
+          phones now provide vision for those who don’t have it. When
+          sensors supplement a touchscreen, devices can provide
+          astonishingly good interfaces for people with poor sight or
+          other disabilities. For more examples, see “Visually Impaired
+          Turn to Smartphones to See Their World”
+          (http://bkaprt.com/dft/03-15/).
+      - And that’s only the camera. Today’s gadgets are packed with
+        other sensor-enabled superpowers:
+        - Microphones let devices hear. Check out the Web Audio API
+          (http://bkaprt.com/dft/03-17/) to learn more about how
+          browsers can make and recognize sounds. The Web Speech API
+          (http://bkaprt.com/dft/03-18/) similarly lets browsers
+          understand and speak words.
+        - Fingerprint readers provide instant ID.
+      - How might you gather and use that data in ways that can save
+        people time, effort—or the dreary work of data entry?
+      - In other words: How can you deliver the maximum results for the
+        minimum input? These sensor-based examples offer more than fast
+        shortcuts for input; more important—and more interesting—they
+        take their cues directly from a person’s environment. When we
+        design for sensors, not just screens, the whole world becomes a
+        digital canvas. As users, that gives us the chance to interact
+        more directly with the people and places we truly care about,
+        restoring some of the attention we’ve ceded to screens.
+** Emotional Design Elements
+*** LOCATION-BASED WEBSITES
+    - Popular games are often location-based—i.e. the location of the
+      player affects the game. Can we benefit from this in Web and UX
+      design? Heck, yeah!
+    - I live in Denmark. I recently visited Amazon's US website and was
+      greeted with this message:
+    - Amazon detects where I live and points me to Amazon UK. Checking
+      my location may be a simple technical task, but it makes it feel
+      almost as if they know me.
+    - Social networks are taking advantage of our urge to play and the
+      fact that we almost always have a GPS-enabled gadget with us. To
+      get a discount, someone can check in at H&M, and at the same time
+      tell the entire world that they're shopping at H&M. That is
+      extremely cheap advertising.
+    - You cannot increase the intrinsic value of something by adding
+      game mechanics. You CAN make the value more visible. You CAN
+      change the paradigm and context of your site visitor from user to
+      player—increasing their engagement.
+*** EASTER EGGS
+    -
+*** 
+* Articles
+** [[http://alistapart.com/article/interaction-is-an-enhancement][Interaction Is an Enhancement · An A List Apart Article]]
+** [[http://alistapart.com/article/testing-websites-in-game-console-browsers][Testing Websites in Game Console Browsers · An A List Apart Article]]
+** [[http://www.stucox.com/blog/you-cant-detect-a-touchscreen/][You Can't Detect A Touchscreen]]
+** Physical Web
+*** [[https://cloudfour.com/thinks/one-amazing-video-that-shows-the-potential-of-the-physical-web/][One amazing video that shows the potential of the physical web - Cloud Four]]
+**** Physical web install process
+     1. Look in drawer for physical web beacons
+     2. Select physical web beacon.
+     3. Web page launches. Prompts for pairing with toy.
+     4. Select toy to complete pairing.
+     5. Control toy.
+** Detection
+*** [[http://www.stucox.com/blog/you-cant-detect-a-touchscreen/][You Can't Detect A Touchscreen | Blog | Stu Cox]]
+**** Finger-friendly layouts
+     - also useful for gestures
+*** [[http://www.stucox.com/blog/the-good-and-bad-of-level-4-media-queries/][The Good & Bad of Level 4 Media Queries | Blog | Stu Cox]]
+    #+BEGIN_QUOTE
+    A touch-optimised interface is typically more accessible and
+    rarely a big inconvenience to a mouse user, so erring towards
+    touch-friendly when in doubt makes sense. But is that always what
+    we want?
+    #+END_QUOTE
+*** [[https://hacks.mozilla.org/2013/04/detecting-touch-its-the-why-not-the-how/][Detecting touch: it's the 'why', not the 'how' &#x2605; Mozilla Hacks – the W...]]
+

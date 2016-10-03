@@ -1,0 +1,12 @@
+* Microinteractions
+* Input Methods
+* Environment Data
+* Usability
+* Consumption
+* Creation
+* Points
+  - Consumption and creation of information.
+  - Do what wasn't previously possible
+  - Improve on what was possible
+  - Solve the same problems in new ways (e.g. navigation)
+  - we're not telling, we're asking or providing options

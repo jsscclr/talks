@@ -1,0 +1,336 @@
+* Ambient Light Sensor
+** Main
+*** Support
+    - Limited
+    - Firefox supports new spec (I think)
+    - Chrome supports old spec lux level
+*** Use cases
+    - you'll notice that the main use case appears to revolve around
+      styling the user interface
+    - media queries level 4 of css actually denotes a light level
+      media query for this exact use
+    - only non-style use case I have seen is on in lieu of the
+      proximity api, that uses changes in light level to play sounds
+    - css is very high level, the sensor is low-level - allows for
+      very granular control
+** [[https://www.w3.org/TR/ambient-light/][Ambient Light Sensor]]
+   - W3C Working Draft 29 March 2016
+   - extends generic sensor API
+   - provides information about light levels detected by device's main
+     light detector in lux units
+   - light-level media feature in media queries 4 provides less
+     granular information
+   - quite different to the 2015 09 03 spec! Last year, you listen to
+     the window's devicelight event.
+   - based on the Generic Sensor API now
+   - code
+     #+BEGIN_SRC js
+     let sensor = new AmbientLightSensor();
+sensor.start();
+    
+sensor.onchange = function(event) {
+    console.log(event.reading.illuminance);
+};
+
+sensor.onerror = function(event) {
+    console.log(event.error.name, event.error.message);
+};
+     #+END_SRC
+     #+BEGIN_SRC js
+     [Constructor(optional SensorOptions sensorOptions)]
+interface AmbientLightSensor : Sensor {
+  readonly attribute AmbientLightSensorReading? reading;
+};
+     #+END_SRC
+     #+BEGIN_SRC js
+     [Constructor(AmbientLightSensorReadingInit ambientLightSensorReadingInit)]
+interface AmbientLightSensorReading : SensorReading {
+    readonly attribute unrestricted double illuminance;
+};
+  
+dictionary AmbientLightSensorReadingInit {
+  unrestricted double illuminance;
+};
+     #+END_SRC
+ 
+   - no security considerations
+   - current light level or illuminance: represents ambient light
+     levels around the hosting device
+   - precise lux value reported by different devices in the same light
+     can be different due to differences in detection method, sensor
+     construction, etc
+   - illuminance attribute
+     - represents current light level
+** [[https://www.w3.org/2016/05/12-dap-minutes.html][Device and Sensors Working Group Teleconference -- 12 May 2016]]
+   - Technical Architecture group would like to expose sensors in
+     workers.
+   - Small spec
+   - Device Orientation spec is built on gyroscope, magnometer, and
+     accelerometer. The way these are combined can vary a lot. Device
+     Orientation only provides a high level view, whilst the
+     underneath platforms have the lower level sensors. Firstly, work
+     on exposing the lower level sensors.
+** [[https://github.com/w3c/ambient-light/issues/8][Security and privacy considerations for Ambient Light Events · Issue #8]]
+   - Information leakage: identify videos or TV channels playing in
+     proximity. 
+   - Illuminance limited to steps of 6 lux
+   - CSS media query requires no permission - high level.
+
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   - Access the light sensor on the device
+   - Night mode - easier to use in dark surroundings
+     #+BEGIN_SRC js
+       window.addEventListener('devicelight', function(event) {
+           // Get the ambient light level in lux.
+           var lightLevel = event.value;
+       });
+     #+END_SRC
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - uses light level sensor
+   - returns readings in lux units
+   - supported in Firefox
+   - CSS4 light-level media query :O
+   - code
+     #+BEGIN_SRC js
+       if('ondevicelight' in window) {
+           window.addEventListener("devicelight", function(event) {
+               //light level is returned in lux units
+               console.log(event.value + " lux");
+           });
+       }
+
+       if('onlightlevel' in window){
+           window.addEventListener("lightlevel", function(event) {
+               //light value can be dim, normal or bright
+               console.log(event.value);
+           });
+       }
+     #+END_SRC
+** TODO [[http://www.webondevices.com/predict-hand-distance-with-device-light-javascript-api/][Predict Hand Distance with the device light JavaScript API]]
+** HTML5 Device APIs
+   - code
+     #+BEGIN_SRC js
+       window.addEventListener('devicelight', function(e) {
+          alert(e.value); // returns double
+       });
+     #+END_SRC
+   - values
+     - < 400 lux (indoor)
+     - 400 - 1000 (office lighting)
+     - > 1000 (outdoor daylight)
+** HTML5 Mobile hardware
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('lightlevel', function(e) {
+          alert(e.value); // returns string
+       });
+     #+END_SRC
+   - lux ranges are left to implementation - hardware with different
+     sensitivities may map differently
+   - returned values:
+     - dim - illuminance of < 50 lux
+       - dark enough that light produced by a white background is eye
+         straining or distracting
+     - normal - illuminance of 50 - 10000 lux
+       - office building hallway, dark overcast day, office lighting,
+         sunrise or sunset on a clear day, overcast day
+     - bright - illuminance of > 10000 lux
+       - direct sunlight or similarly bright conditions that make it
+         hard to see things that are not high contrast
+
+** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+   - serve different versions depending on the environment
+   - code
+     #+BEGIN_SRC js
+window.addEventListener("devicelight", function (event) { 
+    /* The level of the ambient light in lux 
+       A lux value for "dim" typically begin below 50,
+       and a value for "bright" begin above 10000
+    */
+    console.log(event.value); 
+});
+ 
+window.addEventListener("lightlevel", function (event) {
+    // Possible values: "normal", "bright", "dim"
+    console.log(event.value); 
+});
+     #+END_SRC
+** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
+   - returns lux units (lx) - an international measurement of light
+     intensity
+   - e.g. e-reader
+   - adjust colour values, typography
+** [[http://www.girliemac.com/blog/2014/01/12/luminosity/][Responsive UI with Luminosity Level – GirlieMac Blog]]
+   - Screen readability
+     - when outside, increase screen luminance
+   - Ambient Light Events API
+     - access light/photocensor
+     - DeviceLightEvent
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('devicelight', function(event) {
+  console.log(event.value + 'lux');
+});
+
+     #+END_SRC
+   - making web responsive to light
+     - change ui based on light level
+     - default: black text with light gray
+     - under bright light: black text and white background
+     - dark: white text and dark background
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('devicelight', function(e) {
+  var lux = e.value;
+
+  if(lux < 50) { // dim
+    document.body.className = 'dim';
+  }
+  if(lux >= 50 && lux <= 1000) {
+    document.body.className = 'normal';
+  }
+  if(lux > 1000)  { // bright
+    document.body.className = 'bright';
+  } 
+});
+
+     #+END_SRC
+   - support
+     - Firefox 22+
+** [[http://www.webondevices.com/predict-hand-distance-with-device-light-javascript-api/][Predict hand distance with the device light JavaScript API]]
+   - access light sensor
+   - code
+     #+BEGIN_SRC js
+     if('ondevicelight' in window){
+    window.addEventListener('devicelight', function(event) {
+        // light level is returned in lux units
+        console.log(event.value);
+    });
+}
+
+if('onlightlevel' in window){
+    window.addEventListener('lightlevel', function(event) {
+        // light value can be dim, normal or bright
+    console.log(event.value);
+    });
+}
+     #+END_SRC
+** [[http://www.smartjava.org/content/adjust-colors-your-page-based-lighting-room-html5-webrtc-and-webcam][Adjust colors of your page based on the lighting of the room with HTML5, webr...]]
+   - interesting alternative that uses webcam and media streams
+   - code
+     #+BEGIN_SRC js
+         video = document.getElementById("live")
+ 
+    navigator.webkitGetUserMedia("video",
+            function (stream) {
+                console.log(stream);
+                video.src = webkitURL.createObjectURL(stream);
+            },
+            function (err) {
+                console.log("Unable to get video stream!")
+            }
+    )
+
+  // create a dummy context
+   var ctx = $('<canvas />', {width:'320', height:'240'})[0].getContext('2d');
+   ctx.drawImage(video, 0, 0, 320, 240);
+   var imgd = ctx.getImageData(0, 0, 320, 240);
+    var pix = imgd.data;
+
+   function calculateLuminance(w, h) {
+ 
+        // draw the current image
+        ctx.drawImage(video, 0, 0, w, h);
+        var imgd = ctx.getImageData(0, 0, w, h);
+        var pix = imgd.data;
+ 
+        var totalL = 0;
+        for (var i = 0, n = pix.length; i < n; i += 4) {
+            // Red, Green and Blue have different influence on the total luminance
+            totalL += pix[i  ] * .3 + pix[i + 1] * .59 + pix[i + 2] * .11;
+        }
+ 
+        return totalL;
+    }
+
+            function LightenDarkenColor(col, amt) {
+                var usePound = false;
+                if (col[0] == "#") {
+                    col = col.slice(1);
+                    usePound = true;
+                }
+ 
+                var num = parseInt(col, 16);
+ 
+                var r = (num >> 16) + amt;
+ 
+                if (r > 255) r = 255;
+                else if (r < 0) r = 0;
+ 
+                var b = ((num >> 8) & 0x00FF) + amt;
+ 
+                if (b > 255) b = 255;
+                else if (b < 0) b = 0;
+ 
+                var g = (num & 0x0000FF) + amt;
+ 
+                if (g > 255) g = 255;
+                else if (g < 0) g = 0;
+ 
+                return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+            }
+
+    // luminance for dark is around 300.000
+    var lower = 300000;
+    // luminance for bright is around 6.000.000, could be different per webcam
+    var higher = 6400000;
+ 
+    // base color that we change
+    var baseColor = "666666";
+ 
+    timer = setInterval(
+            function () {
+                var luminance = calculateLuminance(320, 240);
+                // based on the luminance we need to set the background
+                // color to a specific value. We do this by calculating
+                // the required target offset
+                var offsetFromCenter = ((luminance - lower) / (higher - lower)) * 100;
+ 
+                // now we can increase the luminance of the background
+                var targetColor = LightenDarkenColor(baseColor, offsetFromCenter);
+ 
+                console.log(luminance);
+ 
+                $("body").animate({
+                    backgroundColor:"#" + targetColor
+                }, 2000);
+ 
+            }, 2000);
+     #+END_SRC
+** [[https://www.sitepoint.com/mobile-web-superpowers-ambient-light-api/][Mobile Web Superpowers - Ambient Light API]]
+   - readability use case - ensure adequate contrast
+   - lux: light intensity
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener("devicelight", function (event) {
+  var luminosity = event.value;
+  console.log(luminosity);
+});
+
+window.addEventListener("devicelight", function (event) {
+    var luminosity = event.value;
+
+    if (luminosity <= 5) {
+      document.body.className = "darkness";
+    } else if (luminosity <= 50) {
+      document.body.className = "dim";
+    } else if (luminosity <= 1000) {
+      document.body.className = "bright";
+    } else if (luminosity > 1000) {
+      document.body.className = "ahhhmyeyes";
+    }
+  });
+     #+END_SRC
+   - use cases
+     - 
+
