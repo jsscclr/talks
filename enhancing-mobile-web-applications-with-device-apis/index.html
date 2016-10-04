@@ -41,10 +41,12 @@
     </section>
     <section data-api="geolocation" class="code display">
       <pre><code>
-navigator.geolocation.getCurrentPosition(showPositionCallback);
+navigator.geolocation.getCurrentPosition(
+    handlePositionCallback
+);
 
-function showPositionCallback(position) {
-  console.info(<span class="green">`
+function handlePositionCallback(position) {
+  console.info(<span class="string">`
     Latitude: <var>${ position.coords.latitude }</var>
     Longitude: <var>${ position.coords.longitude }</var>
     Accuracy: <var>${ position.coords.accuracy }</var>
@@ -60,10 +62,12 @@ function showPositionCallback(position) {
     </section>
     <section data-api="geolocation" class="code display">
       <pre><code>
-navigator<span class="faded">.geolocation.getCurrentPosition(showPositionCallback);
+navigator<span class="faded">.geolocation.getCurrentPosition(
+    handlePositionCallback
+);
 
-function showPositionCallback(position) {
-  console.info(<span class="green">`
+function handlePositionCallback(position) {
+  console.info(<span class="string">`
     Latitude: <var>${ position.coords.latitude }</var>
     Longitude: <var>${ position.coords.longitude }</var>
     Accuracy: <var>${ position.coords.accuracy }</var>
@@ -79,10 +83,12 @@ function showPositionCallback(position) {
     </section>
     <section data-api="geolocation" class="code display">
       <pre><code>
-<span class="faded">navigator.</span>geolocation<span class="faded">.getCurrentPosition(showPositionCallback);
+<span class="faded">navigator.</span>geolocation<span class="faded">.getCurrentPosition(
+    handlePositionCallback
+);
 
-function showPositionCallback(position) {
-  console.info(<span class="green">`
+function handlePositionCallback(position) {
+  console.info(<span class="string">`
     Latitude: <var>${ position.coords.latitude }</var>
     Longitude: <var>${ position.coords.longitude }</var>
     Accuracy: <var>${ position.coords.accuracy }</var>
@@ -98,10 +104,12 @@ function showPositionCallback(position) {
     </section>
     <section data-api="geolocation" class="code display">
       <pre><code>
-<span class="faded">navigator.geolocation.</span>getCurrentPosition(<span class="faded">showPositionCallback</span>)<span class="faded">;
+<span class="faded">navigator.geolocation.</span>getCurrentPosition(<span class="faded">
+    handlePositionCallback</span>
+)<span class="faded">;
 
-function showPositionCallback(position) {
-  console.info(<span class="green">`
+function handlePositionCallback(position) {
+  console.info(<span class="string">`
     Latitude: <var>${ position.coords.latitude }</var>
     Longitude: <var>${ position.coords.longitude }</var>
     Accuracy: <var>${ position.coords.accuracy }</var>
@@ -117,10 +125,12 @@ function showPositionCallback(position) {
     </section>
     <section data-api="geolocation" class="code display">
       <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(</span>showPositionCallback<span class="faded">);
+<span class="faded">navigator.geolocation.getCurrentPosition(</span>
+    handlePositionCallback
+<span class="faded">);
 
-function</span> showPositionCallback(<span class="faded">position</span>)<span class="faded"> {
-  console.info(<span class="green">`
+function</span> handlePositionCallback(<span class="faded">position</span>)<span class="faded"> {
+  console.info(<span class="string">`
     Latitude: <var>${ position.coords.latitude }</var>
     Longitude: <var>${ position.coords.longitude }</var>
     Accuracy: <var>${ position.coords.accuracy }</var>
@@ -136,10 +146,12 @@ function</span> showPositionCallback(<span class="faded">position</span>)<span c
     </section>
     <section data-api="geolocation" class="code display">
       <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(showPositionCallback);
+<span class="faded">navigator.geolocation.getCurrentPosition(
+    handlePositionCallback
+);
 
-function showPositionCallback(</span>position<span class="faded">) {
-  console.info(</span><span class="green">`
+function handlePositionCallback(</span>position<span class="faded">) {
+  console.info(</span><span class="string">`
     Latitude: <var>${ position.coords.latitude }</var>
     Longitude: <var>${ position.coords.longitude }</var>
     Accuracy: <var>${ position.coords.accuracy }</var><span class="faded">
@@ -155,14 +167,16 @@ function showPositionCallback(</span>position<span class="faded">) {
     </section>
     <section data-api="geolocation" class="code display">
       <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(showPositionCallback);
+<span class="faded">navigator.geolocation.getCurrentPosition(
+    handlePositionCallback
+);
 
-function showPositionCallback(</span>position<span class="faded">) {
-  console.info(<span class="green">`
+function handlePositionCallback(</span>position<span class="faded">) {
+  console.info(<span class="string">`
     Latitude: <var>${ position.coords.latitude }</var>
     Longitude: <var>${ position.coords.longitude }</var>
     Accuracy: <var>${ position.coords.accuracy }</var>
-</span></span><span class="green">
+</span></span><span class="string">
     Altitude: <var>${ position.coords.longitude }</var>
     Altitude Accuracy: <var>${ position.coords.longitude }</var>
 <span class="faded">
@@ -174,17 +188,19 @@ function showPositionCallback(</span>position<span class="faded">) {
     </section>
     <section data-api="geolocation" class="code display">
       <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(showPositionCallback);
+<span class="faded">navigator.geolocation.getCurrentPosition(
+    handlePositionCallback
+);
 
-function showPositionCallback(</span>position<span class="faded">) {
-  console.info(<span class="green">`
+function handlePositionCallback(</span>position<span class="faded">) {
+  console.info(<span class="string">`
     Latitude: <var>${ position.coords.latitude }</var>
     Longitude: <var>${ position.coords.longitude }</var>
     Accuracy: <var>${ position.coords.accuracy }</var>
 
     Altitude: <var>${ position.coords.longitude }</var>
     Altitude Accuracy: <var>${ position.coords.longitude }</var>
-</span></span><span class="green">
+</span></span><span class="string">
     Heading: <var>${ position.coords.heading }</var>
     Speed: <var>${ position.coords.speed }</var>
   `</span><span class="faded">);
@@ -194,13 +210,13 @@ function showPositionCallback(</span>position<span class="faded">) {
     <section data-api="geolocation" class="code display">
       <pre><code>
 navigator.geolocation.getCurrentPosition(
-    showPositionCallback,
+    handlePositionCallback,
     handleErrorCallback
 );
 
 function handleErrorCallback(error) {
   console.error(error.message);
-  <span class="darkgrey">
+  <span class="comment">
   // error.TIMEOUT
   // error.PERMISSION_DENIED
   // error.POSITION_UNAVAILABLE
@@ -211,13 +227,13 @@ function handleErrorCallback(error) {
     <section data-api="geolocation" class="code display">
       <pre><code>
 <span class="faded">navigator.geolocation.getCurrentPosition(
-    showPositionCallback,</span>
+    handlePositionCallback,</span>
     handleErrorCallback
 <span class="faded">);
 
 function </span>handleErrorCallback(<span class="faded">error</span>)<span class="faded"> {
   console.error(error.message);
-  <span class="darkgrey">
+  <span class="comment">
   // error.TIMEOUT
   // error.PERMISSION_DENIED
   // error.POSITION_UNAVAILABLE
@@ -228,13 +244,13 @@ function </span>handleErrorCallback(<span class="faded">error</span>)<span class
     <section data-api="geolocation" class="code display">
       <pre><code>
 <span class="faded">navigator.geolocation.getCurrentPosition(
-    showPositionCallback,
+    handlePositionCallback,
     handleErrorCallback
 );
 
 function handleErrorCallback(</span>error<span class="faded">) {
   console.error(</span>error.message<span class="faded">);</span>
-  <span class="darkgrey">
+  <span class="comment">
   // error.TIMEOUT<span class="faded">
   // error.PERMISSION_DENIED
   // error.POSITION_UNAVAILABLE
@@ -245,14 +261,14 @@ function handleErrorCallback(</span>error<span class="faded">) {
     <section data-api="geolocation" class="code display">
       <pre><code>
 <span class="faded">navigator.geolocation.getCurrentPosition(
-    showPositionCallback,
+    handlePositionCallback,
     handleErrorCallback
 );
 
 function handleErrorCallback(</span>error<span class="faded">) {
   console.error(</span>error.message<span class="faded">);
-  <span class="darkgrey">
-  // error.TIMEOUT</span></span><span class="darkgrey">
+  <span class="comment">
+  // error.TIMEOUT</span></span><span class="comment">
   // error.PERMISSION_DENIED<span class="faded">
   // error.POSITION_UNAVAILABLE
   // error.UNKNOWN_ERROR</span>
@@ -262,15 +278,15 @@ function handleErrorCallback(</span>error<span class="faded">) {
     <section data-api="geolocation" class="code display">
       <pre><code>
 <span class="faded">navigator.geolocation.getCurrentPosition(
-    showPositionCallback,
+    handlePositionCallback,
     handleErrorCallback
 );
 
 function handleErrorCallback(</span>error<span class="faded">) {
   console.error(</span>error.message<span class="faded">);
-  <span class="darkgrey">
+  <span class="comment">
   // error.TIMEOUT
-  // error.PERMISSION_DENIED</span></span><span class="darkgrey">
+  // error.PERMISSION_DENIED</span></span><span class="comment">
   // error.POSITION_UNAVAILABLE<span class="faded">
   // error.UNKNOWN_ERROR</span><span class="faded">
 }</span>
@@ -279,16 +295,16 @@ function handleErrorCallback(</span>error<span class="faded">) {
     <section data-api="geolocation" class="code display">
       <pre><code>
 <span class="faded">navigator.geolocation.getCurrentPosition(
-    showPositionCallback,
+    handlePositionCallback,
     handleErrorCallback
 );
 
 function handleErrorCallback(</span>error<span class="faded">) {
   console.error(</span>error.message<span class="faded">);
-  <span class="darkgrey">
+  <span class="comment">
   // error.TIMEOUT
   // error.PERMISSION_DENIED
-  // error.POSITION_UNAVAILABLE</span></span><span class="darkgrey">
+  // error.POSITION_UNAVAILABLE</span></span><span class="comment">
   // error.UNKNOWN_ERROR</span><span class="faded">
 }</span>
       </code></pre>
@@ -296,7 +312,7 @@ function handleErrorCallback(</span>error<span class="faded">) {
     <section data-api="geolocation" class="code display">
       <pre><code>
 navigator.geolocation.getCurrentPosition(
-    showPositionCallback,
+    handlePositionCallback,
     handleErrorCallback
     <var>positionOptions</var>
 );
@@ -312,7 +328,7 @@ var <var>positionOptions</var> = {
     <section data-api="geolocation" class="code display">
       <pre><code>
 <span class="faded">navigator.geolocation.getCurrentPosition(
-    showPositionCallback,
+    handlePositionCallback,
     handleErrorCallback
     <var>positionOptions</var>
 );
@@ -325,7 +341,9 @@ var <var>positionOptions</var> = {</span>
       </code></pre>
     </section>
     <section data-api="geolocation" class="code">
-      <pre><code>var <var>watchPositionId</var> = navigator.geolocation.watchPosition(showPositionCallback);
+      <pre><code>var <var>watchPositionId</var> = navigator.geolocation.watchPosition(
+    handlePositionCallback
+);
 
 navigator.geolocation.clearWatch(<var>watchPositionId</var>);
 </code></pre>
@@ -333,7 +351,7 @@ navigator.geolocation.clearWatch(<var>watchPositionId</var>);
     <section data-api="geolocation" class="code display">
       <pre><code>
 <span class="faded">navigator.geolocation.getCurrentPosition(
-    showPositionCallback,
+    handlePositionCallback,
     handleErrorCallback
     <var>positionOptions</var>
 );
@@ -348,7 +366,7 @@ var <var>positionOptions</var> = {
     <section data-api="geolocation" class="code display">
       <pre><code>
 <span class="faded">navigator.geolocation.getCurrentPosition(
-    showPositionCallback,
+    handlePositionCallback,
     handleErrorCallback
     <var>positionOptions</var>
 );
@@ -371,75 +389,164 @@ var <var>positionOptions</var> = {
 	<img src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
       </div>
     </section>
-    
-    <section data-api="battery-status">
-      <header>
-        
-      </header>
-      <section>
-        <h1>Battery Status API</h1>
-      </section>
+    <section data-api="battery-status" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Battery Status API</em>
+      </h1>
     </section>
-    <section data-api="battery-status" class="code">
+    <section data-api="battery-status" class="code display">
       <pre><code>
-<span class="darkgrey">// Old Synchronous Way</span>
 var <var>batteryManager</var> = navigator.battery;
-<span class="darkgrey">// Shiny New Asynchronous Way</span>
-navigator.getBattery().then(function(<var>batteryManager</var>) {
-  console.info(<span class="green">`
-          charging: <var>${ batteryManager.charging }</var> <span class="darkgrey">             // Boolean</span>
-          chargingTime: <var>${ batteryManager.chargingTime }</var><span class="darkgrey">      // Integer</span>
-          dischargingTime: <var>${ batteryManager.dischargingTime }</var><span class="darkgrey">// Integer</span>
-          level: <var>${ batteryManager.dischargingTime }</var><span class="darkgrey">          // Double</span>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code>
+<s>var <var>batteryManager</var> = navigator.battery;</s>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code>
+navigator.getBattery()
+         .then(
+           onBatteryResolved,
+           onBatteryRejected
+         );
+
+function onBatteryResolved(<var>batteryManager</var>) {
+  <span class="comment">// yay!</span>
+}
+
+function onBatteryRejected() {
+  <span class="comment">// oh no!</span>
+}
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code>
+<span class="faded">navigator.</span>getBattery()<span class="faded">
+         .then(
+           onBatteryResolved,
+           onBatteryRejected
+         );
+
+function onBatteryResolved(<var>batteryManager</var>) {
+  <span class="comment">// yay!</span>
+}
+
+function onBatteryRejected() {
+  <span class="comment">// oh no!</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code>
+<span class="faded">navigator.getBattery()</span>
+         .then(<span class="faded">
+           onBatteryResolved,
+           onBatteryRejected</span>
+         )<span class="faded">;
+
+function onBatteryResolved(<var>batteryManager</var>) {
+  <span class="comment">// yay!</span>
+}
+
+function onBatteryRejected() {
+  <span class="comment">// oh no!</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code>
+<span class="faded">navigator.getBattery()
+         .then(</span>
+           onBatteryResolved<span class="faded">,
+           onBatteryRejected
+         );
+
+</span>function onBatteryResolved(<var>batteryManager</var>) {
+  <span class="comment">// yay!</span>
+}<span class="faded">
+
+function onBatteryRejected() {
+  <span class="comment">// oh no!</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code>
+<span class="faded">navigator.getBattery()
+         .then(
+           onBatteryResolved,</span>
+           onBatteryRejected<span class="faded">
+         );
+
+function onBatteryResolved(<var>batteryManager</var>) {
+  <span class="comment">// yay!</span>
+}
+</span>
+function onBatteryRejected() {
+  <span class="comment">// oh no!</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code>
+function onBatteryResolved(<var>batteryManager</var>) {
+  console.info(<span class="string">`
+    charging: <var>${ batteryManager.charging }</var>
+    chargingTime: <var>${ batteryManager.chargingTime }</var>
+    dischargingTime: <var>${ batteryManager.dischargingTime }</var>
+    level: <var>${ batteryManager.dischargingTime }</var>
   `</span>);
-});
-        </code></pre>
+}
+      </code></pre>
     </section>
-    <section data-api="battery-status" class="code">
+    <section data-api="battery-status" class="code display">
       <pre><code>
-navigator.getBattery().then(function(<var>batteryManager</var>) {
-  battery.onchargingchange = function () {
-    <span class="darkgrey">// fired when battery goes from a charging status to a discharging status,
-    // or vice versa </span>
-  };
+function onBatteryResolved(<var>batteryManager</var>) {
+  <var>batteryManager</var>.addEventListener(
+    <span class="string">"levelchange"</span>, eventCallback
+  );
 
-  battery.onlevelchange = function () {
-    <span class="darkgrey">// fired when the battery level increases or decreases</span>
-  };
+  <var>batteryManager</var>.addEventListener(
+    <span class="string">"chargingchange"</span>, eventCallback
+  );
 
-  battery.onchargingtimechange = function () {
-    <span class="darkgrey">// fired when time until battery is finished charging changes</span>
-  };
-
-  battery.ondischargingtimechange = function () {
-    <span class="darkgrey">// fired when time until battery is depleted changes</span>
-  };
-
-});
-        </code></pre>
+  <var>batteryManager</var>.addEventListener(
+    <span class="string">"chargingtimechange"</span>, eventCallback
+  );
+  
+  <var>batteryManager</var>.addEventListener(
+    <span class="string">"dischargingtimechange"</span>, eventCallback
+  );
+}
+      </code></pre>
     </section>
-    
-    <section data-api="battery-status">
-      <header>
-        <h1>Support</h1>
-      </header>
-      <section>
-        <section class="support"><img src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
-        </section>
-      </section>
+    <section data-api="battery-status" class="display">
+      <h1>Support</h1>
+      <div class="support">
+	<img src="./assets/firefox_logo.svg" alt="Firefox Logo" />
+	<img src="./assets/chrome_logo.svg" alt="Chrome Logo" />
+	<img src="./assets/opera_logo.svg" alt="Opera Logo" />
+	<img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" />
+	<img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" />
+	<img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+      </div>
     </section>
-
-    
-    <section data-api="ambient-light">
-      <h1>Ambient Light Sensor</h1>
+    <section data-api="ambient-light" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Ambient Light Sensor API</em>
+      </h1>
     </section>
-    <section data-api="ambient-light" class="code">
+    <section data-api="ambient-light" class="display code">
       <pre><code>
-window.addEventListener('devicelight', function(event) {
-  <span class="darkgrey">// Get the ambient light level in lux.</span>
-  <span class="darkgrey">// < 400 lux (indoors)</span>
-  <span class="darkgrey">// 400 - 1000 lux (office lighting)</span>
-  <span class="darkgrey">// > 1000 lux (outdoors)</span>
+window.addEventListener(<span class="string">'devicelight'</span>, function(event) {
+  <span class="comment">// Get the ambient light level in lux.</span>
+  <span class="comment">// < 400 lux (indoors)</span>
+  <span class="comment">// 400 - 1000 lux (office lighting)</span>
+  <span class="comment">// > 1000 lux (outdoors)</span>
   console.info(event.value);
 });
         </code></pre>
@@ -447,7 +554,7 @@ window.addEventListener('devicelight', function(event) {
     <section data-api="ambient-light" class="code">
       <pre><code>
 window.addEventListener('lightlevel', function(event) {
-  <span class="darkgrey">// Either dim, normal or bright.</span>
+  <span class="comment">// Either dim, normal or bright.</span>
   console.info(event.value);
 });
       </code></pre>
@@ -487,7 +594,7 @@ sensor.onerror = function(event) {
       <img src="assets/z-axis-alpha-c-rotation.png" style="object-fit: contain;" />
         <pre><code>
 window.addEventListener("deviceorientation", function(event) {
-  console.info(<span class="green">`Rotation around the Z axis: <var>${ event.alpha }</var>`</span>);
+  console.info(<span class="string">`Rotation around the Z axis: <var>${ event.alpha }</var>`</span>);
 });
         </code></pre>
     </section>
@@ -497,7 +604,7 @@ window.addEventListener("deviceorientation", function(event) {
         <img src="assets/beta-a-rotation.png" style="object-fit: contain;" />
         <pre><code>
 window.addEventListener("deviceorientation", function(event) {
-  console.info(<span class="green">`Rotation around the X axis: <var>${ event.beta }</var>`</span>);
+  console.info(<span class="string">`Rotation around the X axis: <var>${ event.beta }</var>`</span>);
 });
         </code></pre>
       </section>
@@ -508,14 +615,14 @@ window.addEventListener("deviceorientation", function(event) {
       <img src="assets/gamma-b-rotation.png" style="object-fit: contain;" />
       <pre><code>
 window.addEventListener("deviceorientation", function(event) {
-  console.info(<span class="green">`Rotation around the Y axis: <var>${ event.gamma }</var>`</span>);
+  console.info(<span class="string">`Rotation around the Y axis: <var>${ event.gamma }</var>`</span>);
 });
       </code></pre>
     </section>
     <section class="code">
       <pre><code>
 window.addEventListener("deviceorientationabsolute", function(event) {
-    <span class="darkgrey">// Separate Event for Absolute Values - Useful for Augmented Reality</span>
+    <span class="comment">// Separate Event for Absolute Values - Useful for Augmented Reality</span>
 });
       </code></pre>
     </section>
@@ -526,17 +633,17 @@ window.addEventListener("deviceorientationabsolute", function(event) {
       <pre><code>
 window.addEventListener("devicemotion", function(event) {
 
-  console.info(<span class="green">`Acceleration:
+  console.info(<span class="string">`Acceleration:
           <var>${ event.acceleration.x }</var>,
           <var>${ event.acceleration.y }</var>,
           <var>${ event.acceleration.z }</var>`</span>);
 
-  console.info(<span class="green">`Acceleration including gravity:
+  console.info(<span class="string">`Acceleration including gravity:
           <var>${ event.accelerationIncludingGravity.x }</var>,
           <var>${ event.accelerationIncludingGravity.y }</var>,
           <var>${ event.accelerationIncludingGravity.z }</var>`</span>);
 
-  console.info(<span class="green">`Rotation rate:
+  console.info(<span class="string">`Rotation rate:
           <var>${ event.rotationRate.alpha }</var>,
           <var>${ event.rotationRate.beta }</var>
           <var>${ event.rotationRate.gamma }</var>`</span>);  
@@ -569,14 +676,14 @@ window.addEventListener("compassneedscalibration", function(event) {
       <pre><code>
 navigator.vibrate(1000);
 
-<span class="darkgrey">// same as:</span>
+<span class="comment">// same as:</span>
 
 navigator.vibrate([1000]);
       </code></pre>
     </section>
     <section data-api="vibration" class="code">
       <pre><code>
-<span class="darkgrey">// cancel!</span>
+<span class="comment">// cancel!</span>
 navigator.vibrate(0);
 navigator.vibrate([]);
       </code></pre>
@@ -605,7 +712,7 @@ navigator.vibrate([1000, 50, 2000]);
       <pre><code>
 var constraints = { video: true, audio: false };
 
-<span class="darkgrey">// returns a Promise</span>
+<span class="comment">// returns a Promise</span>
 navigator.mediaDevices.getUserMedia(constraints)
       </code></pre>
     </section>
@@ -696,10 +803,12 @@ navigator.connection.addEventListener('change', handleNetworkTypeChange());
     <script>
      console.log(window.navigator);
      function getLocation() {
-       navigator.geolocation.getCurrentPosition(showPositionCallback);
+       navigator.geolocation.getCurrentPosition(
+    handlePositionCallback
+);
      }
      
-     function showPositionCallback(position) {
+     function handlePositionCallback(position) {
        document.querySelector(".location").innerText = `
          Latitude: ${ position.coords.latitude }
          Longitude: ${ position.coords.longitude }

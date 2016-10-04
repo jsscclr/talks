@@ -19,6 +19,7 @@ li::before {
     --dark-color: rgb(25, 25, 30);
     --dark-color-faded: rgba(25, 25, 30, 0.25);
     --font-size: calc(20px + 1vw);
+    --dark-grey: darkgrey;
 }
 
 body {
@@ -82,8 +83,8 @@ code {
     color: red;
 }
 
-.darkgrey {
-    color: darkgrey;
+.comment {
+    color: var(--dark-grey);
 }
 
 section[data-api="vibration"][data-example="basic"]:hover img {
@@ -99,7 +100,7 @@ section[data-api="vibration"][data-example="alternating"]:hover img {
     100% { transform: rotate(-1deg) translateX(-1px);}
 }
 
-.green {
+.string {
     color: green;
 }
 
