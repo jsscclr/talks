@@ -137,6 +137,47 @@ var {
     height: 210px;
 }
 
+.quote {
+    line-height: 2em;
+    overflow: hidden;
+}
+
+.quote figure {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    font-size: 2em;
+}
+
+.quote blockquote {
+    font-weight: 100;
+}
+
+.quote cite {
+    color: #1862ab;
+}
+
+.quote figcaption {
+    text-align: right;
+    position: relative;
+}
+
+.quote figcaption::before {
+    content: '\2014';
+    display: inline-block;
+    padding-right: 0.5em;
+}
+
+.quote figcaption::after {
+    color: #1862ab;
+    content: "\201D";
+    position: absolute;
+    right: 0;
+    transform: scale(20) translateY(20%) translateX(-25%);
+    opacity: 0.4;
+}
+
 
 @media all and (display-mode: fullscreen) {
     body {

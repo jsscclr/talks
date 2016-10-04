@@ -17,8 +17,9 @@
     </section>
     <section class="display quote">
       <figure>
-	<blockquote></blockquote>
-	<figcaption></figcaption>
+	 <cite>Small is Beautiful: Why Desktop UX still has something to teach Mobile</cite>
+	<blockquote>While most of us can likely agree that mobile is the future of computing, something very interesting is happening here. In a world where new technologies usurp the old nearly every year, many of us are reaching for our old school laptops surprisingly often. <strong>This isn't just nostalgia, there is something deeply inadequate about mobile</strong>.</blockquote>
+	<figcaption>Scott Jenson</figcaption>
       </figure>
     </section>
     <section>
@@ -364,6 +365,17 @@ var <var>positionOptions</var> = {
 }</span>
       </code></pre>
     </section>
+    <section class="display quote">
+      <figure>
+	 <cite>The Mobile Book Addendum</cite>
+	<blockquote>The best mobile experiences are
+	  “designed from zero”—that is, prevention and recovery from zero
+	  results is at the core of the way search is implemented. For
+	  example, zero results recovery could be based on the person’s
+	  search history and location, determined via built-in GPS</blockquote>
+	<figcaption>Pattern: Parallel Search Architecture</figcaption>
+      </figure>
+    </section>
     <section data-api="geolocation" class="code display">
       <pre><code>var <var>watchPositionId</var> = <span class="navigator">navigator</span>.geolocation.watchPosition(
     <span class="variable">handlePositionCallback</span>
@@ -406,7 +418,7 @@ var <var>positionOptions</var> = {
     </section>
     <section class="display code">
       <pre><code><span class="faded">window.addEventListener(</span>
-   <span class="string">"deviceorientationabsolute"</span><span class="faded">,
+   <span class="string">"deviceorientation"</span><span class="faded">,
    <span class="variable">orientationChange</span>
 );
 
@@ -419,9 +431,9 @@ var <var>positionOptions</var> = {
 }</span>
       </code></pre>
     </section>
-    <section class="display code">
+        <section class="display code">
       <pre><code><span class="faded">window.addEventListener(
-   <span class="string">"deviceorientationabsolute"</span>,</span>
+   <span class="string">"deviceorientation"</span>,</span>
    <span class="variable">orientationChange</span><span class="faded">
 );
 
@@ -436,11 +448,41 @@ var <var>positionOptions</var> = {
     </section>
     <section class="display code">
       <pre><code><span class="faded">window.addEventListener(
-   <span class="string">"deviceorientationabsolute"</span>,
+   <span class="string">"deviceorientation"</span>,
    <span class="variable">orientationChange</span>
 );
 
 <span class="function">function</span> <span class="variable">orientationChange</span>(</span><span class="parameter">event</span><span class="faded">) {
+    console.info(<span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span>);
+}</span>
+      </code></pre>
+    </section>
+    <section class="display code">
+      <pre><code><span class="faded">window.addEventListener(
+   <span class="string">"deviceorientation"</span>,
+   <span class="variable">orientationChange</span>
+);
+
+<span class="function">function</span> <span class="variable">orientationChange</span>(</span><span class="parameter">event</span><span class="faded">) {
+    console.info(</span><span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span><span class="faded">);
+}</span>
+      </code></pre>
+    </section>
+    <section class="display code">
+      <pre><code><span class="faded">window.addEventListener(</span>
+   <span class="string">"deviceorientationabsolute"</span><span class="faded">,
+   <span class="variable">orientationChange</span>
+);
+
+<span class="function">function</span> <span class="variable">orientationChange</span>(<span class="parameter">event</span>) {
     console.info(<span class="string">`
         Rotation around the Z axis: <var>${ event.alpha }</var>
         Rotation around the X axis: <var>${ event.beta }</var>
@@ -576,6 +618,17 @@ var <var>positionOptions</var> = {
     alert(<span class="string">"Your compass needs calibration :( Fix it!"</span>);</span>
     event.preventDefault();<span class="faded">
 }</span></code></pre>
+    </section>
+    <section class="display quote">
+      <figure>
+	<cite>Meta-Moments: Thoughtfulness by Design</cite>
+	<blockquote>Adding a barrier forces us to
+     engage in a deeper, more attentive way: <strong>we are encouraged to
+     think</strong>. Granted, not everyone will want or need this
+     encouragement, but if a barrier can create a digital experience
+     that is noticed and remembered, then it’s worth talking about.</blockquote>
+	<figcaption>Andrew Grimes</figcaption>
+      </figure>
     </section>
     <section data-api="device-orientation" class="display">
       <h1>Support</h1>
@@ -816,6 +869,16 @@ window.addEventListener(<span class="string">'lightlevel'</span>, <span class="f
     `</span>);
 });
       </code></pre>
+    </section>
+    <section class="display quote">
+      <figure>
+	 <cite>http://alistapart.com/article/building-nonlinear-narratives-for-the-web</cite>
+	<blockquote>Either route offers a way to twist or fragment the story, to add layers to the central narrative- to transform the original Tiv tale into a nonlinear, more nuanced, and limked experience, much closer to how the web itself works. <br/> I want to do that for Pixel Fable, and I want to show you how to do
+   it, too. That means venturing beyond our basic scrolly-telling. But
+   first, let’s take a deeper look at what nonlinear stories do.
+	</blockquote>
+	<figcaption>Senongo Akpem</figcaption>
+      </figure>
     </section>
     <section data-api="ambient-light" class="display">
       <h1>Support</h1>
