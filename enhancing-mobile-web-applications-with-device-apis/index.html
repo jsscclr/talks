@@ -264,8 +264,7 @@ function handleErrorCallback(</span>error<span class="faded">) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback,
     handleErrorCallback
 );
@@ -281,8 +280,7 @@ function handleErrorCallback(</span>error<span class="faded">) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback,
     handleErrorCallback
 );
@@ -298,8 +296,7 @@ function handleErrorCallback(</span>error<span class="faded">) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-navigator.geolocation.getCurrentPosition(
+      <pre><code>navigator.geolocation.getCurrentPosition(
     handlePositionCallback,
     handleErrorCallback
     <var>positionOptions</var>
@@ -314,8 +311,7 @@ var <var>positionOptions</var> = {
 </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback,
     handleErrorCallback
     <var>positionOptions</var>
@@ -337,8 +333,7 @@ navigator.geolocation.clearWatch(<var>watchPositionId</var>);
 </code></pre>
     </section>    
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback,
     handleErrorCallback
     <var>positionOptions</var>
@@ -352,8 +347,7 @@ var <var>positionOptions</var> = {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback,
     handleErrorCallback
     <var>positionOptions</var>
@@ -384,18 +378,15 @@ var <var>positionOptions</var> = {
       </h1>
     </section>
     <section data-api="battery-status" class="code display">
-      <pre><code>
-var <var>batteryManager</var> = navigator.battery;
+      <pre><code>var <var>batteryManager</var> = navigator.battery;
       </code></pre>
     </section>
     <section data-api="battery-status" class="code display">
-      <pre><code>
-<s>var <var>batteryManager</var> = navigator.battery;</s>
+      <pre><code><s>var <var>batteryManager</var> = navigator.battery;</s>
       </code></pre>
     </section>
     <section data-api="battery-status" class="code display">
-      <pre><code>
-navigator.getBattery()
+      <pre><code>navigator.getBattery()
          .then(
            onBatteryResolved,
            onBatteryRejected
@@ -411,8 +402,7 @@ function onBatteryRejected() {
       </code></pre>
     </section>
     <section data-api="battery-status" class="code display">
-      <pre><code>
-<span class="faded">navigator.</span>getBattery()<span class="faded">
+      <pre><code><span class="faded">navigator.</span>getBattery()<span class="faded">
          .then(
            onBatteryResolved,
            onBatteryRejected
@@ -428,8 +418,7 @@ function onBatteryRejected() {
       </code></pre>
     </section>
     <section data-api="battery-status" class="code display">
-      <pre><code>
-<span class="faded">navigator.getBattery()</span>
+      <pre><code><span class="faded">navigator.getBattery()</span>
          .then(<span class="faded">
            onBatteryResolved,
            onBatteryRejected</span>
@@ -445,8 +434,7 @@ function onBatteryRejected() {
       </code></pre>
     </section>
     <section data-api="battery-status" class="code display">
-      <pre><code>
-<span class="faded">navigator.getBattery()
+      <pre><code><span class="faded">navigator.getBattery()
          .then(</span>
            onBatteryResolved<span class="faded">,
            onBatteryRejected
@@ -462,8 +450,7 @@ function onBatteryRejected() {
       </code></pre>
     </section>
     <section data-api="battery-status" class="code display">
-      <pre><code>
-<span class="faded">navigator.getBattery()
+      <pre><code><span class="faded">navigator.getBattery()
          .then(
            onBatteryResolved,</span>
            onBatteryRejected<span class="faded">
@@ -479,8 +466,7 @@ function onBatteryRejected() {
       </code></pre>
     </section>
     <section data-api="battery-status" class="code display">
-      <pre><code>
-function onBatteryResolved(<var>batteryManager</var>) {
+      <pre><code>function onBatteryResolved(<var>batteryManager</var>) {
   console.info(<span class="string">`
     charging: <var>${ batteryManager.charging }</var>
     chargingTime: <var>${ batteryManager.chargingTime }</var>
@@ -491,8 +477,7 @@ function onBatteryResolved(<var>batteryManager</var>) {
       </code></pre>
     </section>
     <section data-api="battery-status" class="code display">
-      <pre><code>
-function onBatteryResolved(<var>batteryManager</var>) {
+      <pre><code>function onBatteryResolved(<var>batteryManager</var>) {
   <var>batteryManager</var>.addEventListener(
     <span class="string">"levelchange"</span>, eventCallback
   );
@@ -529,8 +514,7 @@ function onBatteryResolved(<var>batteryManager</var>) {
       </h1>
     </section>
     <section data-api="ambient-light" class="display code">
-      <pre><code>
-window.addEventListener(<span class="string">'devicelight'</span>, function(event) {
+      <pre><code>window.addEventListener(<span class="string">'devicelight'</span>, function(event) {
   <span class="comment">// Get the ambient light level in lux.</span>
   <span class="comment">// < 400 lux (indoors)</span>
   <span class="comment">// 400 - 1000 lux (office lighting)</span>
@@ -634,117 +618,192 @@ function orientationChange(event) {
       </code></pre>
     </section>
     <section class="code display">
-      <pre><code>window.addEventListener("devicemotion", function(event) {
+      <pre><code>window.addEventListener(<span class="string">"devicemotion"</span>, function(event) {
+    console.info(<span class="string">`
+	Acceleration:
+	    <var>${ event.acceleration.x }</var>,
+            <var>${ event.acceleration.y }</var>,
+	    <var>${ event.acceleration.z }</var>
 
-  console.info(<span class="string">`Acceleration:
-          <var>${ event.acceleration.x }</var>,
-          <var>${ event.acceleration.y }</var>,
-          <var>${ event.acceleration.z }</var>`</span>);
+	Acceleration including gravity:
+            <var>${ event.accelerationIncludingGravity.x }</var>,
+            <var>${ event.accelerationIncludingGravity.y }</var>,
+            <var>${ event.accelerationIncludingGravity.z }</var>
 
-  console.info(<span class="string">`Acceleration including gravity:
-          <var>${ event.accelerationIncludingGravity.x }</var>,
-          <var>${ event.accelerationIncludingGravity.y }</var>,
-          <var>${ event.accelerationIncludingGravity.z }</var>`</span>);
-
-  console.info(<span class="string">`Rotation rate:
-          <var>${ event.rotationRate.alpha }</var>,
-          <var>${ event.rotationRate.beta }</var>
-          <var>${ event.rotationRate.gamma }</var>`</span>);  
+        Rotation rate:
+            <var>${ event.rotationRate.alpha }</var>,
+            <var>${ event.rotationRate.beta }</var>,
+            <var>${ event.rotationRate.gamma }</var>
+    `</span>);
 });
       </code></pre>
     </section>
-    <section class="code">
-      <pre><code>
-window.addEventListener("compassneedscalibration", function(event) {
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(<span class="string">"devicemotion"</span>, function(event) {
+    console.info(<span class="string">`</span></span><span class="string">
+	Acceleration:
+	    <var>${ event.acceleration.x }</var>,
+            <var>${ event.acceleration.y }</var>,
+	    <var>${ event.acceleration.z }</var><span class="faded">
 
-  alert('Your compass is useless, fix it');
-  event.preventDefault();
+	Acceleration including gravity:
+            <var>${ event.accelerationIncludingGravity.x }</var>,
+            <var>${ event.accelerationIncludingGravity.y }</var>,
+            <var>${ event.accelerationIncludingGravity.z }</var>
 
-});
+        Rotation rate:
+            <var>${ event.rotationRate.alpha }</var>,
+            <var>${ event.rotationRate.beta }</var>,
+            <var>${ event.rotationRate.gamma }</var>
+    `</span></span><span class="faded">);
+});</span></code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(<span class="string">"devicemotion"</span>, function(event) {
+    console.info(<span class="string">`
+	Acceleration:
+	    <var>${ event.acceleration.x }</var>,
+            <var>${ event.acceleration.y }</var>,
+	    <var>${ event.acceleration.z }</var></span></span><span class="string">
+
+	Acceleration including gravity:
+            <var>${ event.accelerationIncludingGravity.x }</var>,
+            <var>${ event.accelerationIncludingGravity.y }</var>,
+            <var>${ event.accelerationIncludingGravity.z }</var><span class="faded">
+
+        Rotation rate:
+            <var>${ event.rotationRate.alpha }</var>,
+            <var>${ event.rotationRate.beta }</var>,
+            <var>${ event.rotationRate.gamma }</var>
+    `</span></span><span class="faded">);
+});</span></code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(<span class="string">"devicemotion"</span>, function(event) {
+    console.info(<span class="string">`
+	Acceleration:
+	    <var>${ event.acceleration.x }</var>,
+            <var>${ event.acceleration.y }</var>,
+	    <var>${ event.acceleration.z }</var>
+
+	Acceleration including gravity:
+            <var>${ event.accelerationIncludingGravity.x }</var>,
+            <var>${ event.accelerationIncludingGravity.y }</var>,
+            <var>${ event.accelerationIncludingGravity.z }</var></span></span><span class="string">
+
+        Rotation rate:
+            <var>${ event.rotationRate.alpha }</var>,
+            <var>${ event.rotationRate.beta }</var>,
+            <var>${ event.rotationRate.gamma }</var><span class="faded">
+    `</span></span><span class="faded">);
+});</span></code></pre>
+    </section>
+    <section class="code display">
+      <pre><code>window.addEventListener(
+    <span class="string">"compassneedscalibration"</span>,
+    showCalibrationUserInterface
+);
+
+function showCalibrationUserInterface(event) {
+    alert(<span class="string">"Your compass needs calibration :( Fix it!"</span>);
+    event.preventDefault();
+}
       </code></pre>
     </section>
-    <section data-api="device-orientation">
-      <header>
-        <h2>Support</h2>
-      </header>
-      <section>
-        <section class="support"><img src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img src="./assets/opera_logo.svg" alt="Opera Logo" /><img src="./assets/safari_logo.svg" alt="Safari Logo" /><img src="./assets/edge_logo.svg" alt="Edge Logo" /><img src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
-        </section>
-      </section>
-    </section>
-    <section>
-      <h1>Vibration API</h1>
-    </section>
-    <section data-api="vibration" class="code">
-      <pre><code>
-navigator.vibrate(1000);
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(</span>
+    <span class="string">"compassneedscalibration"</span><span class="faded">,
+    showCalibrationUserInterface
+);
 
-<span class="comment">// same as:</span>
+function showCalibrationUserInterface(event) {
+    alert(<span class="string">"Your compass needs calibration :( Fix it!"</span>);
+    event.preventDefault();
+}
+      </code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(
+    <span class="string">"compassneedscalibration"</span>,</span>
+    showCalibrationUserInterface<span class="faded">
+);
+</span>
+function showCalibrationUserInterface(event) {<span class="faded">
+    alert(<span class="string">"Your compass needs calibration :( Fix it!"</span>);
+    event.preventDefault();</span>
+}
+      </code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(
+    <span class="string">"compassneedscalibration"</span>,
+    showCalibrationUserInterface
+);
+
+function showCalibrationUserInterface(event) {
+    alert(<span class="string">"Your compass needs calibration :( Fix it!"</span>);</span>
+    event.preventDefault();<span class="faded">
+}</span></code></pre>
+    </section>
+    <section data-api="device-orientation" class="display">
+      <h1>Support</h1>
+      <div class="support">
+	<img src="./assets/firefox_logo.svg" alt="Firefox Logo" />
+	<img src="./assets/chrome_logo.svg" alt="Chrome Logo" />
+	<img src="./assets/opera_logo.svg" alt="Opera Logo" />
+	<img src="./assets/safari_logo.svg" alt="Safari Logo" />
+	<img src="./assets/edge_logo.svg" alt="Edge Logo" />
+	<img src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+      </div>
+    </section>
+    <section class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Vibration API</em>
+      </h1>
+    </section>
+    <section data-api="vibration" class="code display">
+      <pre><code>navigator.vibrate( 1000 );</code></pre>
+    </section>
+    <section data-api="vibration" class="code display">
+      <pre><code><span class="faded">navigator.vibrate( 1000 );</span>
 
 navigator.vibrate([1000]);
       </code></pre>
     </section>
-    <section data-api="vibration" class="code">
-      <pre><code>
+    <section data-api="vibration" class="code display">
+      <pre><code><span class="faded">navigator.vibrate( 1000 );
+
+navigator.vibrate([1000]);</span>
+    
 <span class="comment">// cancel!</span>
 navigator.vibrate(0);
-navigator.vibrate([]);
-      </code></pre>
-    </section>
-    <section data-api="vibration" class="code">
-      <pre><code>
-navigator.vibrate([1000, 50, 2000]);
-      </code></pre>
-    </section>
-    <section data-api="vibration">
-      <header>
-        <h2>Support</h2>
-      </header>
-      <section>
-        <section class="support"><img src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
-        </section>
-      </section>
-    </section>
-    <section data-api="media-capture">
-      <h1>Media Capture & Streams</h1>
-    </section>
-    <section data-api="media-capture" style="display: none;">
-      <h1><code>navigator.mediaDevices.getUserMedia</code></h1>
-    </section>
-    <section data-api="media-capture" class="code">
-      <pre><code>
-var constraints = { video: true, audio: false };
 
-<span class="comment">// returns a Promise</span>
-navigator.mediaDevices.getUserMedia(constraints)
-      </code></pre>
+navigator.vibrate([]);</code></pre>
     </section>
+    <section data-api="vibration" class="code display">
+      <pre><code><span class="faded">navigator.vibrate( 1000 );
 
-    <section data-api="media-capture" class="code">
-      <pre><code>
-var constraints = { video: true, audio: false };
+navigator.vibrate([1000]);
+    
+<span class="comment">// cancel!</span>
+navigator.vibrate(0);
 
-navigator.getUserMedia(constraints)
-         .then(handleMediaStream)
-         .catch(function(error) { console.error(error) });
+navigator.vibrate([]);</span>
 
-function handleMediaStream(localMediaStream) {
-  document.querySelector('video').src = window.URL.createObjectURL(localMediaStream);
-}
-      </code></pre>
+<span class="comment">// vibrating patterns!!</span>
+navigator.vibrate([1000, 50, 2000]);</code></pre>
     </section>
-    <section style="display: none" data-api="media-capture">
-      <video></video>
-      <button onclick="getVideo()"></button>
-    </section>
-    <section data-api="geolocation">
-      <header>
-        <h1>Support</h1>        
-      </header>
-      <section>
-        <section class="support"><img src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img class="some-support" src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img class="some-support" src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
-        </section>
-      </section>
+    <section data-api="vibration" class="display">
+      <h1>Support</h1>
+      <div class="support">
+	<img src="./assets/firefox_logo.svg" alt="Firefox Logo" />
+	<img src="./assets/chrome_logo.svg" alt="Chrome Logo" />
+	<img src="./assets/opera_logo.svg" alt="Opera Logo" />
+	<img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" />
+	<img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" />
+	<img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+      </div>
     </section>
     <section data-api="network-information">
       <h1>Network Information API</h1>
@@ -789,54 +848,11 @@ navigator.connection.addEventListener('change', handleNetworkTypeChange());
         </section>
       </section>
     </section>
-
     <section>
-      <h1>What Else?</h1>
+      <h2>Web Bluetooth</h2>
+      <h2>Web NFC (Near Field Communication)</h2>
+      <h2>Web VR</h2>
+      <h2>Game Pad API</h2>
     </section>
-    
-    <section>
-      <section>
-        <h2>Web Bluetooth</h2>
-        <h2>Web NFC (Near Field Communication)</h2>
-        <h2>Web VR</h2>
-        <h2>Game Pad API</h2>
-      </section>
-    </section>
-
-    <script>
-     console.log(window.navigator);
-     function getLocation() {
-       navigator.geolocation.getCurrentPosition(
-    handlePositionCallback
-);
-     }
-     
-     function handlePositionCallback(position) {
-       document.querySelector(".location").innerText = `
-         Latitude: ${ position.coords.latitude }
-         Longitude: ${ position.coords.longitude }
-         Accuracy: ${ position.coords.accuracy }
-         
-         Altitude: ${ position.coords.longitude }
-         Altitude Accuracy: ${ position.coords.longitude }
-
-         Heading: ${ position.coords.heading }
-         Speed: ${ position.coords.speed }
-         `
-       
-     }
-
-     var constraints = { video: true, audio: false };
-
-     function getVideo() {
-       navigator.mediaDevices.getUserMedia(constraints)
-                .then(handleMediaStream)
-                .catch(function(error) { console.error(error) })
-     }
-     
-     function handleMediaStream(localMediaStream) {
-       document.querySelector('video').src = window.URL.createObjectURL(localMediaStream);
-     }
-    </script>
   </body>
 </html>
