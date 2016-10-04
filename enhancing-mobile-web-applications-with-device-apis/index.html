@@ -40,8 +40,7 @@
       </ul>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-navigator.geolocation.getCurrentPosition(
+      <pre><code>navigator.geolocation.getCurrentPosition(
     handlePositionCallback
 );
 
@@ -61,8 +60,7 @@ function handlePositionCallback(position) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-navigator<span class="faded">.geolocation.getCurrentPosition(
+      <pre><code>navigator<span class="faded">.geolocation.getCurrentPosition(
     handlePositionCallback
 );
 
@@ -82,8 +80,7 @@ function handlePositionCallback(position) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.</span>geolocation<span class="faded">.getCurrentPosition(
+      <pre><code><span class="faded">navigator.</span>geolocation<span class="faded">.getCurrentPosition(
     handlePositionCallback
 );
 
@@ -103,8 +100,7 @@ function handlePositionCallback(position) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.</span>getCurrentPosition(<span class="faded">
+      <pre><code><span class="faded">navigator.geolocation.</span>getCurrentPosition(<span class="faded">
     handlePositionCallback</span>
 )<span class="faded">;
 
@@ -124,8 +120,7 @@ function handlePositionCallback(position) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(</span>
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(</span>
     handlePositionCallback
 <span class="faded">);
 
@@ -145,8 +140,7 @@ function</span> handlePositionCallback(<span class="faded">position</span>)<span
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback
 );
 
@@ -166,8 +160,7 @@ function handlePositionCallback(</span>position<span class="faded">) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback
 );
 
@@ -187,8 +180,7 @@ function handlePositionCallback(</span>position<span class="faded">) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback
 );
 
@@ -208,8 +200,7 @@ function handlePositionCallback(</span>position<span class="faded">) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-navigator.geolocation.getCurrentPosition(
+      <pre><code>navigator.geolocation.getCurrentPosition(
     handlePositionCallback,
     handleErrorCallback
 );
@@ -225,8 +216,7 @@ function handleErrorCallback(error) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback,</span>
     handleErrorCallback
 <span class="faded">);
@@ -242,8 +232,7 @@ function </span>handleErrorCallback(<span class="faded">error</span>)<span class
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback,
     handleErrorCallback
 );
@@ -259,8 +248,7 @@ function handleErrorCallback(</span>error<span class="faded">) {
       </code></pre>
     </section>
     <section data-api="geolocation" class="code display">
-      <pre><code>
-<span class="faded">navigator.geolocation.getCurrentPosition(
+      <pre><code><span class="faded">navigator.geolocation.getCurrentPosition(
     handlePositionCallback,
     handleErrorCallback
 );
@@ -551,87 +539,102 @@ window.addEventListener(<span class="string">'devicelight'</span>, function(even
 });
         </code></pre>
     </section>
-    <section data-api="ambient-light" class="code">
-      <pre><code>
-window.addEventListener('lightlevel', function(event) {
+    <section data-api="ambient-light" class="code display">
+      <pre><code><span class="faded">window.addEventListener(<span class="string">'devicelight'</span>, function(event) {
+  <span class="comment">// Get the ambient light level in lux.</span>
+  <span class="comment">// < 400 lux (indoors)</span>
+  <span class="comment">// 400 - 1000 lux (office lighting)</span>
+  <span class="comment">// > 1000 lux (outdoors)</span>
+  console.info(event.value);
+});</span>
+
+window.addEventListener(<span class="string">'lightlevel'</span>, function(event) {
   <span class="comment">// Either dim, normal or bright.</span>
   console.info(event.value);
 });
       </code></pre>
     </section>
-    <section data-api="ambient-light" class="code">
-      <pre><code>
-let sensor = new <var>AmbientLightSensor()</var>;
-sensor.start();
+    <section data-api="ambient-light" class="display code">
+      <pre><code><s>window.addEventListener(<span class="string">'devicelight'</span>, function(event) {
+  <span class="comment">// Get the ambient light level in lux.</span>
+  <span class="comment">// < 400 lux (indoors)</span>
+  <span class="comment">// 400 - 1000 lux (office lighting)</span>
+  <span class="comment">// > 1000 lux (outdoors)</span>
+  console.info(event.value);
+});</s>
+
+<s>window.addEventListener(<span class="string">'lightlevel'</span>, function(event) {
+  <span class="comment">// Either dim, normal or bright.</span>
+  console.info(event.value);
+});</s>
+      </code></pre>
+    </section>
+    <section data-api="ambient-light" class="code display">
+      <pre><code>let <var>sensor</var> = new AmbientLightSensor();
+
+<var>sensor</var>.start();
     
-sensor.onchange = function(event) {
+<var>sensor</var>.addEventListener(<span class="string">"change"</span>, function(event) {
     console.log(event.reading.illuminance);
-};
-
-sensor.onerror = function(event) {
-    console.log(event.error.name, event.error.message);
-};
-      </code></pre>
-    </section>
-    <section data-api="ambient-light">
-      <header>
-        <h2>Support</h2>
-      </header>
-      <section>
-        <section class="support"><img class="some-support" src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img class="no-support" src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img class="no-support" src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img class="some-support" src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
-        </section>
-      </section>
-    </section>
-    <section>
-      <h1>Device Orientation API</h1>
-    </section>
-    <section>
-        <code>deviceorientation</code>
-        <img src="assets/z-axis-alpha.png" style="object-fit: contain;" />
-    </section>
-    <section class="code">
-      <code>deviceorientation</code>
-      <img src="assets/z-axis-alpha-c-rotation.png" style="object-fit: contain;" />
-        <pre><code>
-window.addEventListener("deviceorientation", function(event) {
-  console.info(<span class="string">`Rotation around the Z axis: <var>${ event.alpha }</var>`</span>);
 });
-        </code></pre>
-    </section>
 
-    <section class="code">
-      <code>deviceorientation</code>
-        <img src="assets/beta-a-rotation.png" style="object-fit: contain;" />
-        <pre><code>
-window.addEventListener("deviceorientation", function(event) {
-  console.info(<span class="string">`Rotation around the X axis: <var>${ event.beta }</var>`</span>);
-});
-        </code></pre>
-      </section>
-    </section>
-
-    <section>
-      <code>deviceorientation</code>
-      <img src="assets/gamma-b-rotation.png" style="object-fit: contain;" />
-      <pre><code>
-window.addEventListener("deviceorientation", function(event) {
-  console.info(<span class="string">`Rotation around the Y axis: <var>${ event.gamma }</var>`</span>);
+<var>sensor</var>.addEventListener(<span class="string">"error"</span>, function(event) {
+    console.error(<span class="string">`
+        <var>${event.error.name}</var>,
+        <var>${event.error.message}</var>
+    `</span>);
 });
       </code></pre>
     </section>
-    <section class="code">
-      <pre><code>
-window.addEventListener("deviceorientationabsolute", function(event) {
-    <span class="comment">// Separate Event for Absolute Values - Useful for Augmented Reality</span>
-});
+    <section data-api="ambient-light" class="display">
+      <h1>Support</h1>
+      <div class="support">
+	<img class="some-support" src="./assets/firefox_logo.svg" alt="Firefox Logo" />
+	<img class="no-support" src="./assets/chrome_logo.svg" alt="Chrome Logo" />
+	<img class="no-support" src="./assets/opera_logo.svg" alt="Opera Logo" />
+	<img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" />
+	<img class="some-support" src="./assets/edge_logo.svg" alt="Edge Logo" />
+	<img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+      </div>
+    </section>
+    <section data-api="device-orientation" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Device Orientation API</em>
+      </h1>
+    </section>
+    <section class="display code">
+      <pre><code>window.addEventListener(
+    <span class="string">"deviceorientation"</span>,
+    orientationChange
+);
+
+function orientationChange(event) {
+    console.info(<span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span>);
+}
       </code></pre>
     </section>
-    <section>
-      <h1><code>devicemotion</code></h1>
+    <section class="display code">
+      <pre><code>window.addEventListener(
+   <span class="string">"deviceorientationabsolute"</span>,
+   orientationChange
+);
+
+function orientationChange(event) {
+    console.info(<span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span>);
+}
+      </code></pre>
     </section>
-    <section class="code">
-      <pre><code>
-window.addEventListener("devicemotion", function(event) {
+    <section class="code display">
+      <pre><code>window.addEventListener("devicemotion", function(event) {
 
   console.info(<span class="string">`Acceleration:
           <var>${ event.acceleration.x }</var>,
