@@ -1,0 +1,1962 @@
+* Battery Status API
+** Main
+*** Uses
+**** Main
+     - save battery power
+     - adjust your app's resource usage to reduce battery drain when
+       the battery is low
+     - save changes before battery runs out to prevent data loss
+     - reasonable defaults, then enhance - or provide warnings, etc
+     - remove assumptions! mobile doesn't mean battery conservation,
+       desktop doesn't mean connected to a power source
+       - [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+**** Geolocation
+***** lower location accuracy requested
+      - [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+***** default is not to request inbuilt GPS
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+***** present options: lower battery usage or higher accuracy
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+**** Media
+***** playback videos in lower quality
+      - [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+***** default to low quality streams, option to download HQ
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+**** CSS
+***** change page colour scheme to reduce battery drain
+      - [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+***** reduce complex CSS animations
+      - [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+***** provide basic interface
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+***** TODO ? box-shadows etc ?
+      - State "TODO"       from              [2016-09-17 Sat 14:37]
+***** switch to light on dark so screen draws less power
+      - [[%5B%5Bhttp://code.tutsplus.com/tutorials/html5-battery-status-api--mobile-22795%5D%5D][HTML5 Battery Status API]]
+***** switch to dark themed stylesheet for OLED screens
+      - [[%5B%5Bhttps://steveedson.co.uk/html5/battery-api/%5D%5D][HTML5 Battery Status API]]
+**** JavaScript
+***** reduce intervals for background tasks
+      - [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+***** disable vibration
+      - [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+***** Reduce Web Workers
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+***** Determine appropriate intervals based on level
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+***** TODO ? Idea: Use of Service Workers (?)
+      - State "TODO"       from              [2016-09-17 Sat 14:29]
+***** prevent complex calculations
+      -
+        [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+***** temporarily pause long-running processes
+      - [[%5B%5Bhttp://code.tutsplus.com/tutorials/html5-battery-status-api--mobile-22795%5D%5D][HTML5 Battery Status API]]
+**** Network
+***** decrease/minimise network activity
+      - [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+***** lower image requests
+      - [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart
+        Article]]
+***** less or more aynchronous requests
+      - [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+***** Set default intervals for data and processor-intensive tasks
+      - Websites request information dynamically - using Ajax to push /
+        pull data
+      - Often started by default in the background. Choose default
+        experience for the user
+      - set conservative default settings
+***** ? don't download double density images
+***** proactive action e.g. save more frequently
+      - [[%5B%5Bhttp://code.tutsplus.com/tutorials/html5-battery-status-api--mobile-22795%5D%5D][HTML5 Battery Status API]]
+***** stop or reduce Ajax requests
+      - [[%5B%5Bhttps://steveedson.co.uk/html5/battery-api/%5D%5D][HTML5 Battery Status API]]
+***** proactively save before dead battery
+      - [[%5B%5Bhttps://steveedson.co.uk/html5/battery-api/%5D%5D][HTML5 Battery Status API]]
+***** slow down re-polling of server
+      - [[%5B%5Bhttp://jaspreetchahal.org/html5-battery-api/%5D%5D][HTML5 Battery API]]
+
+**** User Interface
+***** prompt saving of article to a third party service
+      - [[%5B%5Bhttps://steveedson.co.uk/html5/battery-api/%5D%5D][HTML5 Battery Status API]]
+***** prompt saving important data before it is lost
+      -
+        [[%5B%5Bhttps://steveedson.co.uk/html5/battery-api/%5D%5D][HTML5 Battery Status API]]
+***** alert user when accessing / loading images
+      - [[%5B%5Bhttp://jaspreetchahal.org/html5-battery-api/%5D%5D][HTML5 Battery API]]
+           #+BEGIN_SRC js
+      // adds a "charging time change" event listener
+      batteryObj.addEventListener("chargingtimechange", function() {
+        console.warn("Event: Battery charge time change, Value: ", batteryObj.chargingTime);
+      }, false);
+      // adds a "discharging time change" event listener
+      batteryObj.addEventListener("dischargingtimechange", function() {
+        console.warn("Event: Battery discharging time change, value: ", batteryObj.dischargingTime);
+      }, false);
+      // adds a levelchange event listener
+      batteryObj.addEventListener("levelchange", function() {
+        console.warn("Event: Battery level change, Value: ", batteryObj.level);
+      }, false);
+      // adds a chargingchange event listener
+      batteryObj.addEventListener("chargingchange", function() {
+        console.warn("Event: Battery charge change, Value: ", batteryObj.charging);
+      }, false);
+
+    #+END_SRC
+      - 
+**** Bad Uses!
+    
+    - [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+       - The Effect of a Dying Battery on Users
+     - People are willing to accept up to 9.9 times surge pricing if
+       their phones are about to die
+     - "One of the strongest predictors of whether or not you are going
+       to be sensitive to surge - in other words, whether or not you
+       are going to kind of say, oh, 2.2, 2.3, I'll give it a 10 to 15
+       minutes to see if surge goes away - is how much battery you have
+       left on your cell phone" - Keith Chen
+***** track users
+*** Privacy Concerns
+*** About
+**** spec not finalised
+     - [[%5B%5Bhttps://steveedson.co.uk/html5/battery-api/%5D%5D][HTML5 Battery Status API]]
+**** history
+     - In development since early 2011
+     - W3C Candidate Recommendation - but has not changed much
+       since 2012. Current API most likely won't change.
+       - [[%5B%5Bhttp://code.tutsplus.com/tutorials/html5-battery-status-api--mobile-22795%5D%5D][HTML5 Battery Status API]]
+     - used to be synchronous
+**** promise-based (asynchronous)
+***** first parameter for success
+***** second parameter for failure
+**** snapshot
+**** events
+***** charging level
+***** charging status change
+**** system's battery charge level
+**** charging
+***** infinity
+****** not enough data
+****** device never charges / discharge
+****** information not available
+**** charging information from computer
+     - [[%5B%5Bhttp://hwclass.in/2016/03/09/the-next-generation-of-browser-apis/%5D%5D][The State of Browser APIs - 1]]
+**** battery status of machine as a double between 0 and 1
+     - [[%5B%5Bhttp://hwclass.in/2016/03/09/the-next-generation-of-browser-apis/%5D%5D][The State of Browser APIs - 1]]
+**** uses navigator.getBattery()
+**** track charging level via levelchange event
+     - [[%5B%5Bhttp://hwclass.in/2016/03/09/the-next-generation-of-browser-apis/%5D%5D][The State of Browser APIs - 1]]
+*** Device & Sensor Working Group
+    - create client-side APIs
+    - APIs interact with
+      - device hardware
+       - sensors
+       - services
+       - applications
+         - camera
+         - microphone
+         - address books
+         - calendars
+*** Support
+    - Mobile
+      - Firefox mobile has supported for over 3 years! 18+ January 2013
+      - Opera 25+ October 2014
+      - Chrome 40+ April 2015
+    - Desktops
+      - Firefox 18+ 2012
+      - Chrome 39 October 2014
+      - Opera 25 October 2014
+    - firefox
+    - chrome
+    - opera
+    - Old API had issues with Mac device batteries.
+      - [[%5B%5Bhttps://davidwalsh.name/javascript-battery-api%5D%5D][JavaScript Battery API]]
+    - Firefox versions below 42 uses navigator.battery
+      - [[%5B%5Bhttp://hwclass.in/2016/03/09/the-next-generation-of-browser-apis/%5D%5D][The State of Browser APIs - 1]]
+    - Chrome 45
+      - Firefox 43
+      - Opera 34
+      - IE No support
+      - Safari No support
+
+*** Code
+**** BatteryManager
+     - [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+      #+BEGIN_SRC js
+      BatteryManager: {
+        charging: false,
+        chargingTime: Infinity,
+        dischargingTime: 8374,
+        level: 0.77
+      }
+      #+END_SRC
+**** New
+     - [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+         #+BEGIN_SRC js
+       var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
+
+       function logBattery(battery) {
+           console.log(battery.level);
+           console.log(battery.charging);
+           console.log(dischargingTime);
+
+           battery.addEventListener('chargingchange', function() {
+               console.log('Battery chargingchange event: ' + battery.charging);
+           }, false);
+       }
+
+       if (navigator.getBattery) {
+           navigator.getBattery().then(logBattery);
+       } else if (battery) {
+           logBattery(battery);
+       }
+     #+END_SRC
+
+     - [[%5B%5Bhttps://davidwalsh.name/javascript-battery-api%5D%5D][JavaScript Battery API]]
+       - callback provided to then is given a BatteryManager object
+       #+BEGIN_SRC js
+       navigator.getBattery().then(function(result) {});
+       #+END_SRC
+       - BatteryManager object
+        #+BEGIN_SRC js
+          BatteryManagery {
+              charging: false,
+              chargingTime: Infinity,
+              dischargingTime: 8940,
+              level: 0.59,
+              onchargingchange: null,
+              onchargingtimechange: null,
+              ondischargingtimechange: null,
+              onlevelchange: null
+          }    
+        #+END_SRC
+
+     - [[%5B%5Bhttps://steveedson.co.uk/html5/battery-api/%5D%5D][HTML5 Battery Status API]]
+          #+BEGIN_SRC js
+          navigator.getBattery().then(batterySuccess, batteryFailure);
+
+          #+END_SRC
+
+          #+BEGIN_SRC js
+            var battery;
+
+            /**
+             ,* Successful callback providing a Battery Manager object.
+             ,* @param batteryManager
+             ,*/
+            function batterySuccess(batteryManager) {
+              battery = batteryManager;
+
+              updatedBatteryStats();
+            }
+
+            /**
+             ,* Failure callback.
+             ,*/
+            function batteryFailure() {
+              // Fail gracefully.
+            }
+          #+END_SRC
+       - Event handling
+            #+BEGIN_SRC js
+              // Register event handlers
+              battery.addEventListener('chargingchange', updatedBatteryStats);
+              battery.addEventListener('chargingtimechange', updatedBatteryStats);
+              battery.addEventListener('dischargingtimechange', updatedBatteryStats);
+              battery.addEventListener('levelchange', updatedBatteryStats);
+
+            #+END_SRC
+
+       - full use
+            #+BEGIN_SRC js
+      // Initialise Variables
+      var battery;
+
+      // Define functions
+
+      /**
+       ,* Successful callback providing a Battery Manager object.
+       ,* @param batteryManager
+       ,*/
+      function batterySuccess(batteryManager) {
+          // Assign batteryManager to globally 
+          //   available `battery` variable.
+          battery = batteryManager;
+
+          // Register event handlers  
+          battery.addEventListener('chargingchange', updatedBatteryStats);
+          battery.addEventListener('chargingtimechange', updatedBatteryStats);
+          battery.addEventListener('dischargingtimechange', updatedBatteryStats);
+          battery.addEventListener('levelchange', updatedBatteryStats);
+
+          // Process updated data
+          updatedBatteryStats();
+      }
+
+      /**
+       ,* Failure callback.
+       ,*/
+      function batteryFailure() {
+          // Fail gracefully. 
+      }
+
+      /**
+       ,* Update HTML with current battery stats
+       ,*/
+      function updatedBatteryStats() {
+          // Example data in window.battery:
+          //   BatteryManager
+          //     charging: false
+          //     chargingTime: Infinity
+          //     dischargingTime: 12600
+          //     level: 0.56
+          //     onchargingchange: null
+          //     onchargingtimechange: null
+          //     ondischargingtimechange: null
+          //     onlevelchange: null
+      }
+
+      if("getBattery" in navigator) {
+          // API is supported
+
+          // Request battery manager object.
+          navigator.getBattery().then(batterySuccess, batteryFailure);
+
+      } else {
+          // API is not supported, fail gracefully.
+      }
+
+    #+END_SRC
+     
+     - [[%5B%5Bhttp://hwclass.in/2016/03/09/the-next-generation-of-browser-apis/%5D%5D][The State of Browser APIs - 1]]
+       #+BEGIN_SRC js
+        if (navigator.getBattery()) {  
+            var battery = navigator.getBattery()
+            console.log(battery.level * 100); //a double value our battery
+        }
+      #+END_SRC
+       
+       #+BEGIN_SRC js
+        navigator.getBattery().then(function(battery) {  
+            battery.addEventListener('levelchange', function() {
+                console.log('Battery Status : ' + this.level * 100 + ' %');
+            });
+        });
+      #+END_SRC
+     - 
+**** Events
+     - [[%5B%5Bhttp://jaspreetchahal.org/html5-battery-api/%5D%5D][HTML5 Battery API]]
+**** Old
+     - [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605;
+       Mozilla Hacks – the...]]
+       #+BEGIN_SRC js
+       var battery = navigator.battery; 
+       if (battery) { 
+           var batteryLevel = Math.round(battery.level * 100) + "%", 
+               charging = (battery.charging)? "" : "not ", 
+               chargingTime = parseInt(battery.chargingTime / 60, 10), 
+               dischargingTime = parseInt(battery.dischargingTime / 60, 10);
+ 
+               // Set events 
+               battery.addEventListener("levelchange", showStatus);
+               battery.addEventListener("chargingchange", showStatus);
+               battery.addEventListener("chargingtimechange", showStatus);
+               battery.addEventListener("dischargingtimechange", showStatus);
+        }
+     #+END_SRC
+
+     - navigator.battery || navigator.webkitBattery || navigator.mozBattery
+** TODO Talk Here: Battery Status API
+*** Use Cases
+    - display notification if amount of power is not up to the app's
+      requirement, advise the user to manage their resources
+      accordingly
+    - e.g. estimated download time versus battery status?
+    - can use to adjust app resource usage to reduce battery drain
+    - save changes before the battery runs out in order to prevent data loss
+    - enable auto saving
+    - utility applications - collect statistics on battery usage
+    - inform user if the device is charged enough to play a game, watch
+      a movie
+    - optimise battery consumption - e.g. email client checks server
+      for new email less frequently if device is low on battery
+    - word processor - save changes automatically before the battery
+      runs out in order to prevent data loss
+    - process on the client or process on the server
+    - email applications reduce frequency for polling
+    - reduce javascript processing client-side
+    - offline storage of web application data
+    - avoid network calls for images
+*** navigator
+***** getBattery()
+      - provides information about the system's battery
+      - returns a battery promise
+      - battery promise resolved in a BatteryManager interface
+      - 43 onwards
+****** syntax
+       #+BEGIN_SRC js
+       navigator.getBattery().then(funcRef);
+       #+END_SRC
+       - where funcRef is a function to be called when the battery
+         promise returned by navigator.getBattery gets resolved
+       -
+***** battery
+      - used in older browsers
+      - directly return the batteryManager object
+*** BatteryManager
+    - Interface
+    - Provides ways to get information about battery charge level
+    - returned from battery promise via navigator.getBattery
+**** events
+     - do not return event objects - access properties from
+       BatteryManager interface
+     - attach event listeners to the battery manager
+***** chargingchange
+      - battery charging state is updated
+      - fired when charging attribute has changed
+***** chargingtimechange
+      - sent when battery charging time is updated
+      - fired when chargingTime attribute changes
+***** dischargingtimechange
+      - when battery discharging time is updated
+      - fired when the dischargingTime attribute has changed
+***** levelchange
+      - sent when battery level is updated
+      - fired when level attribute has changed
+**** attributes
+***** charging
+      - Read only
+      - Boolean
+      - Indicates whether or not the battery is charging
+      - true if battery is charging, system's battery is not
+        determinable, attached to the system, full, unable to report
+      - false if battery is discharging
+      - 
+***** chargingTime
+      - read only
+      - number
+      - Represents remaining time until battery is fully charged in seconds
+      - Returns 0 if the battery is already fully charged
+      - returns positive infinity if the battery is discharging or if
+        implementation is unable to report the remaining charging time
+***** dischargingTime
+      - read only
+      - Represents the remaining time until battery is fully discharged
+        and system will suspend
+      - Seconds
+      - remaining time in seconds until system battery is completely discharged
+      - returns positive infinity if the battery is charging, if
+        unable to report the remaining discharging time, or if there
+        is no battery attached to the system
+***** level
+      - represents system battery charge level
+      - scaled to a value between 0.0 and 1.0
+      - double (float)
+      - returns 0 if battery is empty and system is about to suspend
+      - returns 1.0 if battery is full, if implementation cannot
+        report the battery's level, or if there is no battery attached
+        to the system
+      - multiply by 100 to get percentage
+*** Support
+**** https://github.com/pstadler/battery.js
+     - Wrapper for the HTML5 Battery Status API
+     - For obvious reasons, there is no polyfill.
+**** Browsers
+     - Edge: Under Consideration
+     - Safari :(
+**** Global
+     - Australia: 47.86%
+     - Global: 64.66%
+*** Misc
+    - similar uses to page visibility
+    - blink has one promise per document
+*** Security
+    - Can be used to identify your online presence - creating a
+      digital fingerprint of your device.
+    - W3C - information disclosed has minimal impact on privacy,
+      exposed without permission grants
+    - Information is very specific- receive both seconds and
+      percentages 
+    - These two figures, provides one of 14 million combinations-
+      becomes a unique ID for each user. Battery updates almost every
+      half a minute - identify a user within 30 seconds. You could be
+      identified if using a website via a proxy, then revisiting the
+      same website without a proxy. Link user's new and old
+      identities - use respawning.
+    - Can be disabled.
+    - Provide users the choice.
+    - Will it stay quite so granular?
+    - ‘The leaking battery: A privacy analysis of the HTML5 Battery Status API’
+
+*** TODO check how often events fire
+*** TODO check battery vs getBattery support
+* Resources
+** Misc
+   - July: after discussion with the Director, the likely next step for
+     Battery will be to publish an updated Proposed Recommendation
+   - Mozilla's DOM Team is considering removing the Battery API from
+     Gecko because of the recent abuse by companies like Uber [1] - and
+     because of a lack of credible set of use cases. Abuses like that
+     harm users and the credibility of apps in general. Or, if we don't
+     remove it, we will likely just get it to return the equivalent of
+     "full" or "unknown".
+   - Since we (the WG) started working on this API, the OS landscape
+     has changed significantly: when we started, OSs were not doing a
+     great job with battery management, and we thought it would be a
+     good idea to allow developers some control. However, this change
+     in recent years with better battery/power management at the OS
+     level (e.g., MacOS and iOS have special battery saving modes that
+     operate at the OS level after a certain threshold is passed - like
+     20% on the phone, and 5% on a Mac... I'm sure Android and Windows
+     probably have similar features).
+   - As such, we should consider not making it a recommendation at all
+     and just scrapping battery entirely.
+   - The mitigation strategies baked into the spec currently are the
+     following:
+     - BatteryManager is gated behind a promise allowing
+       implementations to leave the promise in a pending state, for
+       example, if no user consent is acquired. In particular, the
+       promise never rejects, as to not allow implementations to know
+       whether the user did not grant access or whether she just did
+       not act on the request.
+     - Implementations may obfuscate the exposed values, and/or adjust
+       the precision of the readouts as they see fit.
+   - there are plenty of cases where apps can do rational things, like
+     an email app cutting back to a low-bandwidth mode.
+     #+BEGIN_SRC js
+     async function getState(){
+   var battery = await navigator.getBattery();
+   // await other async stuff, won't ever happen :(
+ }
+
+ getState().then(updateUI).catch(thisWontEverBeCalledHowSad);
+     #+END_SRC
+     - This might be fine, but it doesn't address the underlying
+       presupposition and use case: that this API is no longer needed
+       because power management can be done better at the OS level
+       instead of the application level.
+
+   - Kostiainen, Anssi
+     - App adjusts the amount/number of messages/tweets/data it fetches
+       over the network as well as the polling frequency depending on
+       the battery level/plugged in state. If battery drops below 20%
+       the app will only poll for new data if the user explicitly
+       interacts with the app and clicks the "Update" button, otherwise
+       the app fetches data without user interaction.
+     - App persists its state to cloud only if there's an increased
+       risk of running out of battery. App does not want to persist the
+       state unnecessarily since it is an expensive operation that also
+       depletes battery (don't want to do it unless really needed).
+     - App will only start an expensive (in terms of battery) operation
+       that must run to completion if the battery level is over
+       40%. For example, show a simpler map and not the fancy WebGL one
+       if low on battery while using a web-based navigation app. (the
+       navigation app knows how long it'll take to get to your
+       destination, so can act accordingly).
+     - App will only start a long-running irreversible operation if the
+       battery level is above certain threshold. For example, a very
+       tedious checkout process, or an update of app assets
+       (e.g. download of hi res textures for the new level in a
+       web-based game).
+     - All these could be enhanced with app level power management that
+       would complement the power management decisions the OS makes. I
+       think in an optimal scenario app and OS level would work in
+       concert. For example, OS could still batch network requests from
+       various apps/services in order to keep the radio up as little
+       time as possible (to preserve battery), even if the app also
+       does decisions based on battery status.
+   - June 30
+     - To clarify, shipping implementations (Chrome, Firefox) do not
+       ask for permission. However, given BatteryManager is gated
+       behind a promise, the hooks are in place for that.
+
+   - Battery Status API returns to W3C Candidate Recommendation (Call
+     for Implementations)
+
+   - Note that this (handling of initial about:blank) is an area where
+     Chrome is known to not match the HTML spec in various ways, which
+     is why it "passes" the test.
+
+   - The "setting iframe's src makes its Navigator object vary thus
+     getting another battery promise" creates an iframe with no src
+     attribute, waits for onload, then sets src. It then asserts that
+     this should create a new Navigator and battery promise.
+
+   - But per spec inserting the iframe will land in
+     https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-browsing-context
+     and create an about:blank document in the iframe, then go to
+     https://html.spec.whatwg.org/multipage/embedded-content.html#process-the-iframe-attributes
+     and thence to
+     https://html.spec.whatwg.org/multipage/embedded-content.html#iframe-load-event-steps
+     to fire the load event.
+
+   - Now setting the src will navigate, but the navigation is
+     same-origin and therefore the existing Window gets reused. Hence
+     there is no new Navigator in this case.
+
+   - Specifically, setting src will land in
+     https://html.spec.whatwg.org/multipage/embedded-content.html#process-the-iframe-attributes
+     which will go to
+     https://html.spec.whatwg.org/multipage/embedded-content.html#otherwise-steps-for-iframe-or-frame-elements
+     which will perform the navigation. And note this (easily missed)
+     text after the algorithm steps: 
+   - Similarly, if the child browsing context's session history
+     contained only one Document when the process the iframe attributes
+     algorithm was invoked, and that was the about:blank Document
+     created when the child browsing context was created, then any
+     navigation required of the user agent in that algorithm must be
+     completed with replacement enabled. 
+   - So in this case the navigation is performed with replacement
+     enabled. We go to
+     https://html.spec.whatwg.org/multipage/browsers.html#navigate and
+     eventually land in
+     https://html.spec.whatwg.org/multipage/browsers.html#initialise-the-document-object
+     which says: 
+     - If browsingContext's only entry in its session history is the
+       about:blank Document that was added when browsingContext was
+       created, and navigation is occurring with replacement enabled, and
+       that Document has the same origin as the new Document, then 
+     - Let window be the Window object of that Document.
+   - and that is precisely the situation we're in. So the new document
+     uses the same Window as the old document, and hence also the same
+     Navigator object.
+   - https://github.com/w3c/web-platform-tests/issues/2104
+   - https://github.com/w3c/web-platform-tests/issues/3178
+** Articles
+*** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
+    - run energy tests to give estimate about when battery might die
+*** TODO [[http://www.sitepoint.com/10-html5-apis-worth-looking/][10 HTML5 APIs Worth Looking Into]]
+
+*** [[%5B%5Bhttp://hwclass.in/2016/03/09/the-next-generation-of-browser-apis/%5D%5D][The State of Browser APIs - 1]]
+     - 2016-03-09
+**** Battery Status API
+     - get charging information from the computer
+     - get battery status of machine in the form of a double between 0 and 1
+     - uses the navigator object via getBattery()
+     - Firefox versions below 42 uses navigator.battery
+       #+BEGIN_SRC js
+         if (navigator.getBattery()) {  
+             var battery = navigator.getBattery()
+             console.log(battery.level * 100); //a double value our battery
+         }
+       #+END_SRC
+     - Track charging level via levelchange
+       #+BEGIN_SRC js
+         navigator.getBattery().then(function(battery) {  
+             battery.addEventListener('levelchange', function() {
+                 console.log('Battery Status : ' + this.level * 100 + ' %');
+             });
+         });
+       #+END_SRC
+     - Support:
+       - Chrome 45
+       - Firefox 43
+       - Opera 34
+       - IE No support
+       - Safari No support
+*** [[%5B%5Bhttp://jaspreetchahal.org/html5-battery-api/%5D%5D][HTML5 Battery API]]
+**** Use
+     - slow down re-polling of server
+     - alert user when accessing / loading images
+**** Old syntax
+     - navigator.battery || navigator.webkitBattery || navigator.mozBattery
+     -
+**** Events
+     #+BEGIN_SRC js
+       // adds a "charging time change" event listener
+       batteryObj.addEventListener("chargingtimechange", function() {
+         console.warn("Event: Battery charge time change, Value: ", batteryObj.chargingTime);
+       }, false);
+       // adds a "discharging time change" event listener
+       batteryObj.addEventListener("dischargingtimechange", function() {
+         console.warn("Event: Battery discharging time change, value: ", batteryObj.dischargingTime);
+       }, false);
+       // adds a levelchange event listener
+       batteryObj.addEventListener("levelchange", function() {
+         console.warn("Event: Battery level change, Value: ", batteryObj.level);
+       }, false);
+       // adds a chargingchange event listener
+       batteryObj.addEventListener("chargingchange", function() {
+         console.warn("Event: Battery charge change, Value: ", batteryObj.charging);
+       }, false);
+
+     #+END_SRC
+
+*** [[%5B%5Bhttps://steveedson.co.uk/html5/battery-api/%5D%5D][HTML5 Battery Status API]]
+**** Uses
+     - stop or reduce Ajax requests
+     - OLED screen - switch to a dark themed stylesheet and reduce the
+       power consumption on the device
+     - prompt the user to save an article to read later, with a service
+       such as instapaper or pocket
+     - save data that the user is working on before it is lost
+**** Use
+     - spec has not been finalised
+     - fetch data asynchronously
+     - use Promise: first parameter for success, second parameter for failure
+     - charging:
+       - if infinity, is because not enough data or device never charges
+         / discharges
+       - on mobiles, often not available - so set to infinity always
+
+     #+BEGIN_SRC js
+       navigator.getBattery().then(batterySuccess, batteryFailure);
+
+     #+END_SRC
+     #+BEGIN_SRC js
+       var battery;
+
+       /**
+        ,* Successful callback providing a Battery Manager object.
+        ,* @param batteryManager
+        ,*/
+       function batterySuccess(batteryManager) {
+           battery = batteryManager;
+
+           updatedBatteryStats();
+       }
+
+       /**
+        ,* Failure callback.
+        ,*/
+       function batteryFailure() {
+           // Fail gracefully.
+       }
+
+
+     #+END_SRC
+
+**** Event handling
+     #+BEGIN_SRC js
+       // Register event handlers
+       battery.addEventListener('chargingchange', updatedBatteryStats);
+       battery.addEventListener('chargingtimechange', updatedBatteryStats);
+       battery.addEventListener('dischargingtimechange', updatedBatteryStats);
+       battery.addEventListener('levelchange', updatedBatteryStats);
+
+     #+END_SRC
+
+**** Full use
+     #+BEGIN_SRC js
+       // Initialise Variables
+       var battery;
+
+       // Define functions
+
+       /**
+        ,* Successful callback providing a Battery Manager object.
+        ,* @param batteryManager
+        ,*/
+       function batterySuccess(batteryManager) {
+           // Assign batteryManager to globally 
+           //   available `battery` variable.
+           battery = batteryManager;
+
+           // Register event handlers  
+           battery.addEventListener('chargingchange', updatedBatteryStats);
+           battery.addEventListener('chargingtimechange', updatedBatteryStats);
+           battery.addEventListener('dischargingtimechange', updatedBatteryStats);
+           battery.addEventListener('levelchange', updatedBatteryStats);
+
+           // Process updated data
+           updatedBatteryStats();
+       }
+
+       /**
+        ,* Failure callback.
+        ,*/
+       function batteryFailure() {
+           // Fail gracefully. 
+       }
+
+       /**
+        ,* Update HTML with current battery stats
+        ,*/
+       function updatedBatteryStats() {
+           // Example data in window.battery:
+           //   BatteryManager
+           //     charging: false
+           //     chargingTime: Infinity
+           //     dischargingTime: 12600
+           //     level: 0.56
+           //     onchargingchange: null
+           //     onchargingtimechange: null
+           //     ondischargingtimechange: null
+           //     onlevelchange: null
+       }
+
+       if("getBattery" in navigator) {
+           // API is supported
+
+           // Request battery manager object.
+           navigator.getBattery().then(batterySuccess, batteryFailure);
+
+       } else {
+           // API is not supported, fail gracefully.
+       }
+
+     #+END_SRC
+*** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
+    - should not assume that small screen should get small images
+    - battery api provides not just a snapshot, but also events
+*** [[https://blog.cdemi.io/abusing-the-html5-battery-status-api-for-advertising/][(Ab)Using the HTML5 Battery Status API for Advertising]]
+    - Device and Sensor Working Group
+      - tasked with creating client-side APIs
+      - APIs interact with
+        - device hardware
+        - sensors
+        - services
+        - applications
+          - camera
+          - microphone
+          - address books
+          - calendars
+    - Battery Status API
+      - information about the system's battery charge level
+      - notification of battery status events such as charging level or
+        charging status change
+      - adjust your app's resource usage to reduce battery drain when
+        the battery is low
+      - save changes before battery runs out to prevent data loss
+    - Support
+      - firefox
+      - chrome
+      - opera
+    - Returns BatteryManager
+      #+BEGIN_SRC js
+      BatteryManager: {
+        charging: false,
+        chargingTime: Infinity,
+        dischargingTime: 8374,
+        level: 0.77
+      }
+      #+END_SRC
+    - designed to help developers save battery power
+      - lower Geolocation accuracy
+      - playback videos in lower quality
+      - reduce complex CSS animations
+      - reduce intervals for background tasks
+      - disable vibration
+      - decrease network activity
+      - change page colour scheme to reduce battery drain
+    - doesn't require permission from user
+    - Can be used to track users
+    - The Effect of a Dying Battery on Users
+      - People are willing to accept up to 9.9 times surge pricing if
+        their phones are about to die
+      - "One of the strongest predictors of whether or not you are going
+        to be sensitive to surge - in other words, whether or not you
+        are going to kind of say, oh, 2.2, 2.3, I'll give it a 10 to 15
+        minutes to see if surge goes away - is how much battery you have
+        left on your cell phone" - Keith Chen
+*** [[https://www.sitepoint.com/using-the-battery-status-api-to-optimize-your-development/][Using the Battery Status API to Optimize Your Development]]
+    - In development since early 2011
+**** Use
+    - Specification is not finalised so should be used to progressively
+      enhance your application. If you see navigator.battery, this is
+      deprecated.
+    - Customise Geolocation elements:
+      - Have a lower accuracy
+      - Don't request usage of inbuilt GPS
+      - Provide option between lower battery usage or higher accuracy
+    - Set video streams or playback to lower quality by default
+      - Data transfers quicker, less intensive on the device
+      - Option to download high quality stream
+    - CSS Animations
+      - Reduce complex CSS animations
+      - Provide a more basic interface
+    - Determine interval for background tasks
+      - E.g. Ajax, Web Workers
+      - Use state to determine how frequently tasks should be called
+      - Minimise network usage
+    - Idea should be to provide reasonable defaults, then enhance
+      applications when we know. Or provide warnings, etc
+***** Browser Support
+      - Mobile
+        - Firefox mobile has supported for over 3 years! 18+ January 2013
+        - Opera 25+ October 2014
+        - Chrome 40+ April 2015
+      - Desktops
+        - Firefox 18+ 2012
+        - Chrome 39 October 2014
+        - Opera 25 October 2014
+***** Practical Example: Reducing Background API Calls
+      - Set default intervals for data and processor-intensive tasks
+      - Websites request information dynamically - using Ajax to push /
+        pull data
+      - Often started by default in the background. Choose default
+        experience for the user
+      - set conservative default settings
+*** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+    - prevent complex animations or calculations
+    - both mobile and laptop
+    - me: don't download double density images?
+    - code
+      #+BEGIN_SRC js
+        var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
+
+        function logBattery(battery) {
+            console.log(battery.level);
+            console.log(battery.charging);
+            console.log(dischargingTime);
+
+            battery.addEventListener('chargingchange', function() {
+                console.log('Battery chargingchange event: ' + battery.charging);
+            }, false);
+        }
+
+        if (navigator.getBattery) {
+            navigator.getBattery().then(logBattery);
+        } else if (battery) {
+            logBattery(battery);
+        }
+      #+END_SRC
+*** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+    - code
+      #+BEGIN_SRC js
+        var battery = navigator.battery; 
+        if (battery) { 
+            var batteryLevel = Math.round(battery.level * 100) + "%", 
+                charging = (battery.charging)? "" : "not ", 
+                chargingTime = parseInt(battery.chargingTime / 60, 10), 
+                dischargingTime = parseInt(battery.dischargingTime / 60, 10);
+ 
+                // Set events 
+                battery.addEventListener("levelchange", showStatus);
+                battery.addEventListener("chargingchange", showStatus);
+                battery.addEventListener("chargingtimechange", showStatus);
+                battery.addEventListener("dischargingtimechange", showStatus);
+         }
+      #+END_SRC
+*** [[%5B%5Bhttp://code.tutsplus.com/tutorials/html5-battery-status-api--mobile-22795%5D%5D][HTML5 Battery Status API]]
+    - W3C Candidate Recommendation - but has not changed much
+      since 2012. Current API most likely won't change.
+    - examples
+      - temporarily pause long-running processes
+      - proactive action - if application manages content, then it may be
+        useful to save the user's data more frequently
+      - switch to a light on dark theme - screen draws less power from
+        the battery
+*** [[%5B%5Bhttps://davidwalsh.name/javascript-battery-api%5D%5D][JavaScript Battery API]]
+**** Functionality
+       - callback provided to then is given a BatteryManager object
+         #+BEGIN_SRC js
+         navigator.getBattery().then(function(result) {});
+         #+END_SRC
+       - BatteryManager object
+         #+BEGIN_SRC js
+           BatteryManagery {
+               charging: false,
+               chargingTime: Infinity,
+               dischargingTime: 8940,
+               level: 0.59,
+               onchargingchange: null,
+               onchargingtimechange: null,
+               ondischargingtimechange: null,
+               onlevelchange: null
+           }    
+         #+END_SRC
+**** Issues
+     - Old API had issues with Mac device batteries.
+     - Promise based now. Old used synchronous.
+
+*** TODO [[http://tutorialzine.com/2016/08/working-with-the-javascript-battery-api/][Quick Tip: Working with the JavaScript Battery API]]
+    - State "TODO"       from              [2016-09-17 Sat 15:11]
+    - improve user experience
+    - promise based navigator.getBattery() interface
+    - directly via navigator.battery (deprecated)
+    - check support
+      #+BEGIN_SRC js
+        if(navigator.getBattery){
+          // Battery API available.
+          // Rest of code goes here.
+        }
+        else{
+          // No battery API support.
+          // Handle error accordingly.
+        }
+      #+END_SRC
+    - use
+      #+BEGIN_SRC js
+        navigator.getBattery()
+                 .then(function(batteryManager) {
+                   // Get current charge in percentages.
+                   var level = batteryManager.level * 100;
+                 })
+                 .catch(function(e) {
+                   console.error(e);
+                 });
+      #+END_SRC
+    - getBattery()
+      - returns promise
+      - resolves with a BatteryManager object
+    - BatteryManager
+      - level
+        - current charge
+        - float between 0 and 1
+      - charging
+        - device on power supply or not
+        - returns Boolean
+      - chargingTime
+        - remaining time in seconds until completely charged
+      - dischargingTime
+        - remaining time until battery is completely discharged
+      - events
+        - onlevelchange
+        - onchargingchange
+        - onchargingtimechange
+        - ondischargingtimechange
+      - watch battery level
+        #+BEGIN_SRC js
+        navigator.getBattery()
+      .then(function(battery) {    
+          battery.onlevelchange = function() {
+
+              if(battery.level<0.3 && !battery.charging) {
+                  powerSavingMode = true;
+              }
+
+          }
+      });
+        #+END_SRC
+      - power saving option
+    - preserving energy
+      - screen is biggest battery drainer
+        - mobile
+          - CPUs energy preserving
+          - screens have high resolution
+        - limit light emitted
+        - change colour palette
+        - dark screens: 50% energy reduction on AMOLED screens
+      - limit amount / size of requests to external resources
+        - high resolution images
+        - advertisements
+        - large JavaScript libraries
+        - load alternative / optimised resource with smaller footprint
+        - remove superfluous image / advert
+          - videos, animations
+        - removing non-essentials => vital content easier to reach
+          - example store locator
+      - javascript
+        - parsing / execution
+        - animations cause constant redrawing of elements on the screen
+        - listening for notifications from the server
+        - multiple AJAX requests
+          - JavaScript code consumes 7% of Yahoo's total rendering
+            energy
+          - 17% on Amazon
+          - more than 20% on YouTube
+    - App with Power-Saving Mode
+      - static website
+      - reacts to amount of battery left
+      - starts "power saving" mode when less than 30% battery
+      - uses virtual battery
+        - toggle between fully charged and almost dead
+
+        - 
+
+*** TODO [[https://www.w3.org/TR/battery-status/][Battery Status API]]
+    - State "TODO"       from              [2016-09-17 Sat 15:07]
+    - proposed recommendation 29 March 2016
+    - changes
+      - more detailed privacy considerations e.g. advice regarding high
+        precision readout implications
+      - very little change to the spec since late 2014 12 09
+      - 2014 changes from 08 May 2012
+        - exposes BatteryManager via getBattery() which returns a
+          Promise instead of synchronous accessor 
+        - clarifies default values
+        - specifies behaviour for multiple batteries
+    - we develop sites assuming that the user has enough battery for
+      the task at hand
+      - videos?
+      - form completions?
+    - spec warns naive implementation can negative impact battery
+    - defer or scale back work
+      - email application does not check server as often
+      - save changes in word processors
+    - security
+      - originally - "has minimal impact on privacy or fingerprinting,
+        and therefore is exposed without permission grants."
+      - user agent should not expose high precision readouts of battery
+        status information that can be used as a fingerprinting vector
+      - MAY ask user for battery status information access -
+        alternatively, enforce user permission requirement in private
+        browsing modes
+      - should inform user of the API use by scripts in an uninstrusive
+        manner, aiding transparency, allowing user to revoke API access
+      - may obfuscate exposed value - authors cannot directly know if a
+        hosting device has no battery, is charging, or is exposing fake
+        values
+**** navigator
+      - Each browsing context has a battery promise.
+      - The battery promise is set to null.
+      - The Promise object holds a BatteryManager.
+      - Call the getBattery():
+        - if batteryPromise is not null, return the battery promise.
+        - Otherwise, set battery promise to a new Promise
+        - return battery promise, continue asynchronously
+        - Create a new BatteryManager object - let battery be that
+          object
+        - Resolve the battery promise with battery (BatteryManager
+          object)
+      - code
+        #+BEGIN_SRC js
+        partial interface Navigator {
+      Promise<BatteryManager> getBattery ();
+  };
+        #+END_SRC
+**** BatteryManger
+      - represents current battery status information of hosting device
+      - attributes
+        - charging: charging state
+        - chargingTime: represents time remaining in seconds until
+          battery is fully charged
+        - dischargingTime: represents time remaining in seconds until
+          completely discharged
+        - level: level of system's battery
+      - default values, used when unable to report battery status
+        information - cannot report values for any attributes, due to a
+        system preference, limitation, or no battery
+        - charging = true
+        - chargingTime = 0
+        - dischargingTime = positive infinity
+        - level = 1.0
+      - emulates a full battery, to reduce potential for fingerprinting
+        and to prevent applications from degrading performance
+
+      - events
+        - chargingtimechange
+        - dischargingtimechange
+        - levelchange
+        - left to implementations - check!
+
+      - code
+        #+BEGIN_SRC js
+        interface BatteryManager : EventTarget {
+      readonly        attribute boolean             charging;
+      readonly        attribute unrestricted double chargingTime;
+      readonly        attribute unrestricted double dischargingTime;
+      readonly        attribute double              level;
+                      attribute EventHandler        onchargingchange;
+                      attribute EventHandler        onchargingtimechange;
+                      attribute EventHandler        ondischargingtimechange;
+                      attribute EventHandler        onlevelchange;
+  };
+        #+END_SRC
+***** Multiple Batteries
+      - exposes a unified view of batteries
+      - if one is charging, charging is set to true
+      - chargingTime: set to maximum charging time of individual
+        batteries if charging in parallel, and the sum of the
+        individual charging times if charging serially
+      - dischargingTime - set to maximum discharging time of individual
+        batteries if discharging in parallel, and sum of individual
+        discharging times if discharging serially
+      - level - set to average of the levels of batteries of same
+        capacity, or weighted average of battery level attributes for
+        batteries of different capacities
+***** Event handlers
+      - chargingchange
+      - chargingtimechange
+      - dischargingtimechange
+      - levelchange
+***** Examples
+       #+BEGIN_SRC js
+       // We get the initial value when the promise resolves ...
+  navigator.getBattery().then(function(battery) {
+    console.log(battery.level);
+    // ... and any subsequent updates.
+    battery.onlevelchange = function() {
+      console.log(this.level);
+    };
+  });
+       #+END_SRC
+       #+BEGIN_SRC js
+       navigator.getBattery().then(function(battery) {
+    console.log(battery.level);
+    battery.addEventListener('levelchange', function() {
+      console.log(this.level);
+    });
+  });
+       #+END_SRC
+       #+BEGIN_SRC js
+       window.onload = function () {
+        function updateBatteryStatus(battery) {
+          document.querySelector('#charging').textContent = battery.charging ? 'charging' : 'not charging';
+          document.querySelector('#level').textContent = battery.level;
+          document.querySelector('#dischargingTime').textContent = battery.dischargingTime / 60;
+        }
+
+        navigator.getBattery().then(function(battery) {
+          // Update the battery status initially when the promise resolves ...
+          updateBatteryStatus(battery);
+
+          // .. and for any subsequent updates.
+          battery.onchargingchange = function () {
+            updateBatteryStatus(battery);
+          };
+
+          battery.onlevelchange = function () {
+            updateBatteryStatus(battery);
+          };
+
+          battery.ondischargingtimechange = function () {
+            updateBatteryStatus(battery);
+          };
+        });
+      };
+       #+END_SRC
+
+*** TODO [[%5B%5Bhttp://www.sitepoint.com/html5-battery-status-api/%5D%5D][How to Use the HTML5 Battery Status API]]
+    - State "TODO"       from              [2016-09-17 Sat 15:06]
+    - 2013-12-19
+**** Causes of Battery Drain
+     - The screen:
+       - switch to a light on dark theme
+       - Disable non-critical CSS3 and JavaScript animations
+       - Avoid DOM changes
+     - Network activity:
+       - Slow down / stop Ajax polling
+       - Use AppCache or Service workers to make an offline application
+       - Store data on the client using Web Storage
+       - Avoid requests for non-critical assets e.g. images
+     - Audible / tactile output
+       - Sound / vibration drains battery.
+       - Shorten effects, disable it
+     - Processing
+       - Action games
+       - Avoid complex ongoing client-side calculations
+**** Cross browser battery object
+     - Early implementation (outdated)
+     #+BEGIN_SRC js
+       var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery || navigator.msBattery;
+
+       if (battery) {
+           // battery API supported
+       }
+     #+END_SRC
+**** Properties
+     - Charging or above certain level
+       #+BEGIN_SRC js
+         var enableEffects = (battery.charging || battery.level > 0.25);
+
+         // vibrate for one second
+         if (enableEffects) navigator.vibrate(1000);
+       #+END_SRC
+       - Progressive enhancement!
+     - chargingTime: time in seconds until charging reaches 100%
+     - dischargingTime: time in seconds until the battery is completely
+       discharged
+**** Battery Status Events
+     - chargingchange: device has changed from charging to discharging
+       or discharging to charging
+     - levelchange: battery level has changed
+     - chargingtimechange: change in time until battery is fully charged
+     - dischargingtimechange: change in time until battery is fully discharged
+     - We can make better decisions!
+**** Example
+     #+BEGIN_SRC js
+
+       (function() {
+
+           "use strict";
+
+           // detect battery support
+           var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery || navigator.msBattery || null;
+
+           if (battery) {
+
+               // meter element
+               var meter = document.getElementsByTagName("meter")[0],
+                   status = document.getElementById("status");
+
+               // battery status change
+               window.onload = battery.onlevelchange = battery.onchargingchange = function() {
+
+                   meter.value = battery.level;
+                   meter.textContent = Math.floor((battery.level*100)+"%");
+                   var s;
+                   if (battery.charging) {
+                       s = "CHARGING: fully charged in " + battery.chargingTime;
+                   }
+                   else {
+                       s = "DISCHARGING: time remaining " + battery.dischargingTime;
+                   }
+                   status.textContent = s + " seconds";
+
+               };
+
+               // enable battery meter
+               document.getElementById("nosupport").style.display = "none";
+               document.getElementsByTagName("article")[0].style.display = "block";
+
+           }
+
+       }());
+
+     #+END_SRC
+
+*** TODO [[https://www.theguardian.com/technology/2016/aug/02/battery-status-indicators-tracking-online?utm_source=html5weekly&utm_medium=email][Your battery status is being used to track you online]]
+    - State "TODO"       from              [2016-09-17 Sat 14:36]
+    - battery status indicators used to track devices
+    - researchers from Princeton University
+    - enable tracking online
+    - privacy researchers warned about potential to track users
+    - allows seeing percentage of battery life
+      - discharge time
+      - charge time
+      - if connected to a power source
+    - intent: serve low-power versions of sites and web apps
+    - combination of battery life as a percentage and battery life in
+      seconds provides 14 million combination
+    - pseudo-unique identifier for each device
+    - example
+      - advertisement shown on two different pages could tell that the
+        device was the same
+      - longer someone stays on the page, easier to confirm
+    - battery status indicator is being used to track users, confirmed
+      by two security researchers from Princeton University
+    - Steve Engelhard / Arvind Narayanan
+      - found two tracking scripts
+      - used API to fingerprint a specific device
+      - allows them to identify them across multiple contexts
+    - research highlighted by Lukasz Olejnik
+      - one of four researchers who first called attention to the
+        security issues seen with the Battery Status API in 2015
+      - some success followed the warning
+      - API still has potential for misuse
+      - Olejnik warns that worse could be done than tracking scripts
+      - "Some companies may be analysing the possibility of monetising the
+        access to battery levels,"
+      - "When battery is running low, people might be prone to some -
+        otherwise different - decisions. In such circumstances, users
+        will agree to pay more for a service."
+*** TODO [[http://blog.lukaszolejnik.com/battery-status-readout-as-a-privacy-risk/][Battery Status readout as a privacy risk]]
+    - State "TODO"       from              [2016-09-17 Sat 14:36]
+    - allows web site to read battery level of a device
+    - positive use case:
+      - stop execution of intensive operations if battery is running low
+    - privacy analysis of Battery Status API
+      - information provided by battery readouts
+        - current battery level (0.00 - 1.0)
+        - full discharge time of battery in seconds
+        - time to a full charge of battery if connected to a charger in
+          seconds
+      - Values udpated when a new value is supplied by the operating
+        system.
+    - Frequency of changes
+      - allows monitoring of users' computer use habits
+      - e.g. analyse how frequently the user's device is under heavy use
+      - leads to behavioural analysis
+      - identical installations of computer deployments in standard
+        environments, such as schools or offices are often behind a
+        NAT. A NAT mechanism allows a number of users to browse the
+        internet with what is seen externally as a single IP address.
+      - Observing the differences between these otherwise identical
+        computer installations can allow the identification and
+        targetting of particular users.
+    - Battery readouts as identifiers
+      - Information provided does not always change rapidly.
+      - Battery information is static for a duration.
+      - Provides a short-lived identifier
+      - Users may clear standard web identifiers, such as cookies.
+      - Identifiers provided by the Battery Status API can allow
+        recreation of identifiers.
+      - Example
+        - Continuously monitor identifier status and Battery Status API
+          information
+        - User clears identifying cookies
+        - See new user => new cookie is established
+        - Battery level analysis hints that this user is the same as the
+          previous user
+        - Resumes tracking
+        - Identifier recreation (respawning)
+    - Recovering battery capacity
+      - In some circumstances, you can approximate the actual battery
+        capacity in raw format (in particular on Firefox under Linux)
+      - Test script exploited the too verbose readout of battery level
+      - Combined this information with knowledge of the operating
+        system's battery level computation information before it is
+        provided to the browser.
+      - Possible to recover battery capacity, and use battery capacity
+        as an identifier.
+    - Results
+      - W3C standard updated to reflect privacy analysis.
+      - Firefox browser shipped a fix.
+    - Trackers use of battery information
+      - Battery readout is used by tracking scripts according to recent
+        study.
+      - Some tracking / analysis scripts access and recover this
+        information.
+      - Companies may be exploring monetisation of access to battery
+        levels.
+      - Battery level may result in different decision making. These
+        circumstances may result in users paying more for a service.
+      - Some browser vendors are considering the restriction or removal
+        of access to the battery readout mechanisms.
+    - Summary
+      - 
+
+*** TODO [[https://www.theguardian.com/technology/2015/aug/03/privacy-smartphones-battery-life][How your smartphone's battery life can be used to invade your privacy | Techn...]]
+    - State "TODO"       from              [2016-09-17 Sat 14:36]
+    - researchers demonstrated how to track users
+    - web site / web application can notice visitor of low battery power
+    - disable extraneous features
+    - values updated around every 30 seconds
+      - every half a minute battery status can identify users
+    - on some platforms, you can determine maximum battery capacity of
+      the device and create a semi-permanent metric to compare devices
+
+*** TODO [[http://www.nbcnews.com/tech/security/princeton-study-exposes-weird-new-ways-sites-are-spying-you-n622391][Sites Spying on You in Weird New Ways, Princeton Study Exposes]]
+    - State "TODO"       from              [2016-09-17 Sat 14:36]
+    - clearing your cookies isn't enough
+    - iPhone's battery status level (?)
+    - massive analysis of 1 million web sites, largest of its kind
+    - trackers
+      - find out who you are
+      - serves you targetted ads
+      - data is resold to other marketers
+      - build profiles of consumers they have no control over
+    - top two sites had over 81,000 trackers
+      - tracking consolidated among Google, Facebook and Twitter are the
+        only third-party trackers present on more than 10 percent of the
+        web sites studied
+    - browser fingerprinting
+      - when a company encounters you online, they know who you are
+        because the device behaves the same way
+      - list of fonts
+      - processing of audio data
+      - browser window size
+    - battery status level
+      - particularly dangerous as it can unmask users
+      - see change occurring at same rate
+    - types
+      - canvas fingerprinting (instances of a graphics function
+        tracking) on 14,371 sites
+      - font list fingerprinting on 3,250 sites
+      - audio fingerprinting on 579 sites
+      - battery level tracking in two different tracking scripts
+    - combination of browser version, OS version, Flash version, RAM
+      amount is a way of tracking
+    - advertising industry
+      - should try to avoid drawing attention from privacy regulators
+      - legitimate industry has not seemed to embrace the use of these
+        details 
+*** TODO The leaking battery
+    - highlights privacy risks associated with Battery Status API
+    - focuses on Firefox implementation
+    - websites can learn the capacity of a users' battery
+    - exploits Firefox on Linux's high precision readouts
+    - fingerprintable surface is exposed by battery capacity and battery
+      level
+    - can track web users in short time intervals
+    - risk is higher for old/used batteries with reduced capacities
+    - battery capacity can serve as a tracking identifier
+    - reduce the reading precision => no loss of functionality
+    - proposes minor modifications to specification and implementation
+      (in Firefox) to address the privacy issue
+    - bug report for Firefox was accepted, Firefox deployed a fix
+**** 1 Introduction
+     - enables access to battery state of a device
+     - check battery level
+     - use information to switch between energy-saving or
+       high-performance modes
+     - available without users' permission OR awareness (important)
+     - W3C Specification "Security and privacy considerations" section
+       - "The information disclosed has minimal impact on privacy or
+         fingerprinting, and therefore is exposed without permission grants"
+     - Findings show Firefox's implementation on GNU/Linux operating
+       system enabled fingerprinting and tracking of devices with
+       batteries in short time intervals
+     - June 2015
+       - Firefox, Chrome, Opera support
+     - 2012
+       - Potential privacy concerns discussed by Mozilla / Tor Browser
+         developers
+       - API nor implementation had undergone a major revision
+     - Demonstrates ways to abuse the API for fingerprinting / tracking
+     - Analysis shows Battery Status API can serve as a tracking
+       identifier when implemented incorrectly
+     - Core contributions
+       - Battery Status API provides a device fingerprinting vector
+         - discovery of battery's capacity
+         - short-term identifiers
+         - facilitates tracking
+         - potentially reinstatiates identifiers (respawning)
+       - Proposes solution for reducing Battery Status API's
+         fingerprintable surface
+         - rounding the level readings provided by the API
+         - no loss of functionality
+       -
+**** 2 Related Work
+     - Panopticlick study by Eckersley
+       - feasibility of browser fingerprinting for online tracking
+       - measures entropy present in browser properties
+         - screen size
+         - list of system fonts
+         - browser plugins
+     - other browser based fingerprinting vectors
+       - clock skew
+       - font metrics
+       - network protocol characteristics
+       - JavaScript engine performance
+       - WebGL
+       - canvas rendering
+     - browser fingerprinting prevalence
+       - questionable practices such as proxy circumvention
+       - stealthy techniques to exercise browser fingerprinting
+       - commonly used by websties
+     - zombie cookie / evercookie
+       - tracking mechanism
+       - used to reconstruct tracking identifiers, even if user clears
+         their history
+       - uses Flash cookies / ETags / other vectors
+     - other study mentions potential privacy risk vector
+       - potential risks due to monitoring charging / discharging rates
+**** 3 Background
+***** 3.1 Battery Status API
+      - World Wide Web Consortium's (W3C) Battery Status API provides
+        reading battery status information
+      - information provided
+        - level: current battery level
+        - chargingTime: predicted time to charge
+        - dischargingTime: predicted time to discharge
+      - accessed via navigator.getBattery() method
+        - returns BatteryManager object
+      - no user permission required
+        - no disclosure required
+        - transparent access to battery information - no user awareness
+      - event handlers allow battery status monitoring
+        - level
+          - double-precision floating-point number
+          - values between 0 (depleted) and 1.0 (full)
+      - Firefox: does not implement navigator.getBattery() but
+        navigator.battery
+***** 3.2 Power information under Linux
+      - Firefox browser on GNU / Linux
+        - battery level reported with double precision
+        - e.g. 0.9301929625425652
+      - Firefox browser on Windows / Mac OS X / Android
+        - just two significant digits
+        - e.g. 0.93
+      - Firefox source code
+        - battery level read from UPower
+          - Linux tool
+          - gives access to the UPower daemon
+      - UPower daemon
+        - comprehensive power-management data about the device
+        - access to detailed battery status information
+          - capacity
+          - level
+          - voltage
+          - discharge / charge estimates
+        - source code
+          - linux/up-device-supply.c
+          - BatteryLevel = 0.01 \times Percentage
+          - Percentage = 100.0 \times Energy / EnergyFull
+          - Energy = ChargeNow / 1,000,000 \times DesignVoltage
+          - EnergyFull = ChargeFull / 1,000,000 \times DesignVoltage
+        - Energy
+          - current amount of energy present in the battery
+          - measured in watt-hours
+        - EnergyFull
+          - measured in watt-hours
+          - represents maximum possible energy amount stored in battery
+          - due to aging of the battery, EnergyFull tends to be lower
+            than the design capacity of the battery
+          - can change after a discharge, followed by a full charge
+            (possibly for calibration purposes)
+          - whilst batteries share design capacities, capacities are
+            reduced in different amounts with aging, resulting in a
+            diverse number of possible EnergyFull values
+          - stored internally with four decimal places
+          - UPower daemon updates current capacity by comparing EnergyFull
+            to latest value stored when the battery is fully charged
+        - ChargeNow / ChargeFull
+          - measured in μAh
+          - current and maxium charge capacities of the battery
+          - 
+      - Firefox accesses UPower-provided data
+        - reads Percentage value in 64 bit double precision floating
+          point format
+        - multiplies by 0.01 to obtain battery level
+        - level exposed to website scripts through Battery Status API in
+          double precision
+        - EnergyFull value may change as battery capacity degrades
+**** 4 Tracking with the Battery Status API
+     - measure extent to which it is possible to link / track a device
+       with battery, using battery level and charge/discharge time
+       readouts
+     - can be used for fingerprinting and tracking across sites
+     - recover the battery's effective capacity (EnergyFull) using
+       precise battery level readouts
+***** 4.1 Tracking across sites
+      - third-party script that is present across multiple websites can
+        link users' visits in a short time interval via battery
+        information 
+      - scripts use battery level, dischargingTime and chargingTime
+        values
+      - readings are consistent across sites as update intervals are
+        identical
+      - link the concurrent visits
+      - if user leaves sites but then visits another site with the same
+        scripts, readings could be used to link current visit with
+        preceding ones
+      - specific cases
+        - frequency of battery status changes
+          - analysed update rates under different computing loads
+            - movie watching
+            - browsing
+          - tested rate of changes
+          - registered JavaScript event handlers for battery status
+            changes
+          - monitored JavaScript readouts of level and dischargingTime
+          - event timestamps
+          - analysed collected data for relative time difference between
+            level, chargeTime and dischargeTime changes
+          - ~30s: battery status may serve as a static identifier
+          - allows a third-party script to link visits from the same
+            computer in short time intervals
+        - number of possible identifiers
+          - lowest indication of dischargeTime was 355 seconds
+          - highest indication of dischargingTime was 40277 seconds
+          - 355 - 40277 provides 39922 numbers
+          - assume users seeing a near-drained battery generally connect
+            their notebooks to AC power
+          - users start to charge their devices when the battery level
+            is 0.1
+          - leaves 90 available battery level states (0.11 - 1.0)
+          - tuple (level, dischargeTime) denotes number of potential
+            levels
+          - 90 x 39922 => possible states are 3592980 => only
+            discharging state!
+          - using battery charge (chargingTime) effectively doubles
+            number of possible states
+          - probability of a (level, dischargeTime) collision (between
+            different users, and assuming a uniform distribution) is
+            therefore quite low
+          - for a short time frame this is effectively a unique identifier
+          - dischargeTime levels can be subject to frequent changes, in
+            response to change in users' computer use patterns
+          - in practice, long-term tracking with information is
+            negligible
+          - depending on battery level, chargeTime or dischargeTime
+            values may not be observed in practice (e.g. 355s
+            dischargeTime may be too short for a full battery, or 40277s
+            dischargeTime may be too long for a battery with level 0.1)
+          - available combinations can be used to distinguish users
+            behind a NAT (Network Address Translation)
+            - in this setting, computers may have similar fingerprints,
+              and often identical public IP addresses
+            - readouts from the battery may allow distinguishing of users
+        - Reconstructing user identifiers in short-time intervals
+          - users who try to re-visit a website with a new identity may
+            use browsers' private mode / clear cookies and other client
+            side identifiers
+          - website can link users' new and old identities by exploiting
+            battery level and charge/discharge times when the
+            consecutive visits are within a short time interval
+          - site can reinstantiate users' cookies and other client side
+            identifiers - this is known as respawning
+        - exploiting battery data as a linking identifier only works for
+          short time intervals, but it can be used against power users
+          who not only clear cookies, but go to great lengths to clear
+          their evercookeis
+**** 5 Detecting battery capacity
+     - infer the current battery capacity (EnergyFull) of a device if it
+       allows high precision level readouts
+     - analysis of device fingerprinting by exploiting high precision
+       battery level readouts provided by the Firefox on Linux operating
+       system
+     - 64-bit double precision floating point battery level readouts
+       allows discovering of EnergyFull value - the actual battery
+       capacity
+     - only works for UPower and Firefox on Linux
+     - some computers could not recover the capacity
+       - due to different processor handling of floating point
+         calculations or measurement errors in UPower
+     - uses earlier equations
+       - read battery level
+       - find Energy, EnergyFull and Voltage levels
+       - may give floating point number reading
+       - attacker may either brute-force candidate values by testing all
+         possible values or precompute a lookup table
+***** 5.1 Test method
+      - Assuming a uniform space of EnergyFull values (X, Y)
+      - tested all hypothetical level readouts to detect possible
+        identifiers 
+      - for a given level reading, several possibilities for EnergyFull
+        level may exist
+      - if attacker has access to multiple battery level readouts,
+        number of collisions becomes significantly smaller
+      - analysed the number of potential EnergyFull candidates as a
+        function of the battery level readouts
+      - computed number of collisions for one battery level readout,
+        State1.
+        - For each possible readout level, a different readout level was
+          simulated, State2.
+        - State1 and State2 candidate EnergyFull values were compared
+        - intersecting the sets of possible EnergyFull levels
+        - decreased the number of candidate EnergyFull values
+        - number of EnergyFull candidates for a total of 1559 battery
+          level readings
+        - reduction of EnergyFull candidates when a script is able to
+          read the battery level multiple times from the same device
+        - figure based on 1559 battery level readings collected from a
+          laptop running Ubuntu 12.04 operating system
+        - analysis made possible due to the fixed space a floating-point
+          value can represent, and relatively limited capacities of
+          batteries used in practice
+      - see "floating-point determinism problem"
+      - Possible capacities in calculations include reduced battery
+        capacities - e.g. not limited to battery capacities on the
+        market
+      - Could find candidate capacities on an off-the-shelf computer,
+        without a significant computation overhead
+      - An adversary with moderate storage resources can easily build a
+        lookup table to further reduce the computation time
+      - Figure 1:
+        - In 5% of cases, the attacker can detect the battery capacity
+          with just one reading.
+**** Defense
+***** 6.1 Limiting the precision of level readouts
+      - Implementations should avoid providing high-precision values.
+      - Rounding the level value of the battery minimised the threat
+        without losing API functionality. Especially pertinent when the
+        operating system provides high-precision read-outs on battery
+        level information.
+      - The Battery Status API specification could mention the risk of
+        high precision readouts in the "Security and privacy
+        considerations" section.
+***** 6.2 Asking for user permission to access the Battery Status API
+      - Reduced precision of level readout and charge/discharge times
+        can still lead to a tracking identifier if they are in short
+        time intervals.
+      - Exposed battery information allows attackers to reinstantiate
+        tracker idenifiers, similar to evercookies.
+      - Browser vendors could require user permissions. This has
+        previously been suggested, however the final decision was to
+        make the API available without permissions.
+      - Tor Browser is the only browser that has a strong defense
+        against fingerprinting by the Battery Status API.
+        - Completely disables the API to stop the fingerprinting
+          attempts.
+      - API use could be made available to the user.
+      -
+**** Conclusion
+     - high precision battery level readings can lead to an unexpected
+       fingerprinting surface
+     - Battery Status API can reinstantiate tracking identifiers over
+       short time intervals
+     - In corporate settings where devices share similar
+       characteristics, IP address, battery information can distinguish
+       devices behind a NAT where traditional tracking mechanisms are
+       not effective
+*** TODO [[%5B%5Bhttps://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API%5D%5D][Battery Status API]]
+**** About
+     - provides information about the system's battery charge level
+     - provides events
+     - can use to adjust app resource usage to reduce battery drain
+     - save changes before the battery runs out in order to prevent data loss
+     - extends window.navigator
+     - navigator.getBattery()
+       - returns a battery promise
+       - promise resolves in a BatteryManager object
+**** events
+     - chargingchange
+     - levelchange
+     - chargingtimechange
+     - dischargingtimechange
+**** Example
+     #+BEGIN_SRC js
+       navigator.getBattery().then(function(battery) {
+           function updateAllBatteryInfo(){
+               updateChargeInfo();
+               updateLevelInfo();
+               updateChargingInfo();
+               updateDischargingInfo();
+           }
+           updateAllBatteryInfo();
+
+           battery.addEventListener('chargingchange', function(){
+               updateChargeInfo();
+           });
+           function updateChargeInfo(){
+               console.log("Battery charging? "
+                           + (battery.charging ? "Yes" : "No"));
+           }
+
+           battery.addEventListener('levelchange', function(){
+               updateLevelInfo();
+           });
+           function updateLevelInfo(){
+               console.log("Battery level: "
+                           + battery.level * 100 + "%");
+           }
+
+           battery.addEventListener('chargingtimechange', function(){
+               updateChargingInfo();
+           });
+           function updateChargingInfo(){
+               console.log("Battery charging time: "
+                           + battery.chargingTime + " seconds");
+           }
+
+           battery.addEventListener('dischargingtimechange', function(){
+               updateDischargingInfo();
+           });
+           function updateDischargingInfo(){
+               console.log("Battery discharging time: "
+                           + battery.dischargingTime + " seconds");
+           }
+
+       });
+     #+END_SRC
+**** Support
+     - Chrome 39
+     - Chrome for Android - 42
+       - BatteryManager.chargingTime, BatteryManager.dischargingTime
+         always equal to infinity
+     - Firefox
+       - Navigator.getBattery supported in Firefox 43 onwards
+       - Navigator.battery is deprecated but supported by Firefox
+         - returns the batteryManager object directly
+       - Linux requires UPower
+     - Safari
+       - No support
+*** TODO [[http://www.independent.co.uk/life-style/gadgets-and-tech/news/uber-knows-when-your-phone-is-about-to-run-out-of-battery-a7042416.html][Uber knows when your phone is running out of battery | The Independent]]
+*** Misc
+    - July: after discussion with the Director, the likely next step for
+      Battery will be to publish an updated Proposed Recommendation
+    - Mozilla's DOM Team is considering removing the Battery API from
+      Gecko because of the recent abuse by companies like Uber [1] - and
+      because of a lack of credible set of use cases. Abuses like that
+      harm users and the credibility of apps in general. Or, if we don't
+      remove it, we will likely just get it to return the equivalent of
+      "full" or "unknown".
+    - Since we (the WG) started working on this API, the OS landscape
+      has changed significantly: when we started, OSs were not doing a
+      great job with battery management, and we thought it would be a
+      good idea to allow developers some control. However, this change
+      in recent years with better battery/power management at the OS
+      level (e.g., MacOS and iOS have special battery saving modes that
+      operate at the OS level after a certain threshold is passed - like
+      20% on the phone, and 5% on a Mac... I'm sure Android and Windows
+      probably have similar features).
+    - As such, we should consider not making it a recommendation at all
+      and just scrapping battery entirely.
+    - The mitigation strategies baked into the spec currently are the
+      following:
+      - BatteryManager is gated behind a promise allowing
+        implementations to leave the promise in a pending state, for
+        example, if no user consent is acquired. In particular, the
+        promise never rejects, as to not allow implementations to know
+        whether the user did not grant access or whether she just did
+        not act on the request.
+      - Implementations may obfuscate the exposed values, and/or adjust
+        the precision of the readouts as they see fit.
+    - there are plenty of cases where apps can do rational things, like
+      an email app cutting back to a low-bandwidth mode.
+      #+BEGIN_SRC js
+      async function getState(){
+    var battery = await navigator.getBattery();
+    // await other async stuff, won't ever happen :(
+  }
+
+  getState().then(updateUI).catch(thisWontEverBeCalledHowSad);
+      #+END_SRC
+      - This might be fine, but it doesn't address the underlying
+        presupposition and use case: that this API is no longer needed
+        because power management can be done better at the OS level
+        instead of the application level.
+
+    - Kostiainen, Anssi
+      - App adjusts the amount/number of messages/tweets/data it fetches
+        over the network as well as the polling frequency depending on
+        the battery level/plugged in state. If battery drops below 20%
+        the app will only poll for new data if the user explicitly
+        interacts with the app and clicks the "Update" button, otherwise
+        the app fetches data without user interaction.
+      - App persists its state to cloud only if there's an increased
+        risk of running out of battery. App does not want to persist the
+        state unnecessarily since it is an expensive operation that also
+        depletes battery (don't want to do it unless really needed).
+      - App will only start an expensive (in terms of battery) operation
+        that must run to completion if the battery level is over
+        40%. For example, show a simpler map and not the fancy WebGL one
+        if low on battery while using a web-based navigation app. (the
+        navigation app knows how long it'll take to get to your
+        destination, so can act accordingly).
+      - App will only start a long-running irreversible operation if the
+        battery level is above certain threshold. For example, a very
+        tedious checkout process, or an update of app assets
+        (e.g. download of hi res textures for the new level in a
+        web-based game).
+      - All these could be enhanced with app level power management that
+        would complement the power management decisions the OS makes. I
+        think in an optimal scenario app and OS level would work in
+        concert. For example, OS could still batch network requests from
+        various apps/services in order to keep the radio up as little
+        time as possible (to preserve battery), even if the app also
+        does decisions based on battery status.
+    - June 30
+      - To clarify, shipping implementations (Chrome, Firefox) do not
+        ask for permission. However, given BatteryManager is gated
+        behind a promise, the hooks are in place for that.
+
+    - Battery Status API returns to W3C Candidate Recommendation (Call
+      for Implementations)
+
+    - Note that this (handling of initial about:blank) is an area where
+      Chrome is known to not match the HTML spec in various ways, which
+      is why it "passes" the test.
+
+    - The "setting iframe's src makes its Navigator object vary thus
+      getting another battery promise" creates an iframe with no src
+      attribute, waits for onload, then sets src. It then asserts that
+      this should create a new Navigator and battery promise.
+
+    - But per spec inserting the iframe will land in
+      https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-browsing-context
+      and create an about:blank document in the iframe, then go to
+      https://html.spec.whatwg.org/multipage/embedded-content.html#process-the-iframe-attributes
+      and thence to
+      https://html.spec.whatwg.org/multipage/embedded-content.html#iframe-load-event-steps
+      to fire the load event.
+
+    - Now setting the src will navigate, but the navigation is
+      same-origin and therefore the existing Window gets reused. Hence
+      there is no new Navigator in this case.
+
+    - Specifically, setting src will land in
+      https://html.spec.whatwg.org/multipage/embedded-content.html#process-the-iframe-attributes
+      which will go to
+      https://html.spec.whatwg.org/multipage/embedded-content.html#otherwise-steps-for-iframe-or-frame-elements
+      which will perform the navigation. And note this (easily missed)
+      text after the algorithm steps: 
+    - Similarly, if the child browsing context's session history
+      contained only one Document when the process the iframe attributes
+      algorithm was invoked, and that was the about:blank Document
+      created when the child browsing context was created, then any
+      navigation required of the user agent in that algorithm must be
+      completed with replacement enabled. 
+    - So in this case the navigation is performed with replacement
+      enabled. We go to
+      https://html.spec.whatwg.org/multipage/browsers.html#navigate and
+      eventually land in
+      https://html.spec.whatwg.org/multipage/browsers.html#initialise-the-document-object
+      which says: 
+      - If browsingContext's only entry in its session history is the
+        about:blank Document that was added when browsingContext was
+        created, and navigation is occurring with replacement enabled, and
+        that Document has the same origin as the new Document, then 
+      - Let window be the Window object of that Document.
+    - and that is precisely the situation we're in. So the new document
+      uses the same Window as the old document, and hence also the same
+      Navigator object.
+    - https://github.com/w3c/web-platform-tests/issues/2104
+    - https://github.com/w3c/web-platform-tests/issues/3178

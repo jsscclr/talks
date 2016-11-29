@@ -1,0 +1,62 @@
+* Network Information API
+** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
+*** Network Information APIs
+    - discover whether user is on a metered connection
+    - provide estimate of bandwidth
+    - change behaviour of pages to accommodate user
+    - window.navigator.connection property
+      - exposes two read only properties: bandwidth, metered
+      - bandwidth: represents current bandwidth
+      - metered: boolean - true if subject to limitation and bandwidth
+        usage
+    - support: Firefox 12+, Chrome
+** [[https://www.smashingmagazine.com/2013/05/the-state-of-responsive-web-design/][The State of Responsive Web Design]]
+   - Another API that has been highly discussed is the network
+     information API. The possibility of measuring a user’s bandwidth
+     and optimizing accordingly has seduced many developers. We would
+     be able to serve high-quality images to users with high bandwidth
+     and low-quality images to users with low bandwidth. With the
+     bandwidth attribute of the network API, it would be possible to
+     estimate the downloading bandwidth of a user in megabytes per
+     second. The second attribute, metered, is a Boolean that tells us
+     whether the user has a metered connection (such as from a prepaid
+     card). These two attributes are currently accessible only via
+     JavaScript. 
+   - Unfortunately, measuring a user’s connection is technically
+     difficult, and a connection could change abruptly. A user could
+     go into a tunnel and lose their connection, or their speed could
+     suddenly drop. So, a magical media query that measures bandwidth
+     looks hypothetical at the moment. Yoav Weiss has written a good
+     article about the problems that such a media query would create
+     and about bandwidth measurement, “Bandwidth Media Queries? We
+     Don’t Need ’Em!” 
+** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+   - code
+     #+BEGIN_SRC js
+var connection = window.navigator.mozConnection,
+    online = connection.bandwidth,
+    metered = connection.metered;
+ 
+// online can return:
+//    0 when offline
+//    Infinity when the bandwidth isn't known
+//    Estimation of MB/s
+ 
+// metered implies if the connection is being metered,
+//   meaning limited in some way from the ISP
+     #+END_SRC
+
+** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
+   - size of display does not indicate limited bandwidth
+   - low resolution images do not provide the best experience
+   - returns connection speed in MB per second
+   - provides true / false boolean value of bandwidth being metered in
+     any way by the ISP
+   - filter assets to manage browser
+   - returns a connection of 0 when a user is offline
+   - manage assets on page load - but modify interface
+   - detect performance bottlenecks
+
+* Network Information
+  - Depending on connection type
+

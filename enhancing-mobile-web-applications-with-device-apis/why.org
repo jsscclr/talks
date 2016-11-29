@@ -1,0 +1,818 @@
+* Why
+** speed bumps
+   - battery status API:
+     - downloading something heavy!
+     - navigation!
+** roadblocks
+   - battery maybe
+** misc
+   - "scrolly-telling" <= love this!
+* Resources
+** [[http://www.wired.co.uk/article/the-zombie-apocalypse-of-smart-devices-is-coming][Scott Jenson: 'The zombie apocalypse of smart devices is coming' | WIRED UK]]
+   - Back in the 50s, when small electric motors became inexpensive,
+     there was a fairly sudden redefinition of products when
+     can-openers, razors and even toothbrushes all became
+     "motorised". A similar, and more likely profound, shift will
+     happen with the plummeting cost of microprocessors.
+   - What people don't realise is that although the microprocessor in
+     your computer is indeed going down in price, powerful "system on a
+     chip" devices, which contain everything you need to make a simple
+     web-connected computer, are plummeting even faster.
+   - We're already seeing examples of these types of smart products
+     today with web-connected thermostats, Wi-Fi bathroom scales and
+     prescription-medicine bottles that call when you forget to take
+     your pills. But this wave is accelerating: there is a zombie
+     apocalypse of smart devices coming our way. This melodramatic
+     phrase fits because we are simply not ready. 
+     - We are so entrenched in our old-school concept of "a computer"
+       that we can't see just how profound this wave will be.
+   - The problem is that nearly every smart product today has a mobile
+     app for your phone (usually iPhone or Android, but rarely
+     both). This works for today's market but it will eventually break
+     down. As smart devices become plentiful, will we be responsible
+     for installing, organising and launching every app we need for
+     every device in our lives? This might work if we had only
+     thermostats to worry about. But, as the cost plummets to pennies,
+     we'll see almost everything becoming smart in some way: a smart
+     parking-meter at the airport, the smart poster in the mall, even
+     smart packaging in the supermarket. As more devices become smart,
+     their demand for interaction through mobile apps will quickly
+     become overwhelming and impractical. We need a new paradigm,
+     something that breaks out of our long love affair with apps; a
+     paradigm where smart devices can broadcast their name to the world
+     around them and any phone, laptop, TV or even interactive
+     eyeglasses can find and then interact with them. I call this
+     "just-in-time" interaction: a nearly instantaneous user experience
+     (UX) model, meant more for buildings, malls and museums than the
+     office workstations of the 80s.
+   - Just-in-time interaction allows for a "use it and lose it"
+     approach to smart products that is impossible with mobile
+     applications. Are you really going to stop in front of a smart
+     movie poster and download its app before watching the trailer?
+   - Fortunately, the technology to implement just-in-time interaction
+     already exists. We only need to agree on a few ways for devices to
+     broadcast their name wirelessly and be discovered by nearby smart
+     displays. It's important to note this must be a user-requested
+     interaction, as a beep-in-your-pocket approach would drive people
+     crazy.
+   - The actual interaction with the user would be done using simple
+     web pages, either directly from a web server or from the device
+     itself. These smart devices will likely be functionally modest so
+     even today's web standards are more than adequate. For the last
+     year I've been speaking about and exploring this topic, creating a
+     series of prototypes to explore how this system could be
+     built. The one fundamental learning so far is that this system
+     must be open and free; it can't be proprietary and encourage
+     lock-in to a single vendor. Just as web pages are discoverable and
+     usable by all, so must smart devices be. Are we up to the
+     challenge of creating a world where we can actually find and use
+     them or are we willing to let one company lock us into its vision
+     and restrictions of use?
+   -
+** [[https://jenson.org/small/][Small is Beautiful: Why Desktop UX still has something to teach Mobile | Scot...]]
+   - This isn’t just nostalgia, there is something deeply inadequate
+     about mobile.
+   - See Innovator's Dilemma
+   - In the case with mobile technology, the New Market Effect has
+     definitely occurred, around the consumption style categories of
+     games, social apps, and news. Smartphones could do what desktops
+     couldn’t: post photos while on vacation, kill time waiting in
+     line, or quickly post an update while breezing through the
+     airport. The New Market Effect for mobile was a collection of
+     entirely new use cases that the desktop/laptop market just didn’t
+     care about.
+   - The problem is that too many people conflate this new and old
+     market effect. They assume that as mobile is growing into new
+     markets, especially developing countries, it’s therefore a given
+     that it will eat the old market as well.
+   - Users in these countries may indeed be using only mobile but that
+     may, at least in part, be a choice of desperation. I’m concerned
+     people are confusing economic from ergonomic forces. It’s very
+     hard to say people are using mobile in developing countries
+     because it’s a superior experience. If far more likely they’re
+     using it as it’s their only affordable choice. The fact that it
+     is a functional replacement, by and large, is indeed a very big
+     issue we must pay attention to but for people that do have a
+     choice, we’re not seeing the Old Market Effect nearly as
+     strongly.
+   - The old market effect isn’t happening to desktop (at least not
+     yet) for the simple reason that mobile hasn’t matured enough to
+     replace it.
+   - Most businesses still use desktops/laptops for the simple reason
+     that people get more work done on them. If you complain that
+     ‘business use’ no longer matters, you’re just confusing the new
+     and old market effect. I’m NOT saying desktop will beat
+     mobile. I’m also not saying we’ll have desktop forever. I’m
+     trying to have a nuanced discussion about the UX differences
+     between desktop and mobile and what that means.
+   - See MicroInteractions book
+   - This same thing is happing with mobile and desktop UX
+     discussions. We are so blinded by our techno-lust of multi-touch
+     gestures that we ignore the many compromises mobile UX has had to
+     make. Compromises that have both pros as well as cons. For
+     example:
+     1. Text precision
+        - If you’re dashing off a quick tweet or a ‘be
+          there in 5’ email, the soft keyboards and ham-fisted cursor
+          manipulation of mobile devices is survivable. However, if you
+          want to do any type of serious editing, things quickly become
+          more difficult. For the most part, people are reluctant to
+          compose long form text on mobile phones for the simple reason
+          that text manipulation, at the MicroInteraction level, is just
+          harder on mobile. Here is a partial list:
+          - Cursor positioning conflicts with auto correct
+          - Accurate cursor placement is hard
+          - Auto correct’s continued ability to constantly embarrass
+          - Tapping the screen is a huge context switch (compared to
+            arrow keys)
+          - Copy/paste is a fairly cumbersome task (compared to
+            desktop)
+     2. Window precision
+        - Mobile phones only use a single window at a time. It is a
+          brilliant simplification, allowing users to simply ignore a
+          host of visual and intellectual clutter that comes with
+          desktop windowing systems. For basic Youtube and gaming
+          tasks, these seem a perfect compromise. However, once you
+          start to create content and want to copy and paste between
+          documents, or compare two drafts, it’s clear that there is
+          quite a bit of expressive power that is lost by this. The
+          problem is magnified when you have a larger screens. As
+          tablets grow to be as large as desktop displays, this
+          simplification starts to feel like a huge limitation.
+     3. File precision
+        - Files, for the most part are completely invisible for most
+          mobile apps. The user’s data is literally hidden within the
+          app itself, with each having its own UX technique for
+          showing that data. This too is a reasonable simplification
+          and works well for smaller problems like saved games and top
+          videos. But as soon as you have dozens of objects, or want
+          to place, for example, images in emails, or even want to use
+          two apps to edit the same object, these initial
+          simplifications start to hold users back.
+        - There is no question that the full blown classic desktop
+          folder metaphor is a bit overkill for mobile devices. But by
+          limiting mobile UX to the app-as-container model, mobile
+          apps are hit with a double whammy: you can’t access your
+          content with multiple apps and you can’t take advantage of
+          cloud storage.
+   - Who care’s about documents, or emails?
+   - We have a huge ergonomic opportunity staring us in the face and
+     we’re completely blinded by the success of the New Market Effect
+     to appreciate it.
+   - We need to honestly admit that desktop mops the floor with mobile
+     when it comes to text, window, and file tasks.
+   - Then, let’s move forward to ask, earnestly, “How can we fix it?”
+   - Here is a list of things we should be exploring to improve mobile
+     UX. I want to stress that every single thing on this list will
+     appear ridiculously tiny to you. These are, after all,
+     MicroInteractions. These improvements aren’t going to be headline
+     news, but they are far more than they appear. These are the core
+     building blocks that powerful UX experiences are built upon:
+     + Appreciate soft keyboard functionality hurts as much as helps
+       - Tablets already have physical keyboards and most people feel
+         this ‘solves’ any lingering input issues.
+       - *But creating long-form text is so much more that just typing.*
+       - You need to also select and edit it.
+       - But mobile UX does many little things to support a soft
+         keyboard such as auto complete, alternative word choices and
+         popup menus when the user taps within text.
+       - While helpful, these little functions have a cumulative
+         negative effect.
+       - On the desktop when you click in text it does one thing, move
+         the cursor.
+       - *On mobile UX, it’s a multiplexed beast of options.*
+       - It’s no wonder something as basic as selecting a word or
+         placing the cursor so much more difficult.
+       - *Just admitting this ‘multiplexing’ effect goes a long way*
+         in helping us understand these issues, *rethinking default
+         tap actions*, so we could keep the core tap to move the
+         cursor behavior more predictable.
+     + Force Touch Text Selection
+       - Along the same lines, if we could get a bit more expressive
+         with tapping, it might give us a bit more UX nuance and let
+         us reclaim that basic cursor placement of the desktop
+         UX.
+       - Currently, force touch is used as a glorified right click
+         for apps.
+       - It could be used in much more subtle ways. For example, to
+         aid in text selection or offer those helper functions listed
+         above less intrusively.
+     + Better Copy/Paste
+       - Copy and paste is a fundamental utility and is far too hard
+         on mobile today.
+       - Copy and Paste was always parked in the Edit menu on desktop,
+         with shortcut keys always at the ready.
+       - Mobile has no menus or shortcut keys so is forced to
+         inelegantly sneak it in, usually as a pop up menu when the
+         user may not want it.
+       - The first step is in admitting that this is a UX hack and
+         then find better, more productive solutions.
+       - One direction may be to place a copy/paste button on the
+         keyboard.
+       - We also shouldn’t forget our past.
+       - The visual clipboard of the Newton has a huge value in that
+         it made the clipboard visible to the user so it was easy to
+         not only glimpse what was in the clipboard, but it created a
+         new control surface to tap on and then drag into the target
+         area.
+     + Arrow Key Equivalents
+       - Often when typing, you just need to go back a few characters
+         to make an edit.
+       - It would be much simpler to have some type of simple arrow
+         key functionality on the keyboard.
+       - There are some clever ideas already out there, involving
+         swiping that turns the keyboard into a temporary trackpad for
+         cursor movement.
+       - Given that we’ve already explored gestures on keyboards,
+         there is a lot that could be done here.
+     + Beyond 2 window mode
+       - The iPad pro and Windows Surface are already experimenting
+         with a limited two window mode. Power users love it.
+       - We need to keep exploring and pushing on this approach,
+         especially as tablet sizes get larger.
+       - This isn’t just for moving data between windows but the
+         simple need to view more ‘stuff’ at once.
+       - Two window mode with sliding dividers is a simple extension
+         but as tablets get bigger, allowing more that 2 should also
+         be an option.
+     + Exposing Files to others
+       - Exposing app data as accessible files almost feels like a
+         digital right.
+       - Users have the right to open file formats that can be seen
+         and modified by others.
+       - The obviously valuable use case here is photos.
+       - Most apps simply need read access (e.g. to insert a photo)
+         but others need to modify.
+       - There are risks with this of course but it allows a more
+         open, almost tinker toy like approach to using applications.
+       - Note that we don’t need to go back to the full desktop folder
+         system in order to achieve this.
+       - A simple dropbox like folder of user content, available from
+         any app would be a great start.
+     + Exposing Files to the Cloud
+       - A related point is that by allowing app data to be exposed as
+         a simple file system, you can now move these files into the
+         cloud.
+       - Now that we all have more than 1 device, the ability for the
+         apps on each device to have access to the same files is a
+         huge simplification.
+       - I take this for granted on my desktop but it a nearly
+         impenetrable wall for most of my mobile apps today.
+       - We can clearly make this happen as it hardly involves any
+         additional user complexity.
+   - Mobile isn’t killing desktop in the way most of us expected it
+     to.
+   - It is clearly the future growth platform of computing (at least,
+     until the next thing comes along) but we have over-hyped the New
+     Market Effect, focusing on ‘the shiny’ and not paying attention
+     to critical MicroInteractions that make a difference.
+   - We are so in love with flashy UX features that we ignore the deep
+     impact of the proven and the mundane. The directions listed here
+     are too easily ignored. They are actually the core building
+     blocks of powerful UX experiences and need to be improved.
+   - It’s just a bit surprising that so much mobile inspiration can
+     come from it’s ‘inferior’ predecessor, the Desktop UX.
+** [[https://jenson.org/app-myopia/][App Myopia | Scott Jenson]]
+   - The history of mobile phones has been a long slow process of
+     copying what works on the desktop and then sheepishly realizing
+     that it just doesn’t quite work right.
+** [[https://adactio.com/articles/5826][Adactio: Articles—There Is No Mobile Web]]
+   - So how did web designers deal with this? How did they deal with
+     the unknown?
+   - Well, they basically pretended that they did know. Kind of there
+     was this unspoken agreement to pretend that we had a certain
+     size.
+   - But I understand why designers wanted to do this, because then
+     they could think in fixed dimensions, and especially if they’re
+     coming from that print background, they have hundreds of years’
+     worth of guidelines and rules on how to deal with a fixed medium,
+     that if we do know this size, then okay, now we can start using
+     everything we’ve learned from print; typography and grids and
+     colour, all this stuff. And there’s a lot to be learned from
+     print. As I say, hundreds of years of thinking of methodologies,
+     of guidelines.
+   - It’s critical to craft your website’s experiences to work in any
+     situation by being intentional in how you use specific
+     technologies, such as JavaScript. Take advantage of their
+     benefits while simultaneously understanding that their
+     availability is not guaranteed. That’s progressive enhancement.
+   - We still don’t know the size of the browser; it’s just like this
+     *consensual hallucination that we’ve all agreed to participate in
+     We still don’t know the size of the browser; it’s just like this
+     *consensual hallucination that we’ve all agreed to participate in*:
+     “Let’s assume the browser has a browser width of at least 960
+     pixels.”: “Let’s assume the browser has a browser width of at
+     least 960 pixels.”
+** [[http://alistapart.com/article/dao][A Dao of Web Design · An A List Apart Article]]
+   - What I sense is a real tension between the web as we know it, and
+     the web as it would be. It’s the tension between an existing
+     medium, the printed page, and its child, the web. And it’s time
+     to really understand the relationship between the parent and the
+     child, and to let the child go its own way in the world.
+   - When a new medium borrows from an existing one, some of what it
+     borrows makes sense, but much of the borrowing is thoughtless,
+     “ritual,” and often constrains the new medium. Over time, the new
+     medium develops its own conventions, throwing off existing
+     conventions that don’t make sense.
+   - Spend some time on web design newgroups or mailing lists, and
+     you’ll find some common words and ideas repeated time after
+     time. Question after question, of course, is “how do I?”. But
+     beneath questions like “how do I make my pages look the same on
+     every platform” and “how can I make my fonts appear identical on
+     the Macintosh and Windows” is an underlying question – “how do I
+     control the user’s browser?” Indeed, the word control turns up
+     with surprising frequency.
+   - As designers we need to rethink this role, to abandon control,
+     and seek a new relationship with the page.
+   - Perhaps the inability to “control” a page is a limitation, a bug
+     of the web. When we come from the WYSIWYG world, our initial
+     instinct is to think so. I admit that it was my first response,
+     and a belief that was a long time in going. But I no longer feel
+     that it is a limitation, I see it as a strength of a new medium.
+   - Firstly, think about *what your pages do*, not what they look
+     like. Let your design flow from the services which they will
+     provide to your users, rather than from some overarching idea of
+     what you want pages to look like. Let form follow function,
+     rather than trying to take a particular design and make it
+     “work.”
+   - It’s time to look to the future, not cling to the past.
+   - Changing our ways of thinking and acting isn’t easy. “Closely
+     held beliefs are not easily released.” But I’ve come slowly to
+     realize that much of what I took for granted needed to be
+     reassessed. Judging by what I see and read and the conversations
+     I’ve had, the email I’ve read over the last couple of years, many
+     hold these beliefs closely, and need to rethink them too.
+   - Now is the time for the medium of the web to outgrow its origins
+     in the printed page. Not to abandon so much wisdom and
+     experience, but to also chart its own course, where appropriate.
+   - The web’s greatest strength, I believe, is often seen as a
+     limitation, as a defect. It is the nature of the web to be
+     flexible, and it should be our role as designers and developers
+     to embrace this flexibility, and produce pages which, by being
+     flexible, are accessible to all.
+   - The journey begins by letting go of control, and becoming
+     flexible.
+** [[http://alistapart.com/article/adapting-to-input][Adapting to Input · An A List Apart Article]]
+   - We knew the web didn’t have a fixed viewport size, but we
+     willfully ignored that reality because it made our jobs easier.
+   - And yet there is another consensual hallucination—the idea that
+     desktop equals keyboard and mouse, while phones equal touch.
+   - Four truths about input
+     1. Input is exploding — The last decade has seen everything from
+        accelerometers to GPS to 3D touch.
+     2. Input is a continuum — Phones have keyboards and cursors;
+        desktop computers have touchscreens.
+     3. Input is undetectable — Browser detection of touch‚ and nearly
+        every other input type, is unreliable.
+     4. Input is transient — Knowing what input someone uses one
+        moment tells you little about what will be used next.
+   - Being adaptable
+     - We think of a physical keyboard as being better suited to
+       complex tasks than an onscreen keyboard.
+     - So who are we to judge what input is better? We have no more
+       control over the input someone uses than we do the size of
+       their screen.
+   - Seven Design Principles
+     - Design for multiple concurrent inputs
+       - The idea that we’re either designing for desktop-with-a-mouse
+         or touch-on-mobile is a false dichotomy.
+       - At minimum, we need to ensure that our web pages don’t
+         prevent people from using multiple types of input.
+       - Ideally, we would look for ways to take advantage of multiple
+         inputs used together to create better experiences and enable
+         behavior that otherwise wouldn’t be possible.
+     - Make Web Pages That Are Accessible
+       - The information provided to help assistive devices navigate
+         web pages is also used by new types of input. In fact, many
+         of the new forms of input had their beginnings as assistive
+         technology. Using Cortana to navigate the web on an Xbox One
+         is not so different than using voice to control Safari on a
+         Mac.
+     - Design for the Largest Target Size By Default
+       - something designed for touch is not only usable by mouse, but
+         is often easier to select due to Fitts’s Law, which says that
+         “the time to acquire a target is a function of the distance
+         to and size of the target.”
+     - Design for Modes of Interaction Instead of Input Types
+       - Someone using a touchscreen laptop could choose to use the
+         compact settings. Doing so sacrifices the utility of the
+         laptop’s touchscreen, but the laptop owner gets to make that
+         choice *instead of the developer making it for her*.
+       - In both cases, the companies *designed for use cases* instead
+         of a specific form factor or input. Or worse, designing for a
+         specific input inferred from a form factor.
+     - Abstract Baseline Input
+     - Progressively Enhance Input
+       - Perhaps you can find some innovative uses for the gyroscope
+         like Warby Parker’s product page, which uses the gyroscope to
+         turn the model’s head. And because the feature is built using
+         progressive enhancement, it also works with mouse or touch.
+       - The camera can be used to scan credit cards on iOS or create
+         a photo booth in browsers that support getUserMedia. Normal
+         input forms can be enhanced with the accept attribute to
+         capture images or video via the HTML Media Capture
+         specification:
+       - Or if you really want to push the new boundaries of input,
+         the Web Speech API can be used to enhance form fields in
+         browsers that support it. And Physical Web beacons can be
+         combined with Web Bluetooth to create experiences that are
+         better than native.
+** [[http://alistapart.com/article/meta-moments-thoughtfulness-by-design][Meta-Moments: Thoughtfulness by Design · An A List Apart Article]]
+   - Yet the prevailing wisdom within user experience design (UXD)
+     seems to focus on removing the need for thought. We are so eager
+     for our users to succeed that we try to make everything slick and
+     seamless—to remove even a hint of the possibility of
+     failure. Every new service learns about our movements in order to
+     anticipate our next move. Each new product exists in an ecosystem
+     of services so that even significant actions, such as making a
+     purchase, are made to seem frictionless. The aim is not only to
+     save us time and effort, but to save us from thinking, too.
+   - Something clever is going on here. Adding a barrier forces us to
+     engage in a deeper, more attentive way: we are encouraged to
+     think. Granted, not everyone will want or need this
+     encouragement, but if a barrier can create a digital experience
+     that is noticed and remembered, then it’s worth talking about.
+   - Speed Bumps
+     - They aim to *slow you down* just enough so that you can pay
+       attention to the bits you need to pay attention to. Let’s say
+       you’re about to make an important decision—maybe of a legal,
+       medical, financial, or personal nature. You shouldn’t proceed
+       too quickly and risk misunderstanding what you’re getting
+       yourself into.
+     - A change in layout, content, or style is often all that is
+       required to make users slow down. You can’t be too subtle about
+       this, though. People have grown used to filtering out huge
+       amounts of noise on the internet; they can become blind to
+       anything they view as a possible distraction.
+     - Although most of us find speed bumps irritating, we grudgingly
+       accept that they are there to help us avoid the possibility of
+       more painful consequences. For example, when you fire up an
+       application for the first time, you may see some onboarding
+       tooltips flash up. Part of you hates this—you just want to get
+       going, to play—and yet the product seems to choose this moment
+       to have a little conversation with you so that it can point out
+       one or two essentials. It feels a little unnatural, like your
+       flow has been broken. You’ve been given a meta-moment before
+       being let loose.
+   - Diversions
+     - Online diversions deliberately move us away from conventional
+       paths. Like speed bumps, they make us slow down and take
+       notice. We drive more thoughtfully on unfamiliar roads;
+       sometimes we even welcome the opportunity to understand the
+       space between A and B in a new way. This time, we are quietly
+       prodded into a meta-moment by being shown a new way forward.
+     - A diversion doesn’t have to be pronounced to make you
+       think. The hugely successful UK drinks company Innocent uses
+       microcopy to make an impact. You find yourself reading every
+       single bit of their packaging because there are jokes hidden
+       everywhere. You usually expect ingredients or serving
+       instructions to be boring and functional. But Innocent uses
+       these little spaces as a stage for quirky, silly fun. You end
+       up considering the team behind the product, as well as the
+       product itself, in a new light.
+     - Companies like Apple aim for more than a temporary
+       diversion. They create entirely new experience motorways. With
+       Apple Watch, we’re seeing the introduction of a whole new
+       lexicon. New concepts such as “Digital Touch,” “Heartbeat,”
+       “Sketch,” “Digital Crown,” “Force Touch,” “Short Look,” and
+       “Glances” are deployed to shape our understanding of exactly
+       what this new thing will do. Over the course of the next few
+       years, you can expect at least some of these terms to pass into
+       everyday language. By that time, they will no longer feel like
+       diversions. For now, though, such words have the power to make
+       us pause, anticipate, and imagine what life will be like with
+       these new powers.
+   - The magic of meta-moments
+     - Meta-moments can provide us with space to interpret,
+       understand, and add meaning to our experiences. A little
+       friction in our flow is all we need. A roadblock must be
+       overcome. A speed bump must be negotiated. A diversion must be
+       navigated. Each of these cases involves our attention in a
+       thoughtful way. Our level of engagement deepens. We have an
+       experience we can remember.
+     - A user journey without friction is a bit like a story without
+       intrigue—boring! In fact, a recent study into the first hour of
+       computer game experiences concludes that intrigue might be more
+       important than enjoyment for fostering engagement. We need
+       something a little challenging or complex; we need to be the
+       one who gains mastery and control. We want to triumph in the
+       end.
+     - We’d be finding little ways to surprise people, rather than
+       trying to make them feel at ease at all times.
+** [[https://www.wired.com/2014/11/invisible-technology/][Rejoice: Tomorrow’s Tech Will Probably Stop Nagging Us]]
+   - There is a tremendous opportunity for companies to take advantage
+     of this by rethinking products. Rather than sticking another
+     screen into our environment, embed technology into devices,
+     vehicles, and environments.
+   - Invisible Technology
+     #+BEGIN_QUOTE
+     It’s hidden behind physical buttons and controls, or buried deep
+     inside products and services, working behind-the-scenes to
+     enhance our lives, subtly. It doesn’t demand our attention except
+     when absolutely necessary. It aspires to consistently and
+     reliably deliver value without seeking praise. Think of Google
+     search or Nest.
+     #+END_QUOTE
+     #+BEGIN_QUOTE
+     Having a holistic perspective of the many instances that we could
+     engage with a product naturally lends itself towards designing a
+     more cohesive service, shifting the customer relationship from
+     siloed interactions to a seamless dialogue.
+     #+END_QUOTE
+** [[http://apgrimes.co.uk/2016/04/29/what-is-personalisation-and-why-do-we-want-it/][What is personalisation and why do we want it? | Andrew Grimes]]
+   #+BEGIN_QUOTE
+   We want content and functionality that responds intelligently to
+   our context, that updates in real-time, that we can have a
+   conversation with.
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   In the early days of the web, Personalisation was a small flourish
+   of the ‘Welcome back Andrew’ type. These days some of our clients
+   have access to some serious kit that allows them to tailor the user
+   experience much more. Using every little thing we know about a
+   particular user (their location, device, previous interactions and
+   so on) we can determine what particular arrangement of content and
+   functionality they see.
+   #+END_QUOTE
+** [[http://alistapart.com/article/building-nonlinear-narratives-for-the-web][Building Nonlinear Narratives for the Web · An A List Apart Article]]
+   #+BEGIN_QUOTE
+   For instance, I could’ve built two versions, based on the same
+   HTML, split into the woman’s point of view and Aondo’s. The
+   competing narratives would frame readers as detectives, exploring
+   and contrasting details to figure out the whole tale. Or, I
+   could’ve incorporated data visualizations to reflect Aondo’s mood:
+   by combining weather data like thunderstorms and temperature with a
+   “Sky Mood Indicator,” I could’ve designed Aondo’s emotional state
+   as a separate, visual facet.
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   I want to do that for Pixel Fable, and I want to show you how to do
+   it, too. That means venturing beyond our basic scrolly-telling. But
+   first, let’s take a deeper look at what nonlinear stories do.
+   #+END_QUOTE
+*** The role of nonlinear narratives on the web
+    #+BEGIN_QUOTE
+    The web operates in ways that can conflict with our traditional
+    view of what a “story”—with a set start, middle, and
+    end—is. Content is chunked, spread across various channels,
+    devices, and formats. How do we define story lines, characters,
+    interactions, and the role of the audience, given this information
+    sprawl?
+    #+END_QUOTE
+    #+BEGIN_QUOTE
+    Cue nonlinear narratives. They’re collections of related content,
+    organized around a story. They comprise video, text, links, audio,
+    maps, images, and charts. Their chunked, compartmentalized nature
+    gives them incredible flexibility, and makes them the perfect
+    vehicle for how we explore online, jumping from one piece of
+    information to the next.
+    #+END_QUOTE
+    #+BEGIN_QUOTE
+    Nonlinear narratives also offer audiences more agency. People want
+    to learn, be surprised or intrigued, or entertained—and nonlinear
+    stories prompt participation. Their fragmented structure needs an
+    audience; without readers or viewers, the narrative cannot be
+    experienced as a meaningful whole. In turn, this forces us to
+    design stories that work with, not against, the fluid nature of
+    the web (or what Frank Chimero calls the “edgelessness”).
+    #+END_QUOTE
+    #+BEGIN_QUOTE
+    Say you have an idea for one of your own. How do you link those
+    disparate elements in a cohesive way? You can start by choosing
+    two or three parts and combining them into a larger block, which
+    then forms a core part of your digital story. This block can be
+    displayed anywhere, anytime, as the story demands. For example,
+    one Pixel Fable story in the works pairs a Google map with images
+    and text to define key places (like the birthplace of a mad
+    baddie) or give the factual history of a setting.
+    #+END_QUOTE
+*** Types of nonlinear narratives
+**** Extra-narratives
+**** Disjointed narratives
+**** Parallel narratives
+     #+BEGIN_QUOTE
+     Moon, by UNICEF, follows the parallel lives of two kids. Each
+     wakes in the morning and goes about their life: one ends up
+     working in a factory for a living, while the other goes to school
+     and becomes an astronaut. After you enter a short code to link
+     the desktop site to your smartphone, your phone becomes a
+     controller. When you rotate your phone, you flip the desktop
+     screen 180° to watch that child’s life unfold.
+     #+END_QUOTE
+**** Database narratives
+**** Micro-narratives
+*** Audience participation and feedback loops
+    #+BEGIN_QUOTE
+    Digital narratives depend heavily on the audience experience. With
+    so many potential entry points to your story, you must define the
+    role you want the audience to play. One constant source of tension
+    is who controls the story: you (as the author), or your audience?
+    Whatever narrative form you’ve chosen, it’s something you’ve
+    designed to achieve a specific goal. Your audience, however,
+    probably won’t be content to sit in front of a screen and follow
+    you around. Your visitors want the ability to choose their own
+    paths—what they see, and the order in which they see it—into your
+    content blocks. It’s up to you to design situations and narratives
+    that take this into account.
+    #+END_QUOTE
+**** Encourage exploration
+**** Prompt the audience to play a part
+** [[http://alistapart.com/column/the-alternative-is-nothing][The Alternative is Nothing]]
+   #+BEGIN_QUOTE
+   Despite examples from countless industries where disruption has
+   taken place, it’s easy to pretend that it won’t happen to the
+   web. Today’s mobile internet is janky. It’s slow. It’s hard to
+   navigate. It offers only a paltry subset of what’s available on the
+   desktop. It’s hard to imagine anyone truly preferring it.
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   Clayton Christensen, author of The Innovator’s Dilemma, argues that
+   lower quality and less-than-adequate performance is, in fact, at
+   the heart of what makes disruptive innovation happen:
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   In industry after industry, Christensen discovered, the new
+   technologies that had brought the big, established companies to
+   their knees weren’t better or more advanced—they were actually
+   worse. The new products were low-end, dumb, shoddy, and in almost
+   every way inferior. But the new products were usually cheaper and
+   easier to use, and so people or companies who were not rich or
+   sophisticated enough for the old ones started buying the new ones,
+   and there were so many more of the regular people than there were
+   of the rich, sophisticated people that the companies making the new
+   products prospered. Christensen called these low-end products
+   “disruptive technologies,” because, rather than sustaining
+   technological progress toward better performance, they disrupted
+   it.
+   Larissa MacFarquahar, The New Yorker
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   People often point at the failings of the mobile internet as
+   rationale for why it won’t overtake the desktop web. “No one will
+   ever want to do that on mobile” gets used to justify short-sighted
+   decisions. Truth is, we can’t predict all the ways that people will
+   want to use mobile in the future. Jason Grigsby, co-author of Head
+   First Mobile Web (with Lyza Danger Gardner) says “We can’t predict
+   future behavior from a current experience that sucks.”
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   Today, the mobile internet provides a lousy experience. For
+   billions of people coming online across the world, it will be their
+   first (and only) way to access the web. The history of disruptive
+   innovation shows that it’s okay if the mobile internet provides a
+   less-than-adequate experience today. Most mobile internet users
+   won’t be comparing between the desktop web and the mobile web. For
+   these people, the alternative is nothing.
+   #+END_QUOTE
+** [[http://www.the-haystack.com/2012/07/09/great-works-of-fiction-presents-the-mobile-context/][Great Works of Fiction Presents: The Mobile Context]]
+   #+BEGIN_QUOTE
+    So when I decide to make decisions for you, I’m potentially
+    sabotaging the experience for the both of us.
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   Let me make a long story short: just make quality, relevant content
+   with appropriate tasks, and offer all of these to all users, unless
+   said content or functionality is dependent upon device capabilities
+   (such as a camera). Then make it easy for the user to decide what
+   it is they want to do. It’s like… web development all over again,
+   isn’t it?
+   #+END_QUOTE
+** [[http://www.frankchimero.com/writing/the-webs-grain/][Frank Chimero - The Web’s Grain]]
+   #+BEGIN_QUOTE
+   What would happen if we stopped treating the web like a blank
+   canvas to paint on, and instead like a material to build with?
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   In November of 2013, I gave a talk called What Screens Want, where
+   I tried to answer what it meant to natively design for screens. I
+   said it was something I called flux—the capacity for things to
+   change. This could be as showy as animation, but also as simple and
+   fundamental as a spreadsheet sorting itself and showing new
+   results. You can’t do that on paper. So, designing for screens is
+   managing this change over time, and expressing it in clear,
+   communicative, and powerful ways.
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   *A lack of edges permeates the web at all levels.* \\
+   Edgelessness is in the web’s structure: it’s comprised of
+   individual pages linked together, so its structure can branch out
+   forever. \\
+   Edgelessness applies to the screens that show the web, because they
+   offer an infinite canvas that can scroll in any direction for
+   however long. Boy, do we take for granted that a screen can show
+   more content than is able to be displayed in a single shot.
+   #+END_QUOTE
+** [[http://www.frankchimero.com/writing/what-screens-want/][Frank Chimero - What Screens Want]]
+   #+BEGIN_QUOTE
+   Flux is changing the colors of your website at night, to customize
+   for a different reading experience based on time.
+   #+END_QUOTE
+   #+BEGIN_QUOTE
+   It’s using movement to more clearly describe the steps of a
+   complicated process.
+   #+END_QUOTE
+*** Three Levels of Flux
+**** Low
+     #+BEGIN_QUOTE
+     These are really small mutations we take for granted when it
+     comes to computing, like the ability to sort a table row on your
+     spreadsheet. One of the major reasons the spreadsheet software
+     has the capacity to change is because the screen can show the
+     change produced. You can’t do that on paper. You need processing
+     and a malleable display surface.
+     #+END_QUOTE
+**** High
+     #+BEGIN_QUOTE
+     These are the immersive interactive pieces you think of when I
+     say “Flash website.” I think this sort of stuff is rarely a good
+     idea on the web, but we’re talking about screens in general. I’ve
+     seen a lot of really cool stuff done with high flux in museums,
+     public installations, and in film. High flux is great in physical
+     spaces.
+     #+END_QUOTE
+**** Medium
+     #+BEGIN_QUOTE
+     This area is most interesting to me, because it overlaps with
+     what I do: websites and interfaces. Medium level flux is
+     assistive and descriptive animation, and restructuring content
+     based on sensors. It clarifies interactivity by allowing elements
+     to respond to that interaction and other, measured conditions.
+     #+END_QUOTE
+*** Examples
+    #+BEGIN_QUOTE
+    And last is a comment field with progressive disclosure. This
+    method allows the designer to reduce UI components to their
+    essence. Input forms are only revealed when necessary to avoid
+    confusion, and the animation aids them in understanding the origin
+    of the new form fields.
+    #+END_QUOTE
+    
+    #+BEGIN_QUOTE
+    We’ve been more aware of this interstitial work in the past few
+    years because of responsive design’s popularity and its resistance
+    to fixed states. It’s a step in the right direction, but it has
+    made work crazy frustrating.
+    #+END_QUOTE
+** [[http://www.mckinsey.com/business-functions/business-technology/our-insights/disruptive-technologies][Disruptive technologies: Advances that will transform life, business, and the...]]
+*** Energy storage
+    #+BEGIN_QUOTE
+    Energy-storage devices or physical systems store energy for later
+    use. These technologies, such as lithium-ion batteries and fuel
+    cells, already power electric and hybrid vehicles, along with
+    billions of portable consumer electronics. Over the coming decade,
+    advancing energy-storage technology could make electric vehicles
+    cost competitive, bring electricity to remote areas of developing
+    countries, and improve the efficiency of the utility grid.
+    #+END_QUOTE
+** [[http://www.mckinsey.com/business-functions/marketing-and-sales/our-insights/new-insights-for-new-growth-what-it-takes-to-understand-your-customers-today][New insights for new growth: What it takes to understand your customers today...]]
+   #+BEGIN_QUOTE
+   Developing a better understanding of customers is increasingly a
+   strategic necessity, because fast-moving markets, new technologies,
+   and new business models are changing what customers want and how
+   they shop.
+   #+END_QUOTE
+** [[https://cloudfour.com/thinks/four-truths-about-input/][Four Truths About Input - Cloud Four]]
+*** Input is exploding
+    #+BEGIN_QUOTE
+    ince the iPhone’s release in 2007, every year has brought us new
+    sensors and other forms of input. Our current generation of phones
+    contain everything from barometers to fingerprint sensors.
+    #+END_QUOTE
+**** iPhone 6
+     - Touch
+     - 3D Touch
+     - Fingerprint sensor
+     - Camera (video and image)
+     - GPS
+     - Compass
+     - Bluetooth LE
+     - Audio
+     - Gyroscope
+     - Accelerometer
+     - Barometer
+     - Proximity sensor
+     - Ambient light sensor
+     - NFC (Apply Pay)
+     - iBeacon
+*** Input is a continuum
+    #+BEGIN_QUOTE
+    We can no longer make assumptions about input based on screen size
+    or form factor. And frankly, we never should have.
+    #+END_QUOTE
+*** Input is undetectable
+    #+BEGIN_QUOTE
+    Designing a tailored user experience for a keyboard and mouse is
+    different than designing one for touch. It is tempting to try to
+    detect whether a touch screen is present and then modify our
+    designs accordingly.
+
+    Unfortunately, “it currently isn’t possible to reliably detect
+    whether or not the current device has a touch screen, from within
+    the browser.”
+    #+END_QUOTE
+*** Input is transient
+    #+BEGIN_QUOTE
+    One moment, someone could be sitting at a desk with their tablet
+    connected to an external keyboard, mouse and display. The next
+    moment, they could be using the touch screen exclusively.
+    #+END_QUOTE

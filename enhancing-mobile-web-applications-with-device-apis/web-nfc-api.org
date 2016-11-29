@@ -1,0 +1,15 @@
+* Web NFC API
+** [[https://www.broken-links.com/2015/07/23/hardware-apis-coming-to-browsers/][Hardware APIs coming to browsers - Broken Links]]
+   - Further from implementation is the Web NFC API, which gives
+     access to Near Field Communication devices – such as tap-to-pay
+     systems. Currently only at the spec stage, it’s also
+     Promise-based so seems easy to get started with. 
+   - For example, this is how it’s proposed to read data from an NFC
+     device: 
+     #+BEGIN_SRC js
+       navigator.nfc.requestAdapter().then(function (adapter) {
+         adapter.onmessage = function (event) {
+           console.log(event.message.data);
+         }
+       });
+     #+END_SRC

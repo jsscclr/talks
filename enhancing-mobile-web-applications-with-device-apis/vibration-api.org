@@ -1,0 +1,127 @@
+* Vibration
+** Main
+*** Uses
+    - accessibility - notifications can use vibration rather than
+      sounds or visuals
+    - I'm imagining its use in an in-browser music app. Something like
+      Bandcamp. If a song fails to load, or there's some other
+      important notification, it should vibrate, because the user
+      likely isn't looking at the screen. It doesn't have many obvious
+      openings for value, but it can potentially be useful to have
+      around.
+** [[https://www.w3.org/TR/2015/REC-vibration-20150210/][Vibration API]]
+   - Has been a W3C Recommendation for over a year!
+   - simple, tactile feedback
+   -
+*** Vibration Interface
+    - WebIDL
+    #+BEGIN_SRC js
+    typedef (unsigned long or sequence<unsigned long>) VibratePattern;
+
+partial interface Navigator {
+    boolean vibrate (VibratePattern pattern);
+};
+    #+END_SRC
+    - vibrate() invokes vibration
+    - Processing vibration patterns
+      - If not a list, add the pattern
+      - Max length is an implementation dependent maximum
+        - If length is greater than max length, implementation could
+          break request into shorter requests to achieve same effect
+      - Truncates patterns greater than max length
+      - Max duration:
+        - implementation dependent
+        - 
+    - Means that if submitting a pattern, it should be an odd length!
+    - Performing vibration
+      - may return false e.g. user preferences
+      - if vibration is happening, abort current vibration pattern
+      - vibrates if even index
+      - waits if odd index
+*** Examples
+    #+BEGIN_SRC js
+    // vibrate for 1000 ms
+navigator.vibrate(1000);
+
+// or alternatively
+navigator.vibrate([1000]);
+    #+END_SRC
+    #+BEGIN_SRC js
+    navigator.vibrate([50, 100, 150]);
+    #+END_SRC
+    #+BEGIN_SRC js
+    // cancel any existing vibrations
+navigator.vibrate(0);
+
+// or alternatively
+navigator.vibrate([]);
+    #+END_SRC
+** Vibration API Security
+   - Cross Device Tracking threat
+   - using vibration patterns to create a unique pattern that can
+     allow the device to be recognised. Also might be applicable to
+     Ambient Light.
+   - Identification threat - causing device to vibrate one to identify
+     an individual in a room.
+   - 
+** [[https://www.joezimjs.com/javascript/top-5-9-favorite-html5-apis/]]
+*** Vibration
+    - Works on phones, tablets.
+**** Use cases
+     - Used with notifications to get user attention
+     - games
+**** Support
+     - limited on desktop
+     - use as an enhancement
+**** Use
+     - super easy! navigator.vibrate()
+     - Can send in a number of milliseconds for the device to vibrate
+     - Can send an array of numbers representing multiply vibrations -
+       length of time the device vibrates, pause lengths between the vibrations
+** [[http://www.sitepoint.com/10-html5-apis-worth-looking/]]
+*** Vibration API
+    - programatically produce a vibration
+    - vibrate during the game is reaction to a particular event
+    - window.navigator.vibrate() method
+      - accepts one parameter, either an integer or array of integers
+      - the array is alternating vibration times and pauses
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+*** Vibration
+    #+BEGIN_SRC js
+      // Vibrate for 1 second (1000 milliseconds).
+      navigator.vibrate(1000);
+
+      // Vibrate in sequence.
+      navigator.vibrate([500, 250, 500]);
+    #+END_SRC
+    - build games, create accessible applications
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - haptic feedback
+   - progressive enhancement - works on modern browsers, doesn't break
+     anything not supporting it
+   - Chrome + Firefox + Opera support
+   - code
+     #+BEGIN_SRC js
+     var vibrate = navigator.vibrate || navigator.mozVibrate;
+
+     // vibrate for 1 second
+vibrate(1000);
+
+// vibrate for 1 second, then pause for half, then vibrate for another 1 second
+vibrate([1000, 500, 2000]);
+     #+END_SRC
+** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+   - code
+     #+BEGIN_SRC js
+     // Vibrate for one second 
+navigator.vibrate(1000);
+ 
+// Vibration pattern [vibrationTime, pause,…] 
+navigator.vibrate([200, 100, 200, 100]);
+ 
+// Vibrate for 5 seconds 
+navigator.vibrate(5000);
+ 
+// Turn off vibration 
+navigator.vibrate(0);
+     #+END_SRC

@@ -1,0 +1,13 @@
+* Abstract
+- With more and more users browsing the web on mobile devices, the web
+  community now largely understands how important it is to design and
+  implement our sites with the assumption that it will be viewed on a
+  small screen. 
+- Responsive web design is only one piece of the puzzle, however. A
+  mobile device is more than just a smaller viewport. The technology
+  available to your average mobile device varies considerably to the
+  average desktop or laptop computer.  
+- In this session, I will show how developers can enhance their web
+  applications to take advantage of hardware features via device APIs,
+  without sacrificing the overall experience for users accessing the
+  application from non-mobile devices.

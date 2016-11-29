@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Enhancing Mobile Web Applications with Device APIs</title>
+    <link rel="stylesheet" href="./styles/index.css" />
+  </head>
+  <body>
+    <section class="display">
+      <h1>Enhancing Mobile Web Applications with Device APIs</h1>
+    </section>
+    <section class="display">
+      <h1>
+	<span class="faded">Enhancing </span>
+	<em>Mobile Web Applications</em>
+	<span class="faded">with Device APIs</span></h1>
+    </section>
+    <section class="display quote">
+      <figure>
+	 <cite>Small is Beautiful: Why Desktop UX still has something to teach Mobile</cite>
+	<blockquote>While most of us can likely agree that mobile is the future of computing, something very interesting is happening here. In a world where new technologies usurp the old nearly every year, many of us are reaching for our old school laptops surprisingly often. <strong>This isn't just nostalgia, there is something deeply inadequate about mobile</strong>.</blockquote>
+	<figcaption>Scott Jenson</figcaption>
+      </figure>
+    </section>
+    <section>
+      <h1>
+	<span class="faded">Enhancing </span>
+	<em><s>Mobile</s> Web Applications</em>
+	<span class="faded">with Device APIs</span></h1>
+    </section>
+    <section class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with </span>
+	<em>Device APIs</em>
+      </h1>
+    </section>
+    <section class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Geolocation API</em>
+      </h1>
+    </section>
+    <section data-api="geolocation">
+      <h1>Geolocation API</h1>
+      <ul>
+        <li>GPS</li>
+        <li>GSM / CDMA Cell Ids</li>
+        <li>IP address</li>
+        <li>RFID - Radio-frequency identification</li>
+        <li>Network signals</li>
+        <li>Cell towers</li>
+        <li>SSID</li>
+      </ul>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handlePositionCallback</span>(<span class="parameter">position</span>) {
+  console.info(<span class="string">`
+    Latitude: <var>${ position.coords.latitude }</var>
+    Longitude: <var>${ position.coords.longitude }</var>
+    Accuracy: <var>${ position.coords.accuracy }</var>
+            
+    Altitude: <var>${ position.coords.longitude }</var>
+    Altitude Accuracy: <var>${ position.coords.longitude }</var>
+
+    Heading: <var>${ position.coords.heading }</var>
+    Speed: <var>${ position.coords.speed }</var>
+  `</span>);
+}
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="navigator">navigator</span><span class="faded">.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handlePositionCallback</span>(<span class="parameter">position</span>) {
+  console.info(<span class="string">`
+    Latitude: <var>${ position.coords.latitude }</var>
+    Longitude: <var>${ position.coords.longitude }</var>
+    Accuracy: <var>${ position.coords.accuracy }</var>
+            
+    Altitude: <var>${ position.coords.longitude }</var>
+    Altitude Accuracy: <var>${ position.coords.longitude }</var>
+
+    Heading: <var>${ position.coords.heading }</var>
+    Speed: <var>${ position.coords.speed }</var>
+  `</span>);
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.</span>geolocation<span class="faded">.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handlePositionCallback</span>(<span class="parameter">position</span>) {
+  console.info(<span class="string">`
+    Latitude: <var>${ position.coords.latitude }</var>
+    Longitude: <var>${ position.coords.longitude }</var>
+    Accuracy: <var>${ position.coords.accuracy }</var>
+            
+    Altitude: <var>${ position.coords.longitude }</var>
+    Altitude Accuracy: <var>${ position.coords.longitude }</var>
+
+    Heading: <var>${ position.coords.heading }</var>
+    Speed: <var>${ position.coords.speed }</var>
+  `</span>);
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.</span>getCurrentPosition(<span class="faded">
+    <span class="variable">handlePositionCallback</span></span>
+)<span class="faded">;
+
+<span class="function">function</span> <span class="variable">handlePositionCallback</span>(<span class="parameter">position</span>) {
+  console.info(<span class="string">`
+    Latitude: <var>${ position.coords.latitude }</var>
+    Longitude: <var>${ position.coords.longitude }</var>
+    Accuracy: <var>${ position.coords.accuracy }</var>
+            
+    Altitude: <var>${ position.coords.longitude }</var>
+    Altitude Accuracy: <var>${ position.coords.longitude }</var>
+
+    Heading: <var>${ position.coords.heading }</var>
+    Speed: <var>${ position.coords.speed }</var>
+  `</span>);
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(</span>
+    <span class="variable">handlePositionCallback</span>
+<span class="faded">);
+
+<span class="function">function</span></span> <span class="variable">handlePositionCallback</span>(<span class="faded parameter">position</span>)<span class="faded"> {
+  console.info(<span class="string">`
+    Latitude: <var>${ position.coords.latitude }</var>
+    Longitude: <var>${ position.coords.longitude }</var>
+    Accuracy: <var>${ position.coords.accuracy }</var>
+            
+    Altitude: <var>${ position.coords.longitude }</var>
+    Altitude Accuracy: <var>${ position.coords.longitude }</var>
+
+    Heading: <var>${ position.coords.heading }</var>
+    Speed: <var>${ position.coords.speed }</var>
+  `</span>);
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handlePositionCallback</span>(</span><span class="parameter">position</span><span class="faded">) {
+  console.info(</span><span class="string">`
+    Latitude: <var>${ position.coords.latitude }</var>
+    Longitude: <var>${ position.coords.longitude }</var>
+    Accuracy: <var>${ position.coords.accuracy }</var><span class="faded">
+            
+    Altitude: <var>${ position.coords.longitude }</var>
+    Altitude Accuracy: <var>${ position.coords.longitude }</var>
+
+    Heading: <var>${ position.coords.heading }</var>
+    Speed: <var>${ position.coords.speed }</var>
+  `</span></span><span class="faded">);
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handlePositionCallback</span>(</span><span class="parameter">position</span><span class="faded">) {
+  console.info(<span class="string">`
+    Latitude: <var>${ position.coords.latitude }</var>
+    Longitude: <var>${ position.coords.longitude }</var>
+    Accuracy: <var>${ position.coords.accuracy }</var>
+</span></span><span class="string">
+    Altitude: <var>${ position.coords.longitude }</var>
+    Altitude Accuracy: <var>${ position.coords.longitude }</var>
+<span class="faded">
+    Heading: <var>${ position.coords.heading }</var>
+    Speed: <var>${ position.coords.speed }</var>
+  `</span></span><span class="faded">);
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handlePositionCallback</span>(</span><span class="parameter">position</span><span class="faded">) {
+  console.info(<span class="string">`
+    Latitude: <var>${ position.coords.latitude }</var>
+    Longitude: <var>${ position.coords.longitude }</var>
+    Accuracy: <var>${ position.coords.accuracy }</var>
+
+    Altitude: <var>${ position.coords.longitude }</var>
+    Altitude Accuracy: <var>${ position.coords.longitude }</var>
+</span></span><span class="string">
+    Heading: <var>${ position.coords.heading }</var>
+    Speed: <var>${ position.coords.speed }</var>
+  `</span><span class="faded">);
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,
+    <span class="variable">handleErrorCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handleErrorCallback</span>(<span class="parameter">error</span>) {
+  console.error(error.message);
+  <span class="comment">
+  // error.TIMEOUT
+  // error.PERMISSION_DENIED
+  // error.POSITION_UNAVAILABLE
+  // error.UNKNOWN_ERROR</span>
+}
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,</span>
+    <span class="variable">handleErrorCallback</span>
+<span class="faded">);
+
+<span class="function">function</span> </span><span class="variable">handleErrorCallback</span>(<span class="faded parameter">error</span>)<span class="faded"> {
+  console.error(error.message);
+  <span class="comment">
+  // error.TIMEOUT
+  // error.PERMISSION_DENIED
+  // error.POSITION_UNAVAILABLE
+  // error.UNKNOWN_ERROR</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,
+    <span class="variable">handleErrorCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handleErrorCallback</span>(</span><span class="parameter">error</span><span class="faded">) {
+  console.error(</span><span class="parameter">error</span>.message<span class="faded">);</span>
+  <span class="comment">
+  // error.TIMEOUT<span class="faded">
+  // error.PERMISSION_DENIED
+  // error.POSITION_UNAVAILABLE
+  // error.UNKNOWN_ERROR</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,
+    <span class="variable">handleErrorCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handleErrorCallback</span>(</span><span class="parameter">error</span><span class="faded">) {
+  console.error(</span><span class="parameter">error</span>.message<span class="faded">);
+  <span class="comment">
+  // error.TIMEOUT</span></span><span class="comment">
+  // error.PERMISSION_DENIED<span class="faded">
+  // error.POSITION_UNAVAILABLE
+  // error.UNKNOWN_ERROR</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,
+    <span class="variable">handleErrorCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handleErrorCallback</span>(</span><span class="parameter">error</span><span class="faded">) {
+  console.error(</span><span class="parameter">error</span>.message<span class="faded">);
+  <span class="comment">
+  // error.TIMEOUT
+  // error.PERMISSION_DENIED</span></span><span class="comment">
+  // error.POSITION_UNAVAILABLE<span class="faded">
+  // error.UNKNOWN_ERROR</span><span class="faded">
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,
+    <span class="variable">handleErrorCallback</span>
+);
+
+<span class="function">function</span> <span class="variable">handleErrorCallback</span>(</span><span class="parameter">error</span><span class="faded">) {
+  console.error(</span><span class="parameter">error</span>.message<span class="faded">);
+  <span class="comment">
+  // error.TIMEOUT
+  // error.PERMISSION_DENIED
+  // error.POSITION_UNAVAILABLE</span></span><span class="comment">
+  // error.UNKNOWN_ERROR</span><span class="faded">
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,
+    <span class="variable">handleErrorCallback</span>
+    <var>positionOptions</var>
+);
+
+var <var>positionOptions</var> = {
+  enableHighAccuracy: true,
+  maximumAge: 10000,
+  timeOut: 5000
+}
+
+</code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,
+    <span class="variable">handleErrorCallback</span>
+    <var>positionOptions</var>
+);
+
+var <var>positionOptions</var> = {</span>
+  enableHighAccuracy: true<span class="faded">,
+  maximumAge: 10000,
+  timeOut: 5000
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,
+    <span class="variable">handleErrorCallback</span>
+    <var>positionOptions</var>
+);
+
+var <var>positionOptions</var> = {
+  enableHighAccuracy: true,</span>
+  maximumAge: 10000,<span class="faded">
+  timeOut: 5000
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.geolocation.getCurrentPosition(
+    <span class="variable">handlePositionCallback</span>,
+    <span class="variable">handleErrorCallback</span>
+    <var>positionOptions</var>
+);
+
+var <var>positionOptions</var> = {
+  enableHighAccuracy: true,
+  maximumAge: 10000,</span>
+  timeOut: 5000<span class="faded">
+}</span>
+      </code></pre>
+    </section>
+    <section class="display quote">
+      <figure>
+	 <cite>The Mobile Book Addendum</cite>
+	<blockquote>The best mobile experiences are
+	  “designed from zero”—that is, prevention and recovery from zero
+	  results is at the core of the way search is implemented. For
+	  example, zero results recovery could be based on the person’s
+	  search history and location, determined via built-in GPS</blockquote>
+	<figcaption>Pattern: Parallel Search Architecture</figcaption>
+      </figure>
+    </section>
+    <section data-api="geolocation" class="code display">
+      <pre><code>var <var>watchPositionId</var> = <span class="navigator">navigator</span>.geolocation.watchPosition(
+    <span class="variable">handlePositionCallback</span>
+);
+
+<span class="navigator">navigator</span>.geolocation.clearWatch(<var>watchPositionId</var>);
+</code></pre>
+    </section>    
+    <section data-api="geolocation" class="display">
+      <h1>Support</h1>        
+      <div class="support">
+	<img src="./assets/firefox_logo.svg" alt="Firefox Logo" />
+	<img src="./assets/chrome_logo.svg" alt="Chrome Logo" />
+	<img src="./assets/opera_logo.svg" alt="Opera Logo" />
+	<img src="./assets/safari_logo.svg" alt="Safari Logo" />
+	<img src="./assets/edge_logo.svg" alt="Edge Logo" />
+	<img src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+      </div>
+    </section>
+        <section data-api="device-orientation" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Device Orientation API</em>
+      </h1>
+    </section>
+    <section class="display code">
+      <pre><code>window.addEventListener(
+    <span class="string">"deviceorientation"</span>,
+    <span class="variable">orientationChange</span>
+);
+
+<span class="function">function</span> <span class="variable">orientationChange</span>(<span class="parameter">event</span>) {
+    console.info(<span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span>);
+}
+      </code></pre>
+    </section>
+    <section class="display code">
+      <pre><code><span class="faded">window.addEventListener(</span>
+   <span class="string">"deviceorientation"</span><span class="faded">,
+   <span class="variable">orientationChange</span>
+);
+
+<span class="function">function</span> <span class="variable">orientationChange</span>(<span class="parameter">event</span>) {
+    console.info(<span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span>);
+}</span>
+      </code></pre>
+    </section>
+        <section class="display code">
+      <pre><code><span class="faded">window.addEventListener(
+   <span class="string">"deviceorientation"</span>,</span>
+   <span class="variable">orientationChange</span><span class="faded">
+);
+
+<span class="function">function</span></span> <span class="variable">orientationChange</span>(<span class="parameter faded">event</span>)<span class="faded"> {
+    console.info(<span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span>);
+}</span>
+      </code></pre>
+    </section>
+    <section class="display code">
+      <pre><code><span class="faded">window.addEventListener(
+   <span class="string">"deviceorientation"</span>,
+   <span class="variable">orientationChange</span>
+);
+
+<span class="function">function</span> <span class="variable">orientationChange</span>(</span><span class="parameter">event</span><span class="faded">) {
+    console.info(<span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span>);
+}</span>
+      </code></pre>
+    </section>
+    <section class="display code">
+      <pre><code><span class="faded">window.addEventListener(
+   <span class="string">"deviceorientation"</span>,
+   <span class="variable">orientationChange</span>
+);
+
+<span class="function">function</span> <span class="variable">orientationChange</span>(</span><span class="parameter">event</span><span class="faded">) {
+    console.info(</span><span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span><span class="faded">);
+}</span>
+      </code></pre>
+    </section>
+    <section class="display code">
+      <pre><code><span class="faded">window.addEventListener(</span>
+   <span class="string">"deviceorientationabsolute"</span><span class="faded">,
+   <span class="variable">orientationChange</span>
+);
+
+<span class="function">function</span> <span class="variable">orientationChange</span>(<span class="parameter">event</span>) {
+    console.info(<span class="string">`
+        Rotation around the Z axis: <var>${ event.alpha }</var>
+        Rotation around the X axis: <var>${ event.beta }</var>
+        Rotation around the Y axis: <var>${ event.gamma }</var>
+    `</span>);
+}</span>
+      </code></pre>
+    </section>
+    <section class="code display">
+      <pre><code>window.addEventListener(<span class="string">"devicemotion"</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+    console.info(<span class="string">`
+	Acceleration:
+	    <var>${ event.acceleration.x }</var>,
+            <var>${ event.acceleration.y }</var>,
+	    <var>${ event.acceleration.z }</var>
+
+	Acceleration including gravity:
+            <var>${ event.accelerationIncludingGravity.x }</var>,
+            <var>${ event.accelerationIncludingGravity.y }</var>,
+            <var>${ event.accelerationIncludingGravity.z }</var>
+
+        Rotation rate:
+            <var>${ event.rotationRate.alpha }</var>,
+            <var>${ event.rotationRate.beta }</var>,
+            <var>${ event.rotationRate.gamma }</var>
+    `</span>);
+});
+      </code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(<span class="string">"devicemotion"</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+    console.info(<span class="string">`</span></span><span class="string">
+	Acceleration:
+	    <var>${ event.acceleration.x }</var>,
+            <var>${ event.acceleration.y }</var>,
+	    <var>${ event.acceleration.z }</var><span class="faded">
+
+	Acceleration including gravity:
+            <var>${ event.accelerationIncludingGravity.x }</var>,
+            <var>${ event.accelerationIncludingGravity.y }</var>,
+            <var>${ event.accelerationIncludingGravity.z }</var>
+
+        Rotation rate:
+            <var>${ event.rotationRate.alpha }</var>,
+            <var>${ event.rotationRate.beta }</var>,
+            <var>${ event.rotationRate.gamma }</var>
+    `</span></span><span class="faded">);
+});</span></code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(<span class="string">"devicemotion"</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+    console.info(<span class="string">`
+	Acceleration:
+	    <var>${ event.acceleration.x }</var>,
+            <var>${ event.acceleration.y }</var>,
+	    <var>${ event.acceleration.z }</var></span></span><span class="string">
+
+	Acceleration including gravity:
+            <var>${ event.accelerationIncludingGravity.x }</var>,
+            <var>${ event.accelerationIncludingGravity.y }</var>,
+            <var>${ event.accelerationIncludingGravity.z }</var><span class="faded">
+
+        Rotation rate:
+            <var>${ event.rotationRate.alpha }</var>,
+            <var>${ event.rotationRate.beta }</var>,
+            <var>${ event.rotationRate.gamma }</var>
+    `</span></span><span class="faded">);
+});</span></code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(<span class="string">"devicemotion"</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+    console.info(<span class="string">`
+	Acceleration:
+	    <var>${ event.acceleration.x }</var>,
+            <var>${ event.acceleration.y }</var>,
+	    <var>${ event.acceleration.z }</var>
+
+	Acceleration including gravity:
+            <var>${ event.accelerationIncludingGravity.x }</var>,
+            <var>${ event.accelerationIncludingGravity.y }</var>,
+            <var>${ event.accelerationIncludingGravity.z }</var></span></span><span class="string">
+
+        Rotation rate:
+            <var>${ event.rotationRate.alpha }</var>,
+            <var>${ event.rotationRate.beta }</var>,
+            <var>${ event.rotationRate.gamma }</var><span class="faded">
+    `</span></span><span class="faded">);
+});</span></code></pre>
+    </section>
+    <section class="code display">
+      <pre><code>window.addEventListener(
+    <span class="string">"compassneedscalibration"</span>,
+    <span class="variable">showCalibrationUserInterface</span>
+);
+
+<span class="function">function</span> <span class="variable">showCalibrationUserInterface</span>(<span class="parameter">event</span>) {
+    alert(<span class="string">"Your compass needs calibration :( Fix it!"</span>);
+    <span class="parameter">event</span>.preventDefault();
+}
+      </code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(</span>
+    <span class="string">"compassneedscalibration"</span><span class="faded">,
+    <span class="variable">showCalibrationUserInterface</span>
+);
+
+<span class="function">function</span> <span class="variable">showCalibrationUserInterface</span>(<span class="parameter">event</span>) {
+    alert(<span class="string">"Your compass needs calibration :( Fix it!"</span>);
+    event.preventDefault();
+}
+      </code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(
+    <span class="string">"compassneedscalibration"</span>,</span>
+    <span class="variable">showCalibrationUserInterface</span><span class="faded">
+);
+</span>
+<span class="function">function</span> <span class="variable">showCalibrationUserInterface</span>(<span class="parameter">event</span>) {<span class="faded">
+    alert(<span class="string">"Your compass needs calibration :( Fix it!"</span>);
+    event.preventDefault();</span>
+}
+      </code></pre>
+    </section>
+    <section class="code display">
+      <pre><code><span class="faded">window.addEventListener(
+    <span class="string">"compassneedscalibration"</span>,
+    <span class="variable">showCalibrationUserInterface</span>
+);
+
+<span class="function">function</span> <span class="variable">showCalibrationUserInterface</span>(<span class="parameter">event</span>) {
+    alert(<span class="string">"Your compass needs calibration :( Fix it!"</span>);</span>
+    event.preventDefault();<span class="faded">
+}</span></code></pre>
+    </section>
+    <section class="display quote">
+      <figure>
+	<cite>Meta-Moments: Thoughtfulness by Design</cite>
+	<blockquote>Adding a barrier forces us to
+     engage in a deeper, more attentive way: <strong>we are encouraged to
+     think</strong>. Granted, not everyone will want or need this
+     encouragement, but if a barrier can create a digital experience
+     that is noticed and remembered, then it’s worth talking about.</blockquote>
+	<figcaption>Andrew Grimes</figcaption>
+      </figure>
+    </section>
+    <section data-api="device-orientation" class="display">
+      <h1>Support</h1>
+      <div class="support">
+	<img src="./assets/firefox_logo.svg" alt="Firefox Logo" />
+	<img src="./assets/chrome_logo.svg" alt="Chrome Logo" />
+	<img src="./assets/opera_logo.svg" alt="Opera Logo" />
+	<img src="./assets/safari_logo.svg" alt="Safari Logo" />
+	<img src="./assets/edge_logo.svg" alt="Edge Logo" />
+	<img src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+      </div>
+    </section>
+    <section data-api="battery-status" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Battery Status API</em>
+      </h1>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code>var <var>batteryManager</var> = <span class="navigator">navigator</span>.battery;
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code><s>var <var>batteryManager</var> = <span class="navigator">navigator</span>.battery;</s>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code><span class="navigator">navigator</span>.getBattery()
+         .then(
+           <span class="variable">onBatteryResolved</span>,
+           <span class="variable">onBatteryRejected</span>
+         );
+
+<span class="function">function</span> <span class="variable">onBatteryResolved</span>(<span class="parameter">batteryManager</span>) {
+  <span class="comment">// yay!</span>
+}
+
+<span class="function">function</span> <span class="variable">onBatteryRejected</span>() {
+  <span class="comment">// oh no!</span>
+}
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.</span>getBattery()<span class="faded">
+         .then(
+           <span class="variable">onBatteryResolved</span>,
+           <span class="variable">onBatteryRejected</span>
+         );
+
+<span class="function">function</span> <span class="variable">onBatteryResolved</span>(<span class="parameter">batteryManager</span>) {
+  <span class="comment">// yay!</span>
+}
+
+<span class="function">function</span> <span class="variable">onBatteryRejected</span>() {
+  <span class="comment">// oh no!</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.getBattery()</span>
+         .then(<span class="faded">
+           <span class="variable">onBatteryResolved</span>,
+           <span class="variable">onBatteryRejected</span></span>
+         )<span class="faded">;
+
+<span class="function">function</span> <span class="variable">onBatteryResolved</span>(<span class="parameter">batteryManager</span>) {
+  <span class="comment">// yay!</span>
+}
+
+<span class="function">function</span> <span class="variable">onBatteryRejected</span>() {
+  <span class="comment">// oh no!</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.getBattery()
+         .then(</span>
+           <span class="variable">onBatteryResolved</span><span class="faded">,
+           <span class="variable">onBatteryRejected</span>
+         );
+
+</span><span class="function">function</span> <span class="variable">onBatteryResolved</span>(<span class="parameter">batteryManager</span>) {
+  <span class="comment">// yay!</span>
+}<span class="faded">
+
+<span class="function">function</span> <span class="variable">onBatteryRejected</span>() {
+  <span class="comment">// oh no!</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.getBattery()
+         .then(
+           <span class="variable">onBatteryResolved</span>,</span>
+           <span class="variable">onBatteryRejected</span><span class="faded">
+         );
+
+<span class="function">function</span> <span class="variable">onBatteryResolved</span>(<span class="parameter">batteryManager</span>) {
+  <span class="comment">// yay!</span>
+}
+</span>
+<span class="function">function</span> <span class="variable">onBatteryRejected</span>() {
+  <span class="comment">// oh no!</span>
+}</span>
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code><span class="function">function</span> <span class="variable">onBatteryResolved</span>(<span class="parameter">batteryManager</span>) {
+  console.info(<span class="string">`
+    charging: <var>${ batteryManager.charging }</var>
+    chargingTime: <var>${ batteryManager.chargingTime }</var>
+    dischargingTime: <var>${ batteryManager.dischargingTime }</var>
+    level: <var>${ batteryManager.dischargingTime }</var>
+  `</span>);
+}
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="code display">
+      <pre><code><span class="function">function</span> <span class="variable">onBatteryResolved</span>(<span class="parameter">batteryManager</span>) {
+  <var>batteryManager</var>.addEventListener(
+    <span class="string">"levelchange"</span>, eventCallback
+  );
+
+  <var>batteryManager</var>.addEventListener(
+    <span class="string">"chargingchange"</span>, eventCallback
+  );
+
+  <var>batteryManager</var>.addEventListener(
+    <span class="string">"chargingtimechange"</span>, eventCallback
+  );
+  
+  <var>batteryManager</var>.addEventListener(
+    <span class="string">"dischargingtimechange"</span>, eventCallback
+  );
+}
+      </code></pre>
+    </section>
+    <section data-api="battery-status" class="display">
+      <h1>Support</h1>
+      <div class="support">
+	<img src="./assets/firefox_logo.svg" alt="Firefox Logo" />
+	<img src="./assets/chrome_logo.svg" alt="Chrome Logo" />
+	<img src="./assets/opera_logo.svg" alt="Opera Logo" />
+	<img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" />
+	<img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" />
+	<img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+      </div>
+    </section>
+    <section data-api="generic-sensor" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Generic Sensor API</em>
+      </h1>
+    </section>
+    <section data-api="generic-sensor" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Generic Sensor API</em> ...?
+      </h1>
+    </section>
+    <section data-api="accelerometer-sensor" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Accelerometer Sensor API</em>
+      </h1>
+    </section>
+    <section data-api="magnometer-sensor" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Magnometer Sensor API</em>
+      </h1>
+    </section>
+    <section data-api="gyroscope-sensor" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Gyroscope Sensor API</em>
+      </h1>
+    </section>
+    <section data-api="ambient-light-api" class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Ambient Light API</em>
+      </h1>
+    </section>
+    <section data-api="ambient-light" class="display code">
+      <pre><code>window.addEventListener(<span class="string">'devicelight'</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+  <span class="comment">// Get the ambient light level in lux.</span>
+  <span class="comment">// < 400 lux (indoors)</span>
+  <span class="comment">// 400 - 1000 lux (office lighting)</span>
+  <span class="comment">// > 1000 lux (outdoors)</span>
+  console.info(<span class="parameter">event</span>.value);
+});
+        </code></pre>
+    </section>
+    <section data-api="ambient-light" class="code display">
+      <pre><code><span class="faded">window.addEventListener(<span class="string">'devicelight'</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+  <span class="comment">// Get the ambient light level in lux.</span>
+  <span class="comment">// < 400 lux (indoors)</span>
+  <span class="comment">// 400 - 1000 lux (office lighting)</span>
+  <span class="comment">// > 1000 lux (outdoors)</span>
+  console.info(event.value);
+});</span>
+
+window.addEventListener(<span class="string">'lightlevel'</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+  <span class="comment">// Either dim, normal or bright.</span>
+  console.info(event.value);
+});
+      </code></pre>
+    </section>
+    <section data-api="ambient-light" class="display code">
+      <pre><code><s>window.addEventListener(<span class="string">'devicelight'</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+  <span class="comment">// Get the ambient light level in lux.</span>
+  <span class="comment">// < 400 lux (indoors)</span>
+  <span class="comment">// 400 - 1000 lux (office lighting)</span>
+  <span class="comment">// > 1000 lux (outdoors)</span>
+  console.info(event.value);
+});</s>
+
+<s>window.addEventListener(<span class="string">'lightlevel'</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+  <span class="comment">// Either dim, normal or bright.</span>
+  console.info(event.value);
+});</s>
+      </code></pre>
+    </section>
+    <section data-api="ambient-light" class="code display">
+      <pre><code>let <var>sensor</var> = new AmbientLightSensor();
+
+<var>sensor</var>.start();
+    
+<var>sensor</var>.addEventListener(<span class="string">"change"</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+    console.log(event.reading.illuminance);
+});
+
+<var>sensor</var>.addEventListener(<span class="string">"error"</span>, <span class="function">function</span>(<span class="parameter">event</span>) {
+    console.error(<span class="string">`
+        <var>${event.error.name}</var>,
+        <var>${event.error.message}</var>
+    `</span>);
+});
+      </code></pre>
+    </section>
+    <section class="display quote">
+      <figure>
+	 <cite>http://alistapart.com/article/building-nonlinear-narratives-for-the-web</cite>
+	<blockquote>Either route offers a way to twist or fragment the story, to add layers to the central narrative- to transform the original Tiv tale into a nonlinear, more nuanced, and limked experience, much closer to how the web itself works. <br/> I want to do that for Pixel Fable, and I want to show you how to do
+   it, too. That means venturing beyond our basic scrolly-telling. But
+   first, let’s take a deeper look at what nonlinear stories do.
+	</blockquote>
+	<figcaption>Senongo Akpem</figcaption>
+      </figure>
+    </section>
+    <section data-api="ambient-light" class="display">
+      <h1>Support</h1>
+      <div class="support">
+	<img class="some-support" src="./assets/firefox_logo.svg" alt="Firefox Logo" />
+	<img class="no-support" src="./assets/chrome_logo.svg" alt="Chrome Logo" />
+	<img class="no-support" src="./assets/opera_logo.svg" alt="Opera Logo" />
+	<img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" />
+	<img class="some-support" src="./assets/edge_logo.svg" alt="Edge Logo" />
+	<img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+      </div>
+    </section>
+    <section class="display">
+      <h1>
+	<span class="faded">Enhancing Mobile Web Applications with the</span>
+	<em>Vibration API</em>
+      </h1>
+    </section>
+    <section data-api="vibration" class="code display">
+      <pre><code><span class="navigator">navigator</span>.vibrate( 1000 );</code></pre>
+    </section>
+    <section data-api="vibration" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.vibrate( 1000 );</span>
+
+<span class="navigator">navigator</span>.vibrate([1000]);
+      </code></pre>
+    </section>
+    <section data-api="vibration" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.vibrate( 1000 );
+
+<span class="navigator">navigator</span>.vibrate([1000]);</span>
+    
+<span class="comment">// cancel!</span>
+<span class="navigator">navigator</span>.vibrate(0);
+
+<span class="navigator">navigator</span>.vibrate([]);</code></pre>
+    </section>
+    <section data-api="vibration" class="code display">
+      <pre><code><span class="faded"><span class="navigator">navigator</span>.vibrate( 1000 );
+
+<span class="navigator">navigator</span>.vibrate([1000]);
+    
+<span class="comment">// cancel!</span>
+<span class="navigator">navigator</span>.vibrate(0);
+
+<span class="navigator">navigator</span>.vibrate([]);</span>
+
+<span class="comment">// vibrating patterns!!</span>
+<span class="navigator">navigator</span>.vibrate([1000, 50, 2000]);</code></pre>
+    </section>
+    <section data-api="vibration" class="display">
+      <h1>Support</h1>
+      <div class="support">
+	<img src="./assets/firefox_logo.svg" alt="Firefox Logo" />
+	<img src="./assets/chrome_logo.svg" alt="Chrome Logo" />
+	<img src="./assets/opera_logo.svg" alt="Opera Logo" />
+	<img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" />
+	<img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" />
+	<img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+      </div>
+    </section>
+    <section data-api="network-information">
+      <h1>Network Information API</h1>
+    </section>
+    <section data-api="network-information" style="display:none;">
+      <h1><code><span class="navigator">navigator</span>.connection</code></h1>
+    </section>
+    <section data-api="network-information">
+      <header>
+      </header>
+      <section>
+        <!--<h1><code><span class="navigator">navigator</span>.connection.type</code></h1>-->
+        <ul>
+          <li>bluetooth</li>
+          <li>cellular</li>
+          <li>ethernet</li>
+          <li>none</li>
+          <li>wifi</li>
+          <li>wimax</li>
+          <li>other</li>
+          <li>unknown</li>
+        </ul>
+      </section>
+    </section>
+    <section data-api="network-information" style="display: none;">
+      <section>
+        <h1><code>navigation.connection.downlinkMax</code></h1>
+        <h2>Maximum download speed in megabits per second (MB/s)</h2>        
+      </section>
+    </section>
+    <section data-api="network-information" class="code">
+      <pre><code>
+<span class="navigator">navigator</span>.connection.addEventListener('change', handleNetworkTypeChange());
+      </code></pre>
+    </section>
+    <section data-api="network-information">
+      <header>
+        <h1>Support</h1>        
+      </header>
+      <section>
+        <section class="support"><img class="some-support" src="./assets/firefox_logo.svg" alt="Firefox Logo" /><img src="./assets/chrome_logo.svg" alt="Chrome Logo" /><img class="some-support" src="./assets/opera_logo.svg" alt="Opera Logo" /><img class="no-support" src="./assets/safari_logo.svg" alt="Safari Logo" /><img class="no-support" src="./assets/edge_logo.svg" alt="Edge Logo" /><img class="no-support" src="./assets/internet_explorer.png" alt="Internet Explorer Logo" />
+        </section>
+      </section>
+    </section>
+    <section>
+      <h2>Web Bluetooth</h2>
+      <h2>Web NFC (Near Field Communication)</h2>
+      <h2>Web VR</h2>
+      <h2>Game Pad API</h2>
+    </section>
+  </body>
+</html>

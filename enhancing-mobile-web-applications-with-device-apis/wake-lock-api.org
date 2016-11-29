@@ -1,0 +1,61 @@
+* Wake Lock API
+** [[https://www.w3.org/TR/wake-lock/][Wake Lock API]]
+   - Working Draft 16 March 2016
+   - Prevent aspect of device from entering power saving state
+   - E.g. turning off the screen
+   - Allows web applications to request a wake lock
+   - Working draft
+*** Examples
+      #+BEGIN_SRC js
+// request to keep the display awake when the recipe is showing:
+screen.keepAwake = true;
+
+// stop keeping the display awake:
+screen.keepAwake = false;
+  
+  #+END_SRC
+*** Wake Lock
+    - only deals with screen wake lock.
+    -
+*** Extension to Screen interface
+    -
+*** Requesting Wake Locks
+    - Each browsing context has a request flag for the wake lock.
+    - Set to false to cancel.
+    - Can only request - you would not get an error.
+    - 
+    -
+*** Managing Wake Locks
+    - Browser requests the operating system to apply the lock.
+    - Browser requests the operating system to release the lock.
+    - Browsing context is only relevant with its visible
+    - For a user:
+      - browser tab / window is closed
+      - change tabs
+      - browser minimised
+      - navigate or reload page
+      - wake lock applies again if the keepAwake attribute is still true
+*** Additional lock types
+    - E.g. prevent cpu, radio, etc from entering power saving state,
+      whilst letting the screen switch off.
+** [[https://www.w3.org/TR/wake-lock-use-cases/][Wake Lock: Use cases]]
+   - 14 August 2014 - W3C Interest Group Note
+   -
+*** Keeping the screen awake
+    - Flashlight
+    - Cooking recipes
+    - Navigate to a destination
+    - reading an e-book
+    - touch enabled signage
+*** Keeping the system awake
+    - Display uses a large amount of power - prolong battery life of a
+      device
+    - applications should not necessarily stop running -
+      e.g. attaching large files to an email
+** Misc
+   - Since the API extends the Screen interface defined by the CSS WG
+     in the CSSOM View module, the CSS WG might wish to confirm this
+     extension is in-line with the design of the interface.
+   - Likewise, since the API relies on the Page Visibility state
+     defined by the WebPerf WG, that group might wish to comment on
+     the proper usage of that signal. 

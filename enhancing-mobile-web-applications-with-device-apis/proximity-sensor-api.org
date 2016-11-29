@@ -1,0 +1,365 @@
+* Proximity Sensor API
+** Main
+   - Won't spend much time on this. It's only implemented in Firefox,
+     and the current spec is most likely going to change to reflect
+     the Generic Sensor API.
+** Support
+   - Firefox 15+
+   - Australia: 6.69%
+   - Global: 8.14%
+** [[https://www.w3.org/TR/proximity/][Proximity Events]] W3C Working Draft 03 September 2015
+   - will be updated to Generic Sensor API
+** [[https://www.sitepoint.com/introducing-proximity-api/][Introducing the Proximity API]]
+   - defines events that provide information about the distance and an
+     object measured by a proximity sensor
+   - reached W3C candidate recommendation 1st October 2013
+   - used to save battery - phone near ear, turn off screen
+   - use case: listening to music, use a gesture to turn off music
+   - events
+     - fire on the window object
+     - deviceproximity
+       - provides information about the distance between the hosting
+         device and a nearby object
+       - event properties
+         - value: represents proximity of device in centimetres
+         - min: minimum distance the sensor can detect
+         - max: maximum distance the sensor can detect
+     - userproximity
+       - specifies if device has sensed a nearby object
+       - properties
+         - near: boolean specifying if an object is close enough to
+           the device
+         - close enough: object is within the detectable range for the
+           specific device
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('deviceproximity', function(event) {
+   console.log('An object is ' + event.value + ' centimeters far away');
+});
+     #+END_SRC
+   - support
+     - Firefox mobile / desktop 15+
+     - code
+       #+BEGIN_SRC js
+       if ('ondeviceproximity' in window) {
+   // API supported. Don't get too close, I can feel you
+} else {
+   // API not supported
+}
+       #+END_SRC
+   - demo
+     #+BEGIN_SRC html
+     <!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <meta name="author" content="Aurelio De Rosa">
+      <title>Proximity API Demo by Aurelio De Rosa</title>
+      <style>
+         *
+         {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+         }
+
+         body
+         {
+            max-width: 500px;
+            margin: 2em auto;
+            padding: 0 0.5em;
+            font-size: 20px;
+         }
+
+         h1
+         {
+            text-align: center;
+         }
+
+         .api-support
+         {
+            display: block;
+         }
+
+         .hidden
+         {
+            display: none;
+         }
+
+         .value
+         {
+            font-weight: bold;
+         }
+
+         .author
+         {
+            display: block;
+            margin-top: 1em;
+         }
+      </style>
+   </head>
+   <body>
+      <h1>Proximity API</h1>
+
+      <span id="dp-unsupported" class="api-support hidden">deviceproximity event not supported</span>
+      <span id="up-unsupported" class="api-support hidden">userproximity event not supported</span>
+
+      <ul>
+         <li>
+            An object is at a distance of <span id="dp-value" class="value">null</span> centimeters
+            (within a detectable range of <span id="dp-min" class="value">null</span> -
+            <span id="dp-max" class="value">null</span> centimeters).
+         </li>
+         <li>
+            Object close to the device? <span id="up-value" class="value">unavailable</span>
+         </li>
+      </ul>
+
+      <small class="author">
+         Demo created by <a href="http://www.audero.it">Aurelio De Rosa</a>
+         (<a href="https://twitter.com/AurelioDeRosa">@AurelioDeRosa</a>).<br />
+         This demo is part of the <a href="https://github.com/AurelioDeRosa/HTML5-API-demos">HTML5 API demos repository</a>.
+      </small>
+
+      <script>
+         if (!('ondeviceproximity' in window)) {
+            document.getElementById('dp-unsupported').classList.remove('hidden');
+         } else {
+            var proximityValue = document.getElementById('dp-value');
+            var proximityMax = document.getElementById('dp-max');
+            var proximityMin = document.getElementById('dp-min');
+
+            window.addEventListener('deviceproximity', function(event) {
+               proximityValue.innerHTML = event.value;
+               proximityMax.innerHTML = event.max;
+               proximityMin.innerHTML = event.min;
+            });
+         }
+
+         if (!('onuserproximity' in window)) {
+            document.getElementById('up-unsupported').classList.remove('hidden');
+         } else {
+            var inProximity = document.getElementById('up-value');
+
+            window.addEventListener('userproximity', function(event) {
+               inProximity.innerHTML = event.near;
+            });
+         }
+      </script>
+   </body>
+</html>
+     #+END_SRC
+
+** [[http://blog.teamtreehouse.com/exploring-javascript-device-apis]]
+   - Feed back data about objects that are close to the device
+   - Two events
+     - DeviceProximityEvent
+       - more accurate
+       - provides data about the distance an object is from the device
+         and the sensor's field of view
+     - UserProximityEvent
+       - provides a boolean attribute, near
+       - indicates if an object is close to the device or not
+   #+BEGIN_SRC js
+     // An event listener for a DeviceProximityEvent.
+     window.addEventListener('deviceproximity', function(event) {
+         // The maximum distance the sensor covers (in cm).
+         var max = event.max;
+
+         // The minimum distance the sensor covers (in cm).
+         var min = event.min;
+
+         // The device proximity (in cm).
+         var proximity = event.value;
+     });
+
+     // An event listener for a UserProximityEvent.
+     window.addEventListener('userproximity', function(event) {
+         if (event.near) {
+             // Do something.
+         } else {
+             // Do something else.
+         }
+     });
+   #+END_SRC
+** [[http://www.webondevices.com/9-javascript-apis-accessing-device-sensors/][9 JavaScript APIs Accessing Device Sensors]]
+   - proximity sensor found on front of device generally
+   - uses measurements to know when you put your phone against your
+     ear, or when you reach towards it
+   - can tell the distance
+   - supported in Firefox
+     #+BEGIN_SRC js
+       if('ondeviceproximity' in window) {
+           // Fired when object is in the detection zone
+           window.addEventListener('deviceproximity', function(event) {
+               // Object distance in centimeters 
+               console.log(event.value + " centimeters");
+           });
+       } else {
+           console.log("deviceproximity not supported");
+       }
+
+       if('ondeviceproximity' in window){
+           // Fired when object is in the detection zone
+           window.addEventListener('userproximity', function(event) {
+               if(event.near == true) {
+                   console.log("Object is near");
+               } else {
+                   console.log("Object is far");
+               }
+           });
+       } else {
+           console.log("userproximity not supported");
+       }
+     #+END_SRC
+** HTML5 Mobile Hardware
+   - http://www.girliemac.com/presentation-slides/html5-mobile-approach/deviceAPIs.html#27
+   - distance of a nearby physical object using the proximity sensor
+     of a device
+   - deviceproximity and userproximity events
+     - occur when the sensor detects something closer or further from
+       the device
+   - code
+     #+BEGIN_SRC js
+       window.addEventListener('deviceproximity', function(e) {
+           alert(e.value);
+       });
+     #+END_SRC
+
+** [[https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/][Using WebAPIs to make the web layer more capable &#x2605; Mozilla Hacks – the...]]
+   - see how close device is to another object
+   - code
+     #+BEGIN_SRC js
+window.addEventListener("deviceproximity", function (event) { 
+    // Current device proximity, in centimeters 
+    console.log(event.value); 
+ 
+    // The maximum sensing distance the sensor is  
+    // able to report, in centimeters 
+    console.log(event.max); 
+ 
+    // The minimum sensing distance the sensor is  
+    // able to report, in centimeters 
+    console.log(event.min); });
+     #+END_SRC
+
+** [[http://www.sitepoint.com/5-javascript-apis-empower-mobile-web-pages/][5 JavaScript APIs to Empower Your Mobile Web Pages]]
+   - detect proximity of an object to the device
+   - distance measured by proximity sensor
+   - no properties or methods
+   - fires events on window object
+   - deviceproximity: information about the distance between device
+     and a nearby object
+   - userproximity: specifies when an object is nearby
+   - code
+     #+BEGIN_SRC js
+     if ('ondeviceproximity' in window) {
+   // API supported
+} else {
+   // Not supported
+}
+
+window.addEventListener('userproximity', function(event) {
+   console.log( (event.near ? '' : 'no ') + 'object detected nearby');
+});
+     #+END_SRC
+
+** [[http://alistapart.com/article/environmental-design-with-the-device-api][Environmental Design with the Device API · An A List Apart Article]]
+   - enables near field communication
+   - detect nearby objects enabled with NFC information
+   -
+** [[https://developer.mozilla.org/en-US/docs/Web/API/Proximity_Events][Proximity Events - Web APIs | MDN]]
+   - e.g. shut down screen during voice calls
+   - device proximity sensor detects change between the device and an
+     object, then notifies the browser
+   - fires a DeviceProximityEvent for changes
+   - fires UserProximityEvent for rough change(?)
+   - captured at the window level
+   - listen for either deviceproximity or userproximity
+   - DeviceProximityEvent
+     - value: provides exact match for distance between device and
+       object
+       - in cm: float
+     - min/max: closest/furthest distance the device can detect
+       - 0 if not available
+       - float in cm
+       - min usually zero
+
+   - UserProximityEvent
+     - expressed through boolean
+     - rough approximation of distance
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('userproximity', function(event) {
+  if (event.near) {
+    // let's power off the screen
+    navigator.mozPower.screenEnabled = false;
+  } else {
+    // Otherwise, let's power on the screen
+    navigator.mozPower.screenEnabled = true;
+  }
+});
+     #+END_SRC
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('deviceproximity', function(event) {
+  console.log("value: " + event.value, "max: " + event.max, "min: " + event.min);
+});
+     #+END_SRC
+** [[https://hacks.mozilla.org/2013/06/the-proximity-api/][The Proximity API &#x2605; Mozilla Hacks – the Web developer blog]]
+   - code
+     #+BEGIN_SRC js
+     window.ondeviceproximity = function (event) {
+    // Check proximity, in centimeters
+    var prox = "<strong>Proximity: </strong>" + event.value + " cm<br />";
+        prox += "<strong>Min value supported: </strong>" + event.min + " cm<br />";
+        prox += "<strong>Max value supported: </strong>" + event.max + " cm";
+    proximityDisplay.innerHTML = prox;
+};
+     #+END_SRC
+   - sensors can generally return between 0 - 5, 0 - 10 cm
+   - code
+     #+BEGIN_SRC js
+     window.onuserproximity = function (event) {
+    // Check user proximity
+    var userProx = "<strong>User proximity - near: </strong>" + event.near + "<br />";
+    userProximityDisplay.innerHTML = userProx;
+};
+     #+END_SRC
+
+** [[https://developer.mozilla.org/en-US/Apps/Fundamentals/gather_and_modify_data/Near_or_far_responding_to_proximity][Near or far? Responding to proximity - App Center | MDN]]
+   - often implemented as a light sensor chip
+   - some sensors only support binary near or not near measurement
+     values
+   - userProximityEvent
+     #+BEGIN_SRC js
+     window.onuserproximity = function(event) {
+  console.log(event.near);  // current user proximity state (boolean)
+});
+     #+END_SRC
+   - DeviceProximityEvent
+     #+BEGIN_SRC js
+     window.ondeviceproximity = function(event) {
+  console.log(event.value); // current device proximity (cm)
+  console.log(event.max);   // maximum sensing distance (cm)
+  console.log(event.min);   // minimum sensing distance (cm)
+});
+     #+END_SRC
+   - ProximityManager
+
+** [[https://hacks.mozilla.org/2015/04/mobile-game-development-with-the-device-orientation-and-vibration-apis/][Mobile game development with the Device Orientation and Vibration APIs &#x260...]]
+   - code
+     #+BEGIN_SRC js
+     window.addEventListener('deviceproximity', function(event) {
+    if(event.value < 20) {
+        // something is closer than 20 centimeters to the sensor, make action
+    }
+});
+
+window.addEventListener('userproximity', function(event) {
+    if(event.near) {
+        // something is near the sensor, perform action
+    }
+});
+     #+END_SRC

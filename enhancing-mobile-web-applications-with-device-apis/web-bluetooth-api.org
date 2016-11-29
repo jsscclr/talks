@@ -1,0 +1,543 @@
+* Web Bluetooth API
+** What?
+*** Web Bluetooth API
+    - An API that allows web developers to discover and communicate
+      with devices over the Bluetooth 4 wireless standard using the
+      Generic Attribute Profile (GATT).
+    - It is *not* a W3C Standard.
+    - The first version allows web pages to connect to GATT Servers,
+      either other a BR/EDR or Low Energy connection.
+    - The User Agent runs in the Central role.
+    - The specification requires a user gesture for a website to
+      trigger a scan.
+    - Enables:
+      - scan for and connect to nearby Bluetooth devices
+      - read / write Bluetooth characteristics
+      - receive GATT Notifications
+      - Know when a Bluetooth device gets disconnected
+    - The Web Bluetooth API specification allows websites, running in
+      the Central role, to connect to remote GATT Servers over a
+      Bluetooth Low Energy Connection.
+    - 
+*** Bluetooth
+    - Bluetooth is a standard for short-range wireless communication
+      between devices.
+    - A Bluetooth device will use the same value for the BD_ADDR and
+      the Public Device Address, as specified in the Rad BD_ADDR
+      Command.
+    - Each Bluetooth device has a human-readable Bluetooth Device Name.
+    - The Bluetooth Device Name is not guaranteed to be unique. 
+**** Bluetooth "Classic" (BR/EDR)
+     - Bluetooth "Classic" (BR/EDR) defines a set of binary protocols.
+     - Bluetooth "Classic" (BR/EDR) supports speeds up to ~24Mbps.
+     - Each Bluetooth BR/EDR device has a BR_ADDR: a unique 48-bit MAC
+       address.     
+**** Bluetooth Low Energy (BLE)
+     - Bluetooth 4.0 introduced the Bluetooth Low Energy mode.
+     - Bluetooth Low Energy supports speeds up to ~1Mbps.
+     - Bluetooth Low Energy allows devices to leave their transmitters
+       off most of the time.
+     - Bluetooth Low Energy functionality is mostly provided by the
+       key/value pairs provided by the Generic Attribute Profile
+       (GATT).
+     - Each Bluetooth Low Energy device has least one of a:
+       - Public Device Address
+       - Static Device Address
+     - Public Device Address
+       - The Public Device Address is a MAC address.
+     - Static Device Address
+       - The Static Device Address may be regenerated on each restart.
+     - A Bluetooth Low Energy device may have a unique, 128-bit
+       Identity Resolving Key.
+       - An Identity Resolving Key is sent to trusted devices during
+         the bonding process.
+     - To avoid leaking a persistent identifier, a Bluetooth Low
+       Energy device may scan and advertise using a random Resolvable
+       or Non-Resolvable Private Address, instead of its Static or
+       Public Address.
+       - The random Resolvable or Non-Resolvable Private Addresses are
+         regenerated periodically, approximately every 15 minutes.
+       - A bonded device can check whether one of its Identity
+         Resolving Keys matches any given Resolvable Private Address,
+         using the Resolvable Private Address Resolution Procedure.
+     - 
+**** Roles      
+     - Bluetooth Low Energy defines roles for devices.
+***** Broadcaster      
+      - The Broadcaster role is for transmitter-only applications.
+***** Observer
+      - The Observer role is for receiver-only applications.
+***** Peripheral
+      - The Peripheral role allows devices to receive connections.
+      - The Peripheral role permits devices to host a GATT Server.
+***** Central
+      - The Central role allows devices to connect to Peripheral
+        devices.
+      - The Central role permits devices to host a GATT Server.
+
+**** GATT Server
+     - The GATT Server exposes a hierarchy of Services,
+       Characteristics, and Descriptors.
+     - The GATT Server holds the service and characteristic
+       definitions.
+     - The GATT protocol was designed to support BLE transport.
+     - The GATT protocol can run over BR/EDR transport.
+***** Characteristic
+      - GATT's Characteristic value is a byte array.
+      - A byte array may be set to lengths and formats the device does
+        not expect.
+***** Descriptor
+      - GATT's Descriptor value is a byte array.
+      - A byte array may be set to lengths and formats the device does
+        not expect.
+** How?
+*** Example 1
+    #+BEGIN_SRC js
+      let chosenHeartRateService = null;
+
+      navigator
+          .bluetooth
+          .requestDevice({
+              filters: [{
+                  services: [ 'heart_rate' ]
+              }]
+          })
+          .then(device => device.gatt.connect())
+          .then(server => server.getPrimaryService('heart_rate'))
+          .then(service => {
+              chosenHeartRateService = service;
+              return Promise.all([
+                  service
+                      .getCharacteristic('body_sensor_location')
+                      .then(handleBodySensorLocationCharacteristic),
+                  service
+                      .getCharacteristic('heart_rate_measurement')
+                      .then(handleHeartRateMeasurementCharacteristic)
+             ])
+          })
+
+      function handleBodySensorLocationCharacteristic(characteristic) {
+          if (characteristic === null) {
+              console.info(`Unknown sensor location.`)
+              return Promise.resolve();
+          }
+          return characteristic
+              .readValue()
+              .then(sensorLocationData => {
+                  let sensorLocation = sensorLocationData.getUint8(0);
+                  switch (sensorLocation) {
+                  case 0: return `Other`;
+                  case 1: return `Chest`;
+                  case 2: return `Wrist`;
+                  case 3: return `Finger`;
+                  case 4: return `Hand`;
+                  case 5: return `Ear Lobe`;
+                  case 6: return `Foot`;
+                  default: return `Unknown`;
+                  }
+              }).then(location => console.info(`Location is ${location}.`));
+      }
+
+      function handleHeartRateMeasurementCharacteristic(characteristic) {
+          return characteristic
+              .startNotifications()
+              .then(char => {
+                  characteristic
+                      .addEventListener(
+                          'characteristicvaluechanged',
+                          onHeartRateChanged
+                      );
+              });
+      }
+
+      function onHeartRateChanged(event) {
+          let characteristic = event.target;
+          console.log(parseHeartRate(characteristic.value));
+      }
+
+      function parseHeartRate(data) {
+          let littleEndian = true;
+          let flags = data.getUint8(0);
+          let rate16Bits = flags & 0x1;
+          let result = {};
+          let index = 1;
+          if (rate16Bits) {
+              result.heartRate = data.getUint16(index, littleEndian);
+              index += 2;
+          }
+          let contactDetected = flags & 0x2;
+          let contactSensorPresent = flags & 0x4;
+          if (contactSensorPresent) {
+              result.contactDetected = !!contactDetected;
+          }
+
+          let energyPresent = flags & 0x9;
+          if (energyPresent) {
+              result.energyExpended = data.getUint16(index, littleEndian);
+              index += 2;
+          }
+
+          let rrIntervalPresent = flags & 0x10;
+          if (rrIntervalPresent) {
+              let rrIntervals = [];
+              for (; index + 1 < data.byteLength; index += 2 ) {
+                  rrIntervals.push(data.getUint16(index, littleEndian));
+              }
+              result.rrIntervals = rrIntervals;
+          }
+          return result;
+      }
+
+      function resetEnergyExpended() {
+          if (!chosenHeartRateService) {
+              return Promise.reject(new Error('No heart rate sensor selected yet.'));
+          }
+          return chosenHeartRateService
+              .getCharacteristic('heart_rate_control_point')
+              .then(controlPoint => {
+                  let resetEnergyExpended = new Uint8Array([ 1 ]);
+                  return controlPoint.writeValue(resetEnergyExpended);
+              });
+      }
+    #+END_SRC
+*** Example 2
+    #+BEGIN_SRC js
+    // User will be shown a dialog containing devices D1 and D2.
+    // If the user selects D1, the website will not be able to access 
+    // services C or D.
+    // If the user selects D2, the website will not be able to access
+    // service E.
+    navigator.bluetooth.requestDevice({
+      filters: [{ services: [ A, B ] }]
+    })
+    #+END_SRC
+*** Example 3
+    - Scanning for Bluetooth devices advertising the Bluetooth GATT
+      Battery Service
+      #+BEGIN_SRC js
+      navigator.bluetooth.requestDevice({ 
+        filters: [{ services: ['battery_service'] }]
+      }).then(device => { /* */ })
+        .catch(error => { console.error(error); });
+      #+END_SRC
+*** Example 4
+    - Scanning for Bluetooth devices with the full Bluetooth UUID or a
+      short 16-bit or 32-bit form.
+      #+BEGIN_SRC js
+      navigator.bluetooth.requestDevice({
+        filters: [{
+          services: [
+            0x1234, 
+            0x12345678, 
+            '99999999-0000-1000-8000-00805f9b34fb'
+          ]
+        }]
+      }).then(device => { /* ... */ })
+        .catch(error => { console.error(error) });
+      #+END_SRC
+*** Example 5
+    - Use of name filters key.
+      #+BEGIN_SRC js
+        navigator.bluetooth.requestDevice({
+            filters: [{
+                name: 'Jessica'
+            }],
+            optionalServices: [ 'battery_service' ]
+        }).then(device => { /* ... */ })
+            .catch(error => { console.error(error); });
+      #+END_SRC
+*** Example 6
+    - Connect to the Bluetooth remote GATT Server.
+      #+BEGIN_SRC js
+      navigator.bluetooth.requestDevice({
+        filters: [{ services: ['battery_service'] }]
+      }).then(device => {
+        // Human-readable name of the device
+        console.info(device.name);
+
+        // Attempts to connect to remote GATT Server
+        return device.gatt.connect();
+      }).then(server => { /* ... */ })
+        .catch(error => { console.error(error) });
+      #+END_SRC
+** Device Discovery
+*** WebIDL
+    #+BEGIN_SRC cpp
+      dictionary BluetoothDataFilterInit {
+        BufferSource dataPrefix;
+        BufferSource mask;
+      };
+
+      dictionary BluetoothLEScanFilterInit {
+        sequence<BluetoothServiceUUID> services;
+      }
+    #+END_SRC
+** Bluetooth
+*** methods
+**** requestDevice(options)
+***** about
+      - To match a filter, the device has to:
+        - support all the GATT service UUIDs in the services list if
+          that member is present,
+        - have a name equal to name if that member is present,
+        - have a name starting with namePrefix if that member is
+          present,
+        - advertise manufacturer specific data matching all of the key
+          / value pairs in manufacturerData if that member is present,
+          and
+        - advertise service data matching all of the key/value pairs in
+          serviceData if that member is present.
+      - Both Manufaturer Specific Data and Service Data map a key to an
+        array of bytes.
+      - BluetoothDataFilterInit filters these arrays.
+      - An array matches if it has a prefix such that prefix and mask
+        is equal to dataPrefix and mask.
+      - If a device changes its behaviour significantly when it
+        connects, for example by not advertising its identifying
+        manufacturer data anymore and instead having the client
+        discover some identifying GATT services, the website may need
+        to include filters for both behaviours.
+      - After the user selects a device to pair with this origin, the
+        origin is allowed to access any service whose UUID was listed
+        in the services list in any element of options.filters or in
+        options.optionalServices.
+      - If developers filter just by name, they must use
+        optionalServices to get access to any services.
+      - Websites request access to devices using requestDevice().
+      - When a website requests access to devices using requestDevice(),
+        it can access all GATT services mentioned in the call.
+      - Returns a Promise that resolves to a BluetoothDevice.
+***** User Gesture Required
+      - Discovering nearby Bluetooth devices with
+        navigator.bluetooth.requestDevice() must be called via a user
+        gesture.
+      - A user gesture includes a touch or mouse click.
+***** Prompt
+      - User Agents will prompt the user with a device chooser.
+      - The device chooser allows them to pick one device, or cancel
+        the request.
+      -
+***** options
+      - The options Object is mandatory.
+      - requestDevice(options) asks the user to grant the origin
+        access to a device that matches any filters in
+        options.filters.
+      - In rare cases, a device may not advertise enough distinguishing
+        information to let a site filter out uninteresting devices. In
+        these cases, a site can set acceptAllDevices to true and omit
+        all filters.
+        - This puts the burden of selecting the right device entirely
+          on the site's users.
+        - If a site uses acceptAllDevices, it will only be able to use
+          services listed in optionalServices.
+****** options.filter
+       - The options Object defines filters.
+       - Filters are used to return devices that match some of the
+         advertised Bluetooth GATT services and/or the device name.
+       - If the Bluetooth GATT Service required is not on the list of
+         standardised Bluetooth GATT services, you can provide the
+         full Bluetooth UUID, or a short 16-bit or 32-bit form.
+******* options.filter.name
+        - You can scan for Bluetooth devices based on its advertised
+          device name using the name key.
+        - When using the namePrefix filters key, you require the
+          optionalServices key to be able to access some services.
+******* options.filter.namePrefix
+        - This can be used to search for prefix of this name.
+        - When using the namePrefix filters key, you require the
+          optionalServices key to be able to access some services.
+****** options.optionalServices
+       - Takes an array.
+**** navigator.bluetooth.getAvailability()
+     - getAvailability informs the page whether Bluetooth is available
+       at all.
+     - If an adapter is disabled through software, it is considered
+       available.
+     - The getAvailability() method exposes whether a Bluetooth radio
+       is available on the user's system.
+     - This function returns a Promise.
+     -
+*** Events
+**** availabilitychanged
+     - Changes in availability are reported through the
+       availabilitychanged event.
+     - Example: when the user physically attaches or detaches an
+       adapter.
+*** Properties
+**** referringDevice
+     - referringDevice gives access to the device from which the user
+       opened the page, if any.
+     - For example, an Eddystone beacon may advertise a URL, which the
+       User Agent allows the user to open.
+     - A BluetoothDevice representing the beacon would be available
+       through navigator.bluetooth.referringDevice.
+     - 
+** Considerations
+   - This specification requires that only secure contexts can access
+     Bluetooth devices via requestDevice().
+   - Secure contexts helps ensure that only the entity the user
+     approved for access actually has access.
+** Issues
+*** Security and privacy considerations
+**** Device access is powerful
+**** Trusted servers can serve malicious code
+     - Even if the user trusts an origin, the origin's servers and/or
+       developers may be compromised, or the origin's site could be
+       vulnerable to XSS attacks.
+     - This can lead to users granting malicious code access to
+       valuable devices.
+     - Origins should define a Content Security Policy to reduce the
+       risk of XSS attacks.
+     - The ability to retrieve granted devices after a page reload,
+       provided by the Permission API Integration, increases this
+       risk.
+     - Attackers can take advantage of previously-granted devices if
+       the user simply visits while the site is compromised.
+     - When sites keep access to devices across page reloads, they do
+       not have to show as many permission prompts overall,
+       increasingly the likelihood that users will pay attention to
+       the prompts they do see.
+**** Attacks on devices
+     - Communication from websites can break the security model of
+       some devices, which assume they only receive messages from the
+       trusted operating system of a remote device.
+     - Human Interface Devices
+       - This allows a website allowed to communicate to log
+         keystrokes.
+     - The specification includes a GATT blacklist of vulnerable
+       services, characteristics, and descriptors, to prevent websites
+       from taking advantage of them.
+     - It is expected that many devices are vulnerable to unexpected
+       data delivered to their radio.
+     - Previously, devices had to be exploited one-by-one.
+     - This API makes conducting large-scale attacks plausible.
+     - The specification introduces approaches to make large-scale
+       attacks more difficult.
+     - Restrictions
+       - Pairing individual devices instead of device classes requires
+         at least a user action before a device can be exploited.
+       - Access is constrained to GATT, as opposed to generic
+         byte-stream access. This denies malicious websites access to
+         most parsers on the device.
+         - GATT's Characteristic and Descriptor values are still byte
+           arrays, which may be set to lengths and formats the device
+           does not expect.
+         - User Agents are encouraged to validate the Characteristic
+           and Descriptor values, as they are byte arrays, which may
+           be set to lengths and formats the device does not expect.
+       - Bluetooth addressing, data signing or encryption keys are
+         never exposed via the Web Bluetooth API.
+         - This makes it difficult for a website to predict the bits
+           that will be sent over the radio, which blocks
+           packet-in-packet injection attacks.
+         - This only works over encrypted links.
+         - Not all BLE devices are required to support encrypted
+           links.
+     - User Agents can take further steps to protect their users. A
+       web service may collect lists of malicious websites and
+       vulnerable devices.
+       - User Agents can deny malicious websites access to any device,
+         and any website access to vulnerable devices.
+***** User Agent
+      - When a website requests access to devices, the User Agent
+        *must* inform the user what capabilities GATT services provide
+        the website before asking which devices to entrust these
+        capabilities to.
+      - If the User Agent does not know any of the services in the
+        list, the User Agent *must* assume they give the site complete
+        control over the device, and inform the user of the risk.
+      - The User Agent *must* allow the user to inspect what sites have
+        access to what devices.
+      - The User Agent *must* allow users to revoke bluetooth pairings.
+      - The User Agent *must not* allow the user to pair entire classes
+        of devices with a website, as it is possible to construct a
+        class of devices for which each individual device sends the same
+        Bluetooth-level identifying information.
+      - User Agents are not required to attempt to detect possible
+        forgery, and *may* let a user pair a pseudo-device with a
+        website.
+**** Bluetooth device identifiers
+***** Identifiers for remote Bluetooth devices
+      - If a website can retrieve any of the persistent device IDs,
+        they can be used in combination with a large effort to catalog
+        ambient devices to discover a user's location.
+      - A device ID can be used to identify that a user who pairs two
+        different websites with the same Bluetooth device is a single
+        user.
+      - Many GATT srevices are available that can be used to
+        fingerprint a device.
+      - A device can easily expose a custom GATT service to make
+        fingerprinting easier.
+      - The specification suggests that the User Agent use different
+        device IDs for a single device when its user does not intend
+        scripts to learn it is a single device.
+      - This makes it difficult for websites to abuse the device
+        address.
+      - Device makers can still design their devices to help track
+        users.
+***** The User Agent's Bluetooth address
+      - In BR/EDR mode, or in LE mode during active scanning without
+        the Privacy Feature, the User Agent broadcasts its persistent
+        ID to any nearby Bluetooth radio.
+      - This makes it easy to scatter hostile devices in an area and
+        track the User Agent.
+      - As of 2014-08, few or no platforms document that they
+        implement the Privacy Feature. This means it is unlikely for
+        User Agents to use it.
+      -
+***** Exposing Bluetooth availability
+      - Some users consider Bluetooth radio availability as private.
+      - Revealing Bluetooth radio availability on a user's system
+        slightly increases the User Agent's fingerprinting surface.
+      - As getAvailability() returns a Promise, User Agents have the
+        option of asking the user what value they want to return. The
+        increased risk is small enough that it is expected that User
+        Agents will choose not to prompt.
+** Support
+*** Chrome
+    - Go to ~chrome://flags/#enable-web-bluetooth~
+    - Enable the highlighted flag
+    - Restart Chrome.
+    - Chrome supports communication among devices implementing
+      Bluetooth 4.0 or later.
+    - 
+** Origin Trials
+   - Allow you to temporarily enable the feature for all users of your
+     website.
+   - During the origin trial, the API may still change in
+     backward-incompatible ways.
+   - To use this experimental API in Chrome with no flag, you will
+     need to request a token for your origin and insert it into your
+     application.
+   - The trial will end in January 2017.
+** Security Requirements
+*** HTTPS Only
+    - It is only available to secure contexts.
+    - This requires TLS.
+    - To deploy it to a site, you will need HTTPS set up on your
+      server.
+    - During development with Chrome, you will be able to interact
+      with Web Bluetooth through http://locahost by using tools such
+      as the Chrome Dev Editor or python -m SimpleHTTPServer.
+** Usage
+*** Scan for Bluetooth Devices
+
+* Resources
+** [[https://webbluetoothcg.github.io/web-bluetooth/][Web Bluetooth]]
+** [[https://developers.google.com/web/updates/2015/07/interact-with-ble-devices-on-the-web#available-for-origin-trials][Interact with Bluetooth devices on the Web  |  Web  |  Google Developers]]
+** [[https://www.broken-links.com/2015/07/23/hardware-apis-coming-to-browsers/][Hardware APIs coming to browsers - Broken Links]]
+    - The first is the Web Bluetooth API, which has experimental
+      implementation in Chrome OS devices (running the Dev channel,
+      behind a flag). This Promise-based API allows the browser to scan
+      for local Bluetooth Low Energy (BLE) devices, such as speakers or
+      fitness tracking wearables, then interact with them. 
+    - Scanning is as easy as requesting a list of local devices,
+      filtered by a list of services – for example, to find a BLE
+      device which transmits battery data: 
+      #+BEGIN_SRC js
+      navigator.bluetooth.requestDevice({
+   filters: [{ services: ['battery_service'] }]
+   }).then(function (device) {
+   console.log(device.name);
+   });
+      #+END_SRC
